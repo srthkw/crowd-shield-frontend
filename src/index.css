@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --textcolor: rgb(255, 255, 255);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 200;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* MOVE BUTTON STYLES HERE — NOT BASE */
+@layer components {
+
+  .glass-bg{
+    @apply
+     bg-white/25 shadow-xl shadow-black/30 rounded-2xl backdrop-blur-[5px] border border-white/30 p-6 sm:p-16 sm:py-12 text-center
+  }
+
+  .glass-btn {
+    @apply
+      rounded-xl bg-white/80 text-[#2e2e2e] backdrop-blur-[10px]
+      border border-white/20 text-xs sm:text-[1.1rem] font-semibold 
+      shadow-lg shadow-black/30 px-4 py-3 w-[75%] my-1.5 cursor-pointer transition-all duration-300 ease-in-out;
+  }
+
+  .glass-btn:hover {
+    @apply bg-white/90 -translate-y-[3px] shadow-[0_6px_20px_rgba(0,0,0,0.15)] outline-none;
+  }
+
+  .glass-btn:active {
+    @apply translate-y-0;
+  }
+
+  .glass-input{
+    @apply sm:w-70 w-[100%] shadow-lg shadow-black/15 bg-white/60 rounded-xl sm:px-5 px-4 sm:py-3 py-2 mb-2.5 sm:mb-5 text-black/70 font-semibold placeholder:text-black sm:placeholder:font-semibold placeholder:text-xs sm:placeholder:text-sm placeholder:opacity-50 focus:outline-none focus:bg-white/80 transition-all duration-300 ease-in-out;
+  }
+}

@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
-import AnnouncementTab from "../components/AnnouncementTab";
-import LostFoundTab from "../components/LostFoundTab";
+import AnnouncementTab from "../components/tabs/AnnouncementTab";
+import LostFoundTab from "../components/tabs/LostFoundTab";
 import { Link } from "react-router-dom";
 import Bg from "../components/Bg";
-import ReportsTab from "../components/ReportsTab";
+import ReportsTab from "../components/tabs/ReportsTab";
 
 export default function EventDashboard() {
     const { eventId } = useParams();
@@ -45,26 +45,33 @@ export default function EventDashboard() {
                 </button>
                 <p className="text-gray-200">{event.location} • {new Date(event.date).toLocaleDateString()}</p>
 
-                {/* Tabs */}
-                <div className="flex gap-4 mt-6 border-b border-gray-600 pb-2">
-                    {["announcements", "Lost-Found", "reports", "SOS"].map(tab => (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab)}
-                            className={`pb-2 capitalize ${activeTab === tab ? "border-b-2 border-white font-bold" : "text-gray-300"
-                                }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
+                {/* Mobile View */}
+                <div className="sm:hidden"> Meow Meow</div>
 
-                {/* Tab Content */}
-                <div className="mt-6">
-                    {activeTab === "announcements" && (<AnnouncementTab eventId={event._id} />)}
-                    {activeTab === "Lost-Found" && <LostFoundTab eventId={event._id} />}
-                    {activeTab === "reports" && <ReportsTab eventId={event._id}/>}
-                    {activeTab === "SOS" && <p>Emergency/SOS tab coming next…</p>}
+                {/* Desktop View */}
+                <div className="hidden sm:flex sm:flex-col">
+                    {/* Tabs */}
+                    <div className="flex gap-4 mt-6 border-b border-gray-600 pb-2">
+                        {["announcements", "Lost-Found", "reports", "SOS"].map(tab => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`pb-2 capitalize ${activeTab === tab ? "border-b-2 border-white font-bold" : "text-gray-300"
+                                    }`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tab Content */}
+                    <div className="mt-6">
+                        {activeTab === "announcements" && (<AnnouncementTab eventId={event._id} />)}
+                        {activeTab === "Lost-Found" && <LostFoundTab eventId={event._id} />}
+                        {activeTab === "reports" && <ReportsTab eventId={event._id} />}
+                        {activeTab === "SOS" && <p>Emergency/SOS tab coming next…</p>}
+                    </div>
+
                 </div>
             </div>
         </>

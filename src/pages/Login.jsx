@@ -43,12 +43,9 @@ const Login = () => {
         <div className="glass-bg sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto">
 
 
-          <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold m-0">
+          <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-8">
             Crowd-Shield
           </h1>
-
-          <p className="text-[var(--textcolor)] text-xs sm:text-[clamp(0.1rem,2vw,1.1rem)] font-[700] opacity-90 leading-relaxed mt-1 mb-5 sm:mb-8">
-            Organizer Login</p>
 
           <form action="" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 items-center sm:w-auto">
 

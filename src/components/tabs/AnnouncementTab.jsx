@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "../api/axios";
-import { useAuth } from "../hooks/useAuth";
+import axios from "../../api/axios";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function AnnouncementTab({ eventId }) {
   const [announcements, setAnnouncements] = useState([]);

@@ -21,7 +21,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className="flex justify-between p-3 content-center m-0 mb-4 bg-white/90">
+        <div className="sticky top-0 w-full z-50 flex justify-between p-3 content-center m-0 mb-2 bg-[#fef2f2]">
             <h3 className="text-black/50 text-xl font-bold">
                 Crowd-Shield
             </h3>

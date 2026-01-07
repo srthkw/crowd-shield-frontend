@@ -10,13 +10,13 @@ const CreateEVNT = () => {
     const { user } = useAuth();
 
     return (
-        <div>
+        <div className="w-full">
             {(user.role === "admin" || user.role === "organizer") && (
                 <button
-                    className="glass-btn w-auto flex sm:text-sm text-xs"
+                    className="glass-btn sm:text-sm text-xs p-2 w-full px-3 font-semibold flex justify-center align-middle"
                     onClick={() => navigate("/events/create")}
                 >
-                    <FiPlusCircle className="size-5 mr-2 mt-0.5"/>Create an event
+                    <FiPlusCircle className="size-4 mr-2 mt-0.5"/>Create an event
                 </button>
             )}
         </div>

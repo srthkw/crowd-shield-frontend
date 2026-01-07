@@ -3,6 +3,7 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Bg from "../components/Bg";
 import Navbar from "../components/Navbar";
+import { FiXCircle, FiHelpCircle } from "react-icons/fi";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -31,7 +32,7 @@ export default function Events() {
       <Bg />
       <div className="p-0 relative z-0">
 
-        <Navbar />
+        <Navbar className=""/>
 
         <div className="flex justify-between items-center mb-4">
           <h1 className="sm:text-4xl px-3 text-2xl font-bold">Events</h1>
@@ -49,39 +50,40 @@ export default function Events() {
             {events.map((event) => (
               <div
                 key={event._id}
-                className="glass-bg py-6 px-6 text-start flex flex-col border rounded shadow cursor-pointer hover:scale-[1.01] transition h-full"
+                className="glass-bg py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition h-full"
                 onClick={() => navigate(`/event/${event._id}`)}
               >
-                <h2 className="text-md font-bold mb-3">{event.name}</h2>
+                <h2 className="text-md font-bold mb-5 line-clamp-2 text-ellipsis">{event.name}</h2>
 
                 {/* description button */}
-                <button className="absolute top-0 right-0 p-1 text-xs font-medium text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:outline-none" onClick={(e) => {
+                <button className="absolute top-0 right-0 p-1 text-xs font-medium text-white" onClick={(e) => {
                   e.stopPropagation();
                   const card = document.getElementById(`event-desc-${event._id}`);
                   card.classList.toggle("hidden");
 
                 }}>
-                  <i className="fa fa-info-circle">View more</i>
+                  <FiHelpCircle className="text-2xl m-1" />
                 </button>
 
-                <div id={`event-desc-${event._id}`} className="bg-white/90 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full p-2 hidden rounded shadow overflow-y-auto" onClick={(e) => {
-                  e.stopPropagation();
-                }}>
-                <button className="text-black fixed top-1 z-10" onClick={(e) => {
-                  e.stopPropagation();
-                  const card = document.getElementById(`event-desc-${event._id}`);
-                  card.classList.toggle("hidden");}}>
-                  X
-                </button>
-                  <div>
-                    <p className="text-sm text-black mt-0 ml-5">{event.description}</p>
+                <div id={`event-desc-${event._id}`} className="bg-[#fef2f2] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2" onClick={(e) => {
+                    e.stopPropagation();
+                  }}>
+                  <button className="absolute text-black top-2 right-2 z-10" onClick={(e) => {
+                    e.stopPropagation();
+                    const card = document.getElementById(`event-desc-${event._id}`);
+                    card.classList.toggle("hidden");
+                  }}>
+                    <FiXCircle className="text-2xl" />
+                  </button>
+                  <div className="overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]">{event.description}</p>
                   </div>
                 </div>
                 {/* ------------ */}
 
-                <div className="grid grid-cols-[repeat(2,1fr)] grid-rows-[1fr] gap-3 mt-auto">
-                  <span className="text-xs font-semibold text-white truncate">{event.location}</span>
-                  <span className="text-xs font-semibold text-white">
+                <div className="grid grid-cols-[repeat(2,1fr)] grid-rows-[1fr] gap-3 mt-auto text-sm font-semibold text-white">
+                  <span className=" truncate">{event.location}</span>
+                  <span className=" truncate">
                     {new Date(event.date).toLocaleDateString()}
                   </span>
                 </div>

@@ -40,10 +40,10 @@ const Login = () => {
 
       <div className="fixed inset-0 z-10 grid place-items-center p-4">
 
-        <div className="glass-bg sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto">
+        <div className="glass-bg sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
 
 
-          <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-8">
+          <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-5">
             Crowd-Shield
           </h1>
 
@@ -51,11 +51,11 @@ const Login = () => {
 
             <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Email</label>
 
-            <input placeholder="Username" type="mail" {...register("username", { required: true })} className="glass-input" />
+            <input placeholder="Username" type="mail" {...register("username", { required: true })} className="glass-input font-medium text-xs" />
 
             <label htmlFor="password" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Password</label>
 
-            <input placeholder="Password" type="password" {...register("password", { required: true })} className="glass-input" />
+            <input placeholder="Password" type="password" {...register("password", { required: true })} className="glass-input font-medium text-xs" />
 
             <button type="submit" className="glass-btn w-[70%] sm:px-3 px-2 sm:py-2.5 py-2 mx-auto my-1 sm:my-3">Login</button>
             {error && (

@@ -6,7 +6,6 @@ import API from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import Loader from "../components/Loader";
-import Alert from '@mui/material/Alert';
 
 const Login = () => {
 
@@ -25,7 +24,7 @@ const Login = () => {
     setError(null);
     try {
       const res = await API.post("/auth/login", {
-        email: data.username,   // using username input as email
+        email: data.username,
         password: data.password,
       });
 
@@ -43,11 +42,6 @@ const Login = () => {
       <Bg />
 
       <div className="fixed inset-0 z-10 grid place-items-center p-4">
-      {error && (
-              <Alert className="absolute top-0 sm:w-auto w-full" severity="error">
-                {error}
-              </Alert>
-            )}
 
         <div className="glass-bg sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
 
@@ -60,13 +54,20 @@ const Login = () => {
 
             <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Email</label>
 
-            <input placeholder="Username" type="mail" {...register("username", { required: true })} className="glass-input font-medium text-xs" />
+            <input placeholder="Username" type="mail" {...register("username", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs" />
 
             <label htmlFor="password" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Password</label>
 
-            <input placeholder="Password" type="password" {...register("password", { required: true })} className="glass-input font-medium text-xs mb-5" />
+            <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs mb-2" />
+
+            {error && (
+              <p className="sm:w-auto font-semibold text-xs text-red-500 w-full">
+                {error}
+              </p>
+            )}
 
             <button type="submit" className="glass-btn w-[70%] sm:px-3 px-2 sm:py-2.5 py-2 mx-auto my-1 sm:my-3">{loading ? "Logging you in..." : "Login"}</button>
+            
             {loading && <Loader />}
 
             <div>

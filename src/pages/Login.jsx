@@ -54,11 +54,11 @@ const Login = () => {
 
             <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Email</label>
 
-            <input placeholder="Username" type="mail" {...register("username", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs" />
+            <input placeholder="Username" type="mail" {...register("username", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs sm:text-sm" />
 
             <label htmlFor="password" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Password</label>
 
-            <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs mb-2" />
+            <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs mb-2 sm:text-sm" />
 
             {error && (
               <p className="sm:w-auto font-semibold text-xs text-red-500 w-full">
@@ -68,7 +68,7 @@ const Login = () => {
 
             <button type="submit" className="glass-btn w-[70%] sm:px-3 px-2 sm:py-2.5 py-2 mx-auto my-1 sm:my-3">{loading ? "Logging you in..." : "Login"}</button>
             
-            {loading && <Loader />}
+            {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col gap-4 w-[120vw] h-[120vh] z-10 bg-black/50"><Loader /></div>}
 
             <div>
               <p className="text-white/85 mt-2 text-xs sm:text-[clamp(0.5rem,2vw,1rem)] font-[500] opacity-90 leading-relaxed ">

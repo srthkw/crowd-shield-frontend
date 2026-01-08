@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Bg from "../components/Bg";
 import Navbar from "../components/Navbar";
 import { FiXCircle, FiHelpCircle } from "react-icons/fi";
+import Loader from "../components/Loader";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -39,7 +40,7 @@ export default function Events() {
         </div>
 
 
-        {loading && <p className="px-4" >Loading...</p>}
+        {loading && <div className="flex justify-center h-screen" ><div className="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin" /></div>}
 
         {!loading && events.length === 0 && (
           <p className="text-white/90 p-3 flex justify-center font-bold text-2xl">No events available</p>

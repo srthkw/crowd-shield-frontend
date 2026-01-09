@@ -13,8 +13,8 @@ const LogoutBTN = () => {
     
     return (
         <div className="w-full">
-            <button onClick={handleLogout} className="glass-btn sm:text-sm text-xs p-2 w-full px-3 font-semibold flex justify-center align-middle">
-            <FiLogOut className="size-3 mr-2 mt-0.5" />Logout
+            <button onClick={handleLogout} className="text-black/80 sm:text-sm text-sm p-1 w-full font-semibold flex items-center justify-center align-middle cursor-pointer">
+            <FiLogOut className="size-4 mr-2 mt-0.5" /><span>Logout</span>
             </button>
         </div>
     )

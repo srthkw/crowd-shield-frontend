@@ -3,7 +3,7 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Bg from "../components/Bg";
 import Navbar from "../components/Navbar";
-import { FiXCircle, FiHelpCircle } from "react-icons/fi";
+import { FiXCircle, FiHelpCircle, FiMapPin, FiCalendar } from "react-icons/fi";
 import Loader from "../components/Loader";
 
 export default function Events() {
@@ -30,15 +30,16 @@ export default function Events() {
 
   return (
     <>
-      <Bg />
+      <div className="bg-black/50 w-full h-full z-30"><Bg /></div>
       <div className="p-0 relative z-0">
 
         <Navbar className=""/>
 
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center my-2">
           <h1 className="sm:text-4xl px-3 text-2xl font-bold">Events</h1>
         </div>
 
+        <div className="border-b border-black/30 w-[90vw] sm:w-[95vw] my-2 relative z-1 left-1/2 -translate-x-1/2"></div>
 
         {loading && <div className="flex justify-center h-screen" ><div className="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin" /></div>}
 
@@ -51,13 +52,16 @@ export default function Events() {
             {events.map((event) => (
               <div
                 key={event._id}
-                className="glass-bg py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition h-full"
+                className="bg-white/70 glass-bg text-black/80 border-none py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition h-"
                 onClick={() => navigate(`/event/${event._id}`)}
               >
-                <h2 className="text-md font-bold mb-5 line-clamp-2 text-ellipsis">{event.name}</h2>
+                <div className="w-[95%] h-[50%]">
+                <h2 className="h-12 text-md font-semibold mb-5 line-clamp-2 text-ellipsis text-black/90">{event.name}</h2>
+                </div>
+                <div className="border-b border-black w-full my-2"></div>
 
                 {/* description button */}
-                <button className="absolute top-0 right-0 p-1 text-xs font-medium text-white" onClick={(e) => {
+                <button className="absolute top-0 right-0 p-1 text-xs font-medium text-black cursor-pointer" onClick={(e) => {
                   e.stopPropagation();
                   const card = document.getElementById(`event-desc-${event._id}`);
                   card.classList.toggle("hidden");
@@ -66,25 +70,27 @@ export default function Events() {
                   <FiHelpCircle className="text-2xl m-1" />
                 </button>
 
-                <div id={`event-desc-${event._id}`} className="bg-[#fef2f2] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2" onClick={(e) => {
+                <div id={`event-desc-${event._id}`} className="bg-[#fef2f2] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2 cursor-default" onClick={(e) => {
                     e.stopPropagation();
                   }}>
-                  <button className="absolute text-black top-2 right-2 z-10" onClick={(e) => {
+                  <button className="absolute text-black top-2 right-2 z-10 cursor-pointer" onClick={(e) => {
                     e.stopPropagation();
                     const card = document.getElementById(`event-desc-${event._id}`);
                     card.classList.toggle("hidden");
                   }}>
-                    <FiXCircle className="text-2xl" />
+                    <FiXCircle className="text-2xl bg-[#fef2f2]" />
                   </button>
-                  <div className="overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]">{event.description}</p>
+                  <div className="overflow-y-auto scrollbar-thin [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50">
+                  <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%] mb-5 italic">{event.name}</p>
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 mb-5 w-[80%]"><p className="font-bold">At:</p>{event.location}</p>
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]"><p className="font-bold">Event Description:</p> {event.description}</p>
                   </div>
                 </div>
                 {/* ------------ */}
 
-                <div className="grid grid-cols-[repeat(2,1fr)] grid-rows-[1fr] gap-3 mt-auto text-sm font-semibold text-white">
-                  <span className=" truncate">{event.location}</span>
-                  <span className=" truncate">
+                <div className="flex flex-col gap-1 mt-auto text-sm font-semibold">
+                  <div className=" flex gap-1.5 items-center"><FiMapPin className="text-md"/><span className="line-clamp-1 w-full">{event.location}</span></div>
+                  <span className=" truncate flex gap-1.5 items-center"><FiCalendar />
                     {new Date(event.date).toLocaleDateString()}
                   </span>
                 </div>

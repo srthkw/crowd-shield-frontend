@@ -71,8 +71,8 @@ const Login = () => {
             {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col gap-4 w-[120vw] h-[120vh] z-10 bg-black/50"><Loader /></div>}
 
             <div>
-              <p className="text-white/85 mt-2 text-xs sm:text-[clamp(0.5rem,2vw,1rem)] font-[500] opacity-90 leading-relaxed ">
-                Don't have an account? <a href="/orgsignup" className="text-white">Sign-up here!</a></p>
+              <p className="text-white/100 mt-2 text-xs sm:text-[clamp(0.5rem,2vw,1rem)] font-[500] opacity-90 leading-relaxed">
+                Don't have an account? <span className="text-[var(--textcolor)] cursor-pointer underline" onClick={() => navigate("/underdev")}>Click here!</span></p>
             </div>
 
           </form>

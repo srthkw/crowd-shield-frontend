@@ -9,6 +9,7 @@ import EventDashboard from "./pages/EventDashboard";
 // pages
 import Login from "./pages/Login";
 import Events from "./pages/Events";
+import UnderDev from "./pages/UnderDev";
 // later you'll add Events, Dashboard, etc.
 
 const router = createBrowserRouter([
@@ -27,6 +28,12 @@ const router = createBrowserRouter([
       <ProtectRoute>
         <EventDashboard />
       </ProtectRoute>
+    )
+  },
+  {
+    path: "/underdev",
+    element: (
+        <UnderDev />
     )
   }
   

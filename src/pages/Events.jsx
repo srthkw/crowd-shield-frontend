@@ -3,7 +3,7 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Bg from "../components/Bg";
 import Navbar from "../components/Navbar";
-import { FiXCircle, FiHelpCircle, FiMapPin, FiCalendar } from "react-icons/fi";
+import { FiXCircle, FiInfo, FiMapPin, FiCalendar } from "react-icons/fi";
 import Loader from "../components/Loader";
 
 export default function Events() {
@@ -30,8 +30,8 @@ export default function Events() {
 
   return (
     <>
-      <div className="bg-black/50 w-full h-full z-30"><Bg /></div>
-      <div className="p-0 relative z-0">
+      <div className="w-full h-full z-30 sm:visible invisible"><Bg /></div>
+      <div className="p-0 relative z-0 bg-gradient-to-b from-[#D19B8E] to-[#F8E2CF] sm:bg-none">
 
         <Navbar className=""/>
 
@@ -55,40 +55,40 @@ export default function Events() {
                 className="bg-white/70 glass-bg text-black/80 border-none py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition h-"
                 onClick={() => navigate(`/event/${event._id}`)}
               >
-                <div className="w-[95%] h-[50%]">
-                <h2 className="h-12 text-md font-semibold mb-5 line-clamp-2 text-ellipsis text-black/90">{event.name}</h2>
+                <div className="w-[93%] h-[50%]">
+                <h2 className="h-12 text-md font-semibold mb-5 line-clamp-2 text-ellipsis text-black/70">{event.name}</h2>
                 </div>
-                <div className="border-b border-black w-full my-2"></div>
+                <div className="border-b border-black/20 w-full my-2"></div>
 
                 {/* description button */}
-                <button className="absolute top-0 right-0 p-1 text-xs font-medium text-black cursor-pointer" onClick={(e) => {
+                <button className="absolute top-2 right-1 p-1 text-xs font-medium text-black/70 cursor-pointer" onClick={(e) => {
                   e.stopPropagation();
                   const card = document.getElementById(`event-desc-${event._id}`);
                   card.classList.toggle("hidden");
 
                 }}>
-                  <FiHelpCircle className="text-2xl m-1" />
+                  <FiInfo className="text-2xl m-1" />
                 </button>
 
                 <div id={`event-desc-${event._id}`} className="bg-[#fef2f2] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2 cursor-default" onClick={(e) => {
                     e.stopPropagation();
                   }}>
-                  <button className="absolute text-black top-2 right-2 z-10 cursor-pointer" onClick={(e) => {
+                  <button className="absolute text-black top-4 right-3 z-10 cursor-pointer" onClick={(e) => {
                     e.stopPropagation();
                     const card = document.getElementById(`event-desc-${event._id}`);
                     card.classList.toggle("hidden");
                   }}>
-                    <FiXCircle className="text-2xl bg-[#fef2f2]" />
+                    <FiXCircle className="text-2xl " />
                   </button>
                   <div className="overflow-y-auto scrollbar-thin [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50">
                   <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%] mb-5 italic">{event.name}</p>
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 mb-5 w-[80%]"><p className="font-bold">At:</p>{event.location}</p>
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]"><p className="font-bold">Event Description:</p> {event.description}</p>
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 mb-5 w-[80%]"><p className="font-bold flex items-center gap-1"><FiMapPin/> At:</p>{event.location}</p>
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]"><p className="font-bold flex items-center gap-1"><FiInfo/> Event Description:</p> {event.description}</p>
                   </div>
                 </div>
                 {/* ------------ */}
 
-                <div className="flex flex-col gap-1 mt-auto text-sm font-semibold">
+                <div className="flex flex-col gap-1 mt-auto text-sm font-normal">
                   <div className=" flex gap-1.5 items-center"><FiMapPin className="text-md"/><span className="line-clamp-1 w-full">{event.location}</span></div>
                   <span className=" truncate flex gap-1.5 items-center"><FiCalendar />
                     {new Date(event.date).toLocaleDateString()}

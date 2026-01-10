@@ -25,7 +25,7 @@ const Navbar = () => {
       }, [open])
 
     return (
-        <div className="sticky top-0 w-full z-50 flex justify-between p-3 content-center m-0 glass-bg bg-white/45 rounded-none">
+        <div className="sticky top-0 w-full z-50 flex justify-between p-3 content-center m-0 glass-bg shadow-lg bg-white/45 rounded-none">
             <h3 className="text-black/80 text-xl font-bold">
                 Crowd-Shield
             </h3>

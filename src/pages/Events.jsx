@@ -31,7 +31,7 @@ export default function Events() {
   return (
     <>
       <div className="w-full h-full z-30 sm:visible invisible"><Bg /></div>
-      <div className="p-0 relative z-0 bg-gradient-to-b from-[#D18EAD] to-[#F8E2CF] sm:bg-none">
+      <div className="p-0 relative z-0 bg-gradient-to-b from-[#F8E2CF] to-[#E37474] sm:bg-none">
 
         <Navbar className=""/>
 

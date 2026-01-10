@@ -36,7 +36,7 @@ export default function Events() {
         <Navbar className=""/>
 
         <div className="flex justify-between items-center my-2">
-          <h1 className="sm:text-4xl text-stone-700 px-3 text-2xl font-bold">Events</h1>
+          <h1 className="sm:text-4xl text-stone-700 sm:text-white px-3 text-2xl font-bold">Events</h1>
         </div>
 
         <div className="border-b border-black/30 w-[90vw] sm:w-[95vw] my-2 relative z-1 left-1/2 -translate-x-1/2"></div>

@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import Bg from "../components/Bg";
 import Navbar from "../components/Navbar";
 import { FiXCircle, FiInfo, FiMapPin, FiCalendar } from "react-icons/fi";
 import Loader from "../components/Loader";
@@ -31,22 +30,23 @@ export default function Events() {
   return (
     <>
       <div className="p-0 z-0 ">
-        <div className="fixed -z-5 bg-gradient-to-b from-[#F8E2CF] to-[#E37474] w-screen h-screen"></div>
+        <div className="bg-default"></div>
         <Navbar className=""/>
 
-        <div className="flex justify-between items-center my-2">
-          <h1 className="sm:text-4xl text-stone-700 px-3 text-2xl font-bold">Events</h1>
+        <div className="flex justify-center items-center my-2">
+          <h1 className="sm:text-xl text-stone-700 px-3 text-xl font-bold">Events</h1>
         </div>
 
         <div className="border-b border-black/30 w-[90vw] sm:w-[95vw] my-2 relative z-1 left-1/2 -translate-x-1/2"></div>
 
-        {loading && <div className="flex justify-center h-screen" ><div className="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin" /></div>}
+        {loading && <div className="flex justify-center absolute top-0 left-0 right-0 bottom-0" ><Loader /></div>}
 
         {!loading && events.length === 0 && (
           <p className="text-white/90 p-3 flex justify-center font-bold text-2xl">No events available</p>
         )}
 
         {!loading && events.length > 0 && (
+          <div className="flex items-center justify-center">
           <div className="p-2 w-[99vw] sm:w-[91vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {events.map((event) => (
               <div
@@ -80,9 +80,9 @@ export default function Events() {
                     <FiXCircle className="text-2xl " />
                   </button>
                   <div className="overflow-y-auto scrollbar-thin [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50">
-                  <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%] mb-5 italic">{event.name}</p>
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 mb-5 w-[80%]"><p className="font-bold flex items-center gap-1"><FiMapPin/> At:</p>{event.location}</p>
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]"><p className="font-bold flex items-center gap-1"><FiInfo/> Event Description:</p> {event.description}</p>
+                  <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%] mb-5">{event.name}</p>
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 mb-5 w-[80%]"><p className="font-bold flex text-stone-800 items-center gap-1"><FiMapPin/>At:</p>{event.location}</p>
+                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]"><p className="font-bold flex text-stone-800 items-center gap-1"><FiInfo/> Event Description:</p> {event.description}</p>
                   </div>
                 </div>
                 {/* ------------ */}
@@ -90,11 +90,12 @@ export default function Events() {
                 <div className="flex flex-col gap-1 mt-auto text-sm font-normal">
                   <div className=" flex gap-1.5 items-center"><FiMapPin className="text-md"/><span className="line-clamp-1 w-full">{event.location}</span></div>
                   <span className=" truncate flex gap-1.5 items-center"><FiCalendar />
-                    {new Date(event.date).toLocaleDateString()}
+                    {new Date(event.date).toLocaleDateString("en-IN", {day: "2-digit", month: "long", year: "numeric"})}
                   </span>
                 </div>
               </div>
             ))}
+          </div>
           </div>
         )}
       </div>

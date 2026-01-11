@@ -1,64 +1,82 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import API from "../api/axios";
+import { useNavigate } from "react-router-dom";
 import AnnouncementTab from "../components/tabs/AnnouncementTab";
 import LostFoundTab from "../components/tabs/LostFoundTab";
 import { Link } from "react-router-dom";
-import Bg from "../components/Bg";
 import ReportsTab from "../components/tabs/ReportsTab";
+import Navbar from "../components/Navbar";
+import Loader from "../components/Loader";
+import Bg from "../components/Bg";
 
 export default function EventDashboard() {
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [pageload, setPageload] = useState(true);
     const [activeTab, setActiveTab] = useState("announcements"); // default tab
     const [expanded, setExpanded] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEvent = async () => {
             try {
                 const res = await API.get(`/events/${eventId}`);
                 setEvent(res.data);
+                setPageload(true);
             } catch (err) {
                 console.error("Failed to load event", err);
             } finally {
-                setLoading(false);
+                setPageload(false);
             }
         };
         fetchEvent();
     }, [eventId]);
 
-    if (loading) return <p className="p-4">Loading...</p>;
+    if (pageload) return <div className="bg-default"><div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 w-[120vw] h-[120vh] z-10 bg-black/30"><Loader /></div></div>;
     if (!event) return <p className="p-4 text-red-500">Event not found</p>;
 
     return (
         <>
-            <Bg />
-            <div className="p-4 w-full h-[100vh] mx-auto relative z-1">
+            <div className="bg-default"></div>
+            <Navbar />
+            <div className="w-full h-screen mx-auto relative z-1">
                 {/* Header */}
-                <h1 className="text-2xl font-bold mb-1">{event.name}</h1>
-                <h2 className={` ${expanded ? "" : "line-clamp-2"}`} id="description">{event.description}</h2>
-                <button
-                    className="text-blue-600 font-medium hover:underline"
-                    onClick={() => setExpanded(!expanded)}>
-                    {expanded ? "Show less" : "Read more"}
-                </button>
-                <p className="text-gray-200">{event.location} • {new Date(event.date).toLocaleDateString()}</p>
 
-                {/* Mobile View */}
-                <div className="sm:hidden"> Meow Meow</div>
+                <div className={`flex flex-col justify-center text-stone-700 p-3 glass-bg shadow-lg shadow-black/10 text-left transition-all duration-300 ease-in-out ${expanded ? "rounded-t-none" : "rounded-none"}`}>
+                    <div className="flex justify-center items-center my-1 mb-3">
+                        <FiArrowLeft className="sm:text-2xl text-stone-600 absolute left-2 sm:left-5 text-xl font-bold cursor-pointer" onClick={() => navigate(-1)} /><h1 className="sm:text-xl text-stone-600 py-0 text-lg font-bold">Event Dashboard</h1>
+                    </div>
+                    <div className="border-b border-black/30 w-[98vw] sm:self-start mb-3 relative z-1 left-1/2 -translate-x-1/2"></div>
+
+                    <div className="text-md font-bold mb-1 relative"><div className={`pr-15 overflow-hidden ${expanded ? "" : "line-clamp-2"} `}>{event.name}</div>
+                    <span className={`absolute right-1 top-0 cursor-pointer transition-transform duration-300 ${expanded ? "rotate-180" : ""}`} onClick={() => setExpanded(!expanded)} ><FiChevronDown className="size-7"/></span>
+                    </div>
+                    
+                    <div className={`text-left text-xs sm:text-sm transition-all duration-300 ease-in-out ${expanded ? "max-h-96 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-2"}`}>
+                        <div className="border-b border-black/30 w-[98vw] sm:self-start my-2 relative z-1 left-1/2 -translate-x-1/2"></div>
+                        <span className="flex items-top relative"><FiInfo className="absolute top-1 size-4"/><p className="pl-8" id="description">{event.description}</p></span>
+                        <div className="border-b border-black/30 w-[98vw] sm:self-start my-2 relative z-1 left-1/2 -translate-x-1/2"></div>
+
+                        <span className="flex items-top relative"><FiMapPin className="absolute top-1 size-4"/><p className="pl-8">{event.location}</p></span>
+                        <div className="border-b border-black/30 w-[98vw] sm:self-start my-2 relative z-1 left-1/2 -translate-x-1/2"></div>
+
+                        <span className="flex items-top relative mb-1"><FiCalendar className="absolute top-1 size-4"/><p className="pl-8 flex gap-1 items-center">{new Date(event.date).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}</p></span>
+                    </div>
+                </div>
+
 
                 {/* Desktop View */}
-                <div className="hidden sm:flex sm:flex-col">
+                <div className="relative z-5 flex flex-col">
                     {/* Tabs */}
-                    <div className="flex gap-4 mt-6 border-b border-gray-600 pb-2">
+                    <div className="flex items-center flex-wrap justify-center gap-2 mt-6 text-sm">
                         {["announcements", "Lost-Found", "reports", "SOS"].map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`pb-2 capitalize ${activeTab === tab ? "border-b-2 border-white font-bold" : "text-gray-300"
-                                    }`}
-                            >
+                                className={`p-2 bg-amber-200 cursor-pointer rounded-2xl w-full capitalize ${activeTab === tab ? "text-black" : "text-stone-700"
+                                    }`}>
                                 {tab}
                             </button>
                         ))}

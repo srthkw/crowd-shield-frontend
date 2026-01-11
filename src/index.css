@@ -25,6 +25,11 @@
 /* MOVE BUTTON STYLES HERE — NOT BASE */
 @layer components {
 
+  .bg-default{
+    @apply
+    fixed -z-5 bg-gradient-to-b from-[#F8E2CF] to-[#E37474] w-screen h-screen
+  }
+
   .glass-bg{
     @apply
      bg-white/35 shadow-xl shadow-black/30 rounded-2xl backdrop-blur-[5px] border border-white/30 p-6 sm:p-16 sm:py-12 text-center

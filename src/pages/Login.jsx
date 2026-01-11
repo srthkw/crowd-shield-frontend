@@ -61,7 +61,7 @@ const Login = () => {
             <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs mb-2 sm:text-sm" />
 
             {error && (
-              <p className="sm:w-auto font-semibold text-xs text-red-500 w-full">
+              <p className="sm:w-auto font-semibold text-xs sm:text-sm text-red-500 w-full">
                 {error}
               </p>
             )}

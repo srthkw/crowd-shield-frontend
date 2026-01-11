@@ -30,13 +30,12 @@ export default function Events() {
 
   return (
     <>
-      <div className="w-full h-full z-30 sm:visible invisible"><Bg /></div>
-      <div className="p-0 relative z-0 bg-gradient-to-b from-[#F8E2CF] to-[#E37474] sm:bg-none">
-
+      <div className="p-0 z-0 ">
+        <div className="fixed -z-5 bg-gradient-to-b from-[#F8E2CF] to-[#E37474] w-screen h-screen"></div>
         <Navbar className=""/>
 
         <div className="flex justify-between items-center my-2">
-          <h1 className="sm:text-4xl text-stone-700 sm:text-white px-3 text-2xl font-bold">Events</h1>
+          <h1 className="sm:text-4xl text-stone-700 px-3 text-2xl font-bold">Events</h1>
         </div>
 
         <div className="border-b border-black/30 w-[90vw] sm:w-[95vw] my-2 relative z-1 left-1/2 -translate-x-1/2"></div>

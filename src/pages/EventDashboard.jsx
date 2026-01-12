@@ -75,11 +75,12 @@ export default function EventDashboard() {
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`p-2 bg-amber-200 cursor-pointer rounded-2xl w-full capitalize ${activeTab === tab ? "text-black" : "text-stone-700"
+                                className={`p-2 bg-[#cc8ee7] text-xs sm:text-sm cursor-pointer font-semibold rounded-2xl w-[40%] sm:w-[20%] capitalize text-stone-600 transition-all duration-300 ease-in-out hover:bg-[#C47BE4] ${activeTab === tab ? "text-stone-900 shadow-[0px_3px_0px_#b26dcf] bg-[#b26dcf]" : ""
                                     }`}>
                                 {tab}
                             </button>
                         ))}
+                        <div className="border-b border-black/30 w-[98vw] sm:self-start my-3 relative z-1 left-1/2 -translate-x-1/2"></div>
                     </div>
 
                     {/* Tab Content */}

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
+import { FiTrash2 } from "react-icons/fi";
 
 export default function AnnouncementTab({ eventId }) {
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pop, setPop] = useState(false);
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
@@ -117,38 +119,51 @@ export default function AnnouncementTab({ eventId }) {
 
       {/* ANNOUNCEMENTS LIST */}
       {announcements.length === 0 && <p>No announcements yet.</p>}
-      {announcements.map(a => {
-        const canDelete =
-          user.role === "admin" || user.id === a.createdBy;
 
-        return (
-          <div className="flex flex-row justify-center items-center">
-          <div
-            key={a._id}
-            className="relative p-4 bg-white/50 w-[95vw] sm:w-[98vw] rounded-lg mb-4"
-          >
-            {/* Delete button */}
-            {canDelete && (
-              <button
-                onClick={() => handleDelete(a._id)}
-                className="absolute top-2 right-2 text-red-400 hover:text-red-200"
+      <div className="flex flex-row flex-wrap items-center justify-center">
+        <div className="flex flex-row flex-wrap items-center justify-between w-[95vw]">
+          {announcements.map(a => {
+            const canDelete =
+              user.role === "admin" || user.id === a.createdBy;
+
+            return (
+              <div
+                key={a._id}
+                className={`relative flex flex-col py-4 px-6 overflow-hidden bg-white/50 w-[95vw] sm:w-[47vw] rounded-lg mb-4`} onClick={() => setPop(pop === a._id ? null : a._id)}
               >
-                Delete
-              </button>
-            )}
+                {/* Delete button */}
+                {canDelete && (
+                  <button
+                    onClick={(e) =>
+                      e.stopPropagation() ||
+                      handleDelete(a._id)}
+                    className="absolute top-4 right-3 sm:right-5 text-red-400 hover:text-red-800 cursor-pointer"
+                  >
+                    <FiTrash2 className="size-5" />
+                  </button>
+                )}
 
-            <p className="text-md  font-semibold text-stone-700 w-[70%]">{a.message}</p>
-            <p className="text-xs text-gray-500">
-              {new Date(a.createdAt).toLocaleString()}
-            </p>
-            <p className="text-xs text-gray-500">
-              Announcement by: {a.role}
-            </p>
-          </div>
-          </div>
-        );
-      })}
+                <div className="pointer-events-none">
+                  <div className={`relative text-sm font-semibold text-stone-700 w-60 sm:w-160 min-w-0 cursor-pointer line-clamp-2`}>{a.message}</div>
+                  </div>
 
+                  {pop === a._id && (
+                    <div className="bg-black/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-screen h-screen flex items-center justify-center"><div className="w-70 sm:w-120 max-h-60 sm:max-h-80 overflow-y-scroll text-sm sm:text-md bg-white/70 rounded-2xl text-stone-800 font-semibold backdrop-blur-sm p-5
+                    [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50
+                    "><h2 className="text-xl font-bold mb-1">Announcement</h2>{a.message}</div></div>
+                  )}
+
+                <p className="text-xs italic sm:text-sm text-stone-700 mt-3">
+                  {new Date(a.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true })}
+                </p>
+                <p className="text-xs italic sm:text-sm text-stone-700">
+                  Announcement by: {a.role}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

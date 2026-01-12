@@ -51,10 +51,10 @@ export default function Events() {
             {events.map((event) => (
               <div
                 key={event._id}
-                className="bg-white/70 glass-bg text-black/80 border-none py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition h-"
+                className="bg-white/70 glass-bg text-black/80 border-none py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition"
                 onClick={() => navigate(`/event/${event._id}`)}
               >
-                <div className="w-[93%] h-[50%]">
+                <div className="w-[80%] h-[50%]">
                 <h2 className="h-12 text-md font-semibold mb-5 line-clamp-2 text-ellipsis text-black/70">{event.name}</h2>
                 </div>
                 <div className="border-b border-black/20 w-full my-2"></div>

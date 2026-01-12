@@ -70,18 +70,18 @@ export default function EventDashboard() {
                 {/* Desktop View */}
                 <div className="relative z-5 flex flex-col">
                     {/* Tabs */}
-                    <div className="flex items-center flex-wrap justify-center gap-2 mt-6 text-sm">
+                    <div className="flex items-center sm:flex-wrap flex-nowrap overflow-x-auto  min-w-full h-12 sm:justify-center gap-2 mt-6 text-sm">
                         {["announcements", "Lost-Found", "reports", "SOS"].map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`p-2 bg-[#cc8ee7] text-xs sm:text-sm cursor-pointer font-semibold rounded-2xl w-[40%] h-9 sm:w-[20%] capitalize text-stone-700 transition-all duration-300 ease-in-out hover:bg-[#C47BE4] ${activeTab === tab ? "text-stone-900 shadow-[0px_3px_0px_#a069b8] bg-[#b26dcf]" : ""
+                                className={`shrink-0 p-2 text-xs sm:text-sm cursor-pointer font-semibold rounded-2xl w-30 h-9 sm:w-[20%] capitalize text-stone-700 transition-all duration-300 ease-in-out hover:bg-[#C47BE4] ${activeTab === tab ? "text-stone-900 shadow-[0px_3px_0px_#a069b8] bg-[#C47BE4]" : "bg-[#cc8ee7]"
                                     }`}>
                                 {tab}
                             </button>
                         ))}
-                        <div className="border-b border-black/10 w-[96vw] mt-2"></div>
                     </div>
+                        <div className="border-b border-black/10 w-[96vw] mt-2"></div>
 
                     {/* Tab Content */}
                     <div>

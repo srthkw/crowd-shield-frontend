@@ -50,10 +50,10 @@ export default function AnnouncementTab({ eventId }) {
 
   const handleDelete = async (announcementId) => {
     if (!confirm("Delete announcement?")) return;
-  
+
     try {
       await axios.delete(`/announcements/${announcementId}`);
-  
+
       // Remove instantly without refetch
       setAnnouncements(prev =>
         prev.filter(a => a._id !== announcementId)
@@ -63,21 +63,24 @@ export default function AnnouncementTab({ eventId }) {
       alert("Failed to delete announcement");
     }
   };
-  
 
-  if (loading) return <p>Loading...</p>;
+
+  if (loading) return <div className="flex flex-row justify-center items-center gap-2 mt-6">
+    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce" />
+    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce [animation-delay:-.3s]" />
+    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce [animation-delay:-.5s]" />
+  </div>;
 
   return (
-    <div className="space-y-4">
+    <div className="relative ">
 
       {/* CREATE BUTTON — only for organizer/admin */}
       {(user.role === "organizer" || user.role === "admin") && (
-        <button
+        <div className="w-full h-10 my-5 sm:h-10 flex justify-center relative"><button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-blue-600 rounded text-white"
-        >
+          className="absolute cursor-pointer transition-all text-sm bg-blue-500 text-white px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
           + Add Announcement
-        </button>
+        </button></div>
       )}
 
       {/* MODAL */}
@@ -119,9 +122,10 @@ export default function AnnouncementTab({ eventId }) {
           user.role === "admin" || user.id === a.createdBy;
 
         return (
+          <div className="flex flex-row justify-center items-center">
           <div
             key={a._id}
-            className="relative border border-gray-700 p-4 rounded bg-gray-900"
+            className="relative p-4 bg-white/50 w-[95vw] sm:w-[98vw] rounded-lg mb-4"
           >
             {/* Delete button */}
             {canDelete && (
@@ -133,13 +137,14 @@ export default function AnnouncementTab({ eventId }) {
               </button>
             )}
 
-            <p className="text-lg font-semibold">{a.message}</p>
+            <p className="text-md  font-semibold text-stone-700 w-[70%]">{a.message}</p>
             <p className="text-xs text-gray-500">
               {new Date(a.createdAt).toLocaleString()}
             </p>
             <p className="text-xs text-gray-500">
               Announcement by: {a.role}
-              </p>
+            </p>
+          </div>
           </div>
         );
       })}

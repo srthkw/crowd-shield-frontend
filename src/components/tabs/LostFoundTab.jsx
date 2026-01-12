@@ -174,7 +174,11 @@ export default function LostFoundTab({ eventId }) {
     };
 
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return     <div className="flex flex-row justify-center items-center gap-2">
+    <div className="w-2 h-2 sm:w-4 sm:h-4 rounded-full bg-red-500 animate-bounce" />
+    <div className="w-2 h-2 sm:w-4 sm:h-4 rounded-full bg-red-500 animate-bounce [animation-delay:-.3s]" />
+    <div className="w-2 h-2 sm:w-4 sm:h-4 rounded-full bg-red-500 animate-bounce [animation-delay:-.5s]" />
+  </div>;
 
     return (
         <div className="space-y-6">

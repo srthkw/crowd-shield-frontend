@@ -4,8 +4,8 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectRoute from "./utils/protectRoute";
 import { AuthProvider } from "./context/AuthContext";
+import AuthRedirect from "../redirect/AuthRedirect";
 import EventDashboard from "./pages/EventDashboard";
-
 // pages
 import Login from "./pages/Login";
 import Events from "./pages/Events";
@@ -13,7 +13,11 @@ import UnderDev from "./pages/UnderDev";
 // later you'll add Events, Dashboard, etc.
 
 const router = createBrowserRouter([
-  { path: "/", element: <Login /> },
+  { path: "/", element: (
+  <AuthRedirect>
+  <Login />
+  </AuthRedirect>
+) },
   {
     path: "/events",
     element: (

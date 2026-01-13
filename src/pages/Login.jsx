@@ -43,7 +43,7 @@ const Login = () => {
 
       <div className="fixed inset-0 z-10 grid place-items-center p-4">
 
-        <div className="glass-bg sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
+        <div className="glass-bg text-shadow-lg shadow-black/50 sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
 
 
           <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-3 sm:mb-5">

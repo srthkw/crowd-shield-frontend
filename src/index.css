@@ -42,7 +42,7 @@
 
   .glass-bg{
     @apply
-     bg-white/35 shadow-xl shadow-black/30 rounded-2xl backdrop-blur-[5px] border border-white/30 p-6 sm:p-16 sm:py-12 text-center
+     bg-white/25 shadow-xl shadow-black/30 rounded-2xl backdrop-blur-lg border border-white/30 p-6 sm:p-16 sm:py-12 text-center
   }
 
   .glass-btn {

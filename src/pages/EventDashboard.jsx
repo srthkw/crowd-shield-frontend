@@ -45,12 +45,8 @@ export default function EventDashboard() {
                 {/* Header */}
 
                 <div className={`flex flex-col justify-center text-stone-700 p-3 glass-bg shadow-lg shadow-black/10 text-left transition-all duration-300 ease-in-out ${expanded ? "rounded-t-none" : "rounded-none"}`}>
-                    <div className="flex justify-center items-center mb-3">
-                        <FiArrowLeft className="sm:text-2xl text-stone-600 absolute left-2 sm:left-5 text-xl font-bold cursor-pointer" onClick={() => navigate(-1)} /><h1 className="sm:text-lg text-stone-600 text-md font-bold">Event Dashboard</h1>
-                    </div>
-                    <div className="border-b border-black/30 w-[98vw] sm:self-start mb-3 relative z-1 left-1/2 -translate-x-1/2"></div>
 
-                    <div className="text-lg font-bold mb-1 relative"><div className={`pr-15 overflow-hidden ${expanded ? "" : "line-clamp-2"} `}>{event.name}</div>
+                    <div className="text-lg font-bold mb-1 relative"><div className={`pr-8 sm:pr-10 text-sm sm:text-lg overflow-hidden ${expanded ? "" : "line-clamp-2"} `}>{event.name}</div>
                     <span className={`absolute right-1 top-0 cursor-pointer transition-transform duration-300 ${expanded ? "rotate-180" : ""}`} onClick={() => setExpanded(!expanded)} ><FiChevronDown className="size-7"/></span>
                     </div>
                     
@@ -70,18 +66,18 @@ export default function EventDashboard() {
                 {/* Desktop View */}
                 <div className="relative z-5 flex flex-col">
                     {/* Tabs */}
-                    <div className="flex items-center sm:flex-wrap flex-nowrap overflow-x-auto min-w-full sm:justify-center mt-4 pb-4 text-sm">
-                        {["announcements", "Lost-Found", "reports", "SOS"].map(tab => (
+                    <div className="flex items-center sm:flex-wrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden flex-nowrap overflow-x-auto min-w-full sm:justify-center mt-4 pb-1 text-sm">
+                        {["announcements", "Lost-Found", "SOS", "reports"].map(tab => (
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`shrink-0 p-2 mx-1 text-xs sm:text-sm cursor-pointer font-semibold rounded-2xl w-30 h-9 sm:w-[20%] capitalize text-stone-700 transition-all duration-300 ease-in-out hover:bg-[#C47BE4] ${activeTab === tab ? "text-stone-900 shadow-[0px_3px_0px_#a069b8] bg-[#C47BE4]" : "bg-[#cc8ee7]"
+                                className={`shrink-0 p-2 text-xs sm:text-sm cursor-pointer font-semibold w-30 h-9 sm:w-[20%] capitalize text-stone-700 transition-all duration-300 ease-in-out hover:bg-[#0000000e] ${activeTab === tab ? "text-stone-900 shadow-[0px_4px_0px_#F0FDFF]" : ""
                                     }`}>
                                 {tab}
                             </button>
                         ))}
                     </div>
-                        <div className="border-b border-black/10 w-[96vw]"></div>
+                        <div className="border-b border-black/10"></div>
 
                     {/* Tab Content */}
                     <div>

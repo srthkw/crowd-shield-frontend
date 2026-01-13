@@ -22,12 +22,22 @@
   }
 }
 
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE & Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari */
+  }
+}
+
 /* MOVE BUTTON STYLES HERE — NOT BASE */
 @layer components {
 
   .bg-default{
     @apply
-    fixed -z-5 bg-gradient-to-b from-[#F8E2CF] to-[#E37474] w-screen h-screen
+    fixed -z-5 bg-gradient-to-b from-[#D9ECC7] to-[#07A3B2] w-screen h-screen
   }
 
   .glass-bg{

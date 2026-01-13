@@ -121,7 +121,7 @@ export default function AnnouncementTab({ eventId }) {
       {announcements.length === 0 && <p>No announcements yet.</p>}
 
       <div className="flex flex-row flex-wrap items-center justify-center">
-        <div className="flex flex-row flex-wrap items-center justify-between w-[95vw]">
+        <div className="flex flex-row flex-wrap items-center justify-between w-[95vw] cursor-pointer">
           {announcements.map(a => {
             const canDelete =
               user.role === "admin" || user.id === a.createdBy;
@@ -143,14 +143,14 @@ export default function AnnouncementTab({ eventId }) {
                   </button>
                 )}
 
-                <div className="pointer-events-none">
-                  <div className={`relative text-sm font-semibold text-stone-700 w-60 sm:w-160 min-w-0 cursor-pointer line-clamp-2`}>{a.message}</div>
+                <div className="">
+                  <div className={`relative text-sm sm:text-[1em] font-semibold text-stone-700 w-[90%] sm:w-[90%] min-w-0 cursor-pointer line-clamp-2`}>{a.message}</div>
                   </div>
 
                   {pop === a._id && (
-                    <div className="bg-black/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-screen h-screen flex items-center justify-center"><div className="w-70 sm:w-120 max-h-60 sm:max-h-80 overflow-y-scroll text-sm sm:text-md bg-white/70 rounded-2xl text-stone-800 font-semibold backdrop-blur-sm p-5
+                    <div className="bg-black/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-screen h-screen flex items-center justify-center"><div className="w-full sm:w-150 max-h-60 sm:max-h-80 overflow-y-scroll text-sm sm:text-lg bg-white/70 rounded-2xl text-stone-800 font- backdrop-blur-sm p-5 px-7 sm:px-9 shadow-lg shadow-black/30
                     [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50
-                    "><h2 className="text-xl font-bold mb-1">Announcement</h2>{a.message}</div></div>
+                    "><h2 className="text-xl text-red-600 font-bold mb-2 sm:mb-4">Announcement:</h2>{a.message}</div></div>
                   )}
 
                 <p className="text-xs italic sm:text-sm text-stone-700 mt-3">

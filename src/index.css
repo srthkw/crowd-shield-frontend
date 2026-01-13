@@ -37,7 +37,7 @@
 
   .bg-default{
     @apply
-    fixed -z-5 bg-gradient-to-b from-[#D9ECC7] to-[#07A3B2] w-screen h-screen
+    fixed -z-5 bg-gradient-to-b from-[#BFD7ED] to-[#7B9ACC] w-screen h-screen
   }
 
   .glass-bg{

@@ -54,8 +54,8 @@ export default function Events() {
                 className="bg-white/70 glass-bg text-black/80 border-none py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition"
                 onClick={() => navigate(`/event/${event._id}`)}
               >
-                <div className="w-[80%] h-[50%]">
-                <h2 className="h-12 text-md font-semibold mb-5 line-clamp-2 text-ellipsis text-black/70">{event.name}</h2>
+                <div className="w-[80%] h-[45%]">
+                <h2 className="h-12 sm:h-13 font-semibold mb-5 text-md sm:text-lg line-clamp-2 text-ellipsis text-black/70">{event.name}</h2>
                 </div>
                 <div className="border-b border-black/20 w-full my-2"></div>
 
@@ -69,7 +69,7 @@ export default function Events() {
                   <FiInfo className="text-2xl m-1" />
                 </button>
 
-                <div id={`event-desc-${event._id}`} className="bg-[#fef2f2] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2 cursor-default" onClick={(e) => {
+                <div id={`event-desc-${event._id}`} className="bg-[#f2fbfe] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2 cursor-default" onClick={(e) => {
                     e.stopPropagation();
                   }}>
                   <button className="absolute text-black top-4 right-3 z-10 cursor-pointer" onClick={(e) => {

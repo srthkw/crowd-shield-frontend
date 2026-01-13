@@ -46,7 +46,7 @@ const Login = () => {
         <div className="glass-bg sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
 
 
-          <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-5">
+          <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-3 sm:mb-5">
             Crowd-Shield
           </h1>
 
@@ -58,7 +58,7 @@ const Login = () => {
 
             <label htmlFor="password" className="font-semibold sm:text-base text-xs text-left mr-auto text-white/90 relative left-0">Password</label>
 
-            <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs mb-2 sm:text-sm" />
+            <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="glass-input py-3 font-medium text-xs mb-4 sm:mb-2 sm:text-sm" />
 
             {error && (
               <p className="sm:w-auto font-semibold text-xs sm:text-sm text-red-500 w-full">
@@ -66,7 +66,7 @@ const Login = () => {
               </p>
             )}
 
-            <button type="submit" className="glass-btn w-[70%] sm:px-3 px-2 sm:py-2.5 py-2 mx-auto my-1 sm:my-3">{loading ? "Logging you in..." : "Login"}</button>
+            <button type="submit" className="glass-btn w-[70%] sm:px-3 px-2 sm:py-2.5 py-2 mx-auto my-1 sm:my-3 text-md">{loading ? "Logging you in..." : "Login"}</button>
             
             {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 w-[120vw] h-[120vh] z-10 bg-black/50"><Loader /></div>}
 

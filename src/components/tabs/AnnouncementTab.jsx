@@ -148,7 +148,7 @@ export default function AnnouncementTab({ eventId }) {
                   </div>
 
                   {pop === a._id && (
-                    <div className="bg-black/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-screen h-screen flex items-center justify-center"><div className="w-full sm:w-150 max-h-60 sm:max-h-80 overflow-y-scroll text-sm sm:text-lg bg-white/70 rounded-2xl text-stone-800 font- backdrop-blur-sm p-5 px-7 sm:px-9 shadow-lg shadow-black/30
+                    <div className="bg-black/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-screen h-[120vh] flex items-center justify-center"><div className="w-full sm:w-150 max-h-60 sm:max-h-80 overflow-y-scroll text-sm sm:text-lg bg-white/70 rounded-2xl text-stone-800 font- backdrop-blur-sm p-5 px-7 sm:px-9 shadow-lg shadow-black/30
                     [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50
                     "><h2 className="text-xl text-red-600 font-bold mb-2 sm:mb-4">Announcement:</h2>{a.message}</div></div>
                   )}

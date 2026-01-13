@@ -2,11 +2,13 @@ import React from 'react'
 import {useEffect, useRef, useState } from "react";
 import LogoutBTN from './buttons/LogoutBTN';
 import CreateEVNT from './buttons/CreateEVNT';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
 
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         function handleClickOutside(e) {
@@ -26,7 +28,7 @@ const Navbar = () => {
 
     return (
         <div className="sticky top-0 w-full z-10 flex justify-between p-3 content-center m-0 glass-bg shadow-lg shadow-black/5 bg-white/45 rounded-none">
-            <h3 className="text-black/80 text-xl font-bold">
+            <h3 className="text-black/80 text-xl font-bold" onClick={() => navigate(`/`)}>
                 Crowd-Shield
             </h3>
             <div ref={menuRef}>

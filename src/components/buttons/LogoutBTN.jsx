@@ -8,7 +8,7 @@ const LogoutBTN = () => {
     const { logout } = useAuth();
     const handleLogout = () => {
         logout();
-        navigate("/");
+        navigate("/login");
     };
     
     return (

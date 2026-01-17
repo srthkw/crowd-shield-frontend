@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
-import { FiTrash2 } from "react-icons/fi";
+import { FiTrash2, FiVolume2, FiCalendar, FiUser, FiX } from "react-icons/fi";
+import Loader2 from "../Loader2";
 
 export default function AnnouncementTab({ eventId }) {
   const [announcements, setAnnouncements] = useState([]);
@@ -67,50 +68,65 @@ export default function AnnouncementTab({ eventId }) {
   };
 
 
-  if (loading) return <div className="flex flex-row justify-center items-center gap-2 mt-6">
-    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce" />
-    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce [animation-delay:-.3s]" />
-    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce [animation-delay:-.5s]" />
-  </div>;
+  if (loading) return <Loader2/>;
 
   return (
-    <div className="relative ">
-
+    <div className="py-2 md:py-3">
       {/* CREATE BUTTON — only for organizer/admin */}
       {(user.role === "organizer" || user.role === "admin") && (
-        <div className="w-full h-10 my-5 sm:h-10 flex justify-center relative"><button
-          onClick={() => setShowModal(true)}
-          className="absolute cursor-pointer transition-all text-sm bg-blue-500 text-white px-6 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
-          + Add Announcement
-        </button></div>
+        <div className="flex justify-center mb-6 md:mb-8">
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+          >
+            <span className="text-xl">+</span>
+            Add Announcement
+          </button>
+        </div>
       )}
 
       {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-gray-900 p-6 rounded-lg w-96 space-y-4">
-            <h2 className="text-xl font-bold">New Announcement</h2>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6">
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 md:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+                New Announcement
+              </h2>
+            </div>
+
             <textarea
-              rows="4"
+              rows="6"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full p-2 bg-gray-800 border border-gray-700 rounded outline-none"
-              placeholder="Type your message..."
+              className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 resize-none text-black"
+              placeholder="Type your announcement message here..."
             />
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setShowModal(false)}
-                disabled={submitting}
-                className="px-3 py-2 bg-gray-600 text-white rounded"
-              >
-                Cancel
-              </button>
+
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className="py-2.5 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {submitting ? "Posting..." : "Post"}
+                {submitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Posting...
+                  </>
+                ) : (
+                  "Post Announcement"
+                )}
+              </button>
+              <button
+                onClick={() => setShowModal(false)}
+                disabled={submitting}
+                className="py-2.5 w-full bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+              >
+                Cancel
               </button>
             </div>
           </div>
@@ -118,52 +134,152 @@ export default function AnnouncementTab({ eventId }) {
       )}
 
       {/* ANNOUNCEMENTS LIST */}
-      {announcements.length === 0 && <p>No announcements yet.</p>}
-
-      <div className="flex flex-row flex-wrap items-center justify-center">
-        <div className="flex flex-row flex-wrap items-center justify-between w-[95vw] cursor-pointer">
-          {announcements.map(a => {
-            const canDelete =
-              user.role === "admin" || user.id === a.createdBy;
+      {announcements.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 md:py-16 text-center">
+          <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6">
+            <FiVolume2 className="w-10 h-10 text-gray-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            No Announcements Yet
+          </h3>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          {announcements.map((a) => {
+            const canDelete = user.role === "admin" || user.id === a.createdBy;
 
             return (
               <div
                 key={a._id}
-                className={`relative flex flex-col py-4 px-6 overflow-hidden bg-white/50 w-[95vw] sm:w-[47vw] rounded-lg mb-4`} onClick={() => setPop(pop === a._id ? null : a._id)}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden cursor-pointer group"
+                onClick={() => setPop(pop === a._id ? null : a._id)}
               >
                 {/* Delete button */}
                 {canDelete && (
                   <button
-                    onClick={(e) =>
-                      e.stopPropagation() ||
-                      handleDelete(a._id)}
-                    className="absolute top-4 right-3 sm:right-5 text-red-400 hover:text-red-800 cursor-pointer"
+                    onClick={(e) => e.stopPropagation() || handleDelete(a._id)}
+                    className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all opacity-0 group-hover:opacity-100 hover:opacity-100 shadow-sm"
                   >
-                    <FiTrash2 className="size-5" />
+                    <FiTrash2 className="w-5 h-5" />
                   </button>
                 )}
 
-                <div className="">
-                  <div className={`relative text-sm sm:text-[1em] font-semibold text-stone-700 w-[90%] sm:w-[90%] min-w-0 cursor-pointer line-clamp-2`}>{a.message}</div>
+                {/* Announcement Content */}
+                <div className="p-6 pb-4 flex flex-col">
+                  <div className="mb-4 relative pr-10 h-full">
+                    <div className="flex items-start gap-3">
+                      <div className="md:p-2 p-1 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 flex-shrink-0">
+                        <FiVolume2 className="md:w-5 md:h-5  text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0 md:h-20">
+                        <h3 className="font-semibold text-gray-800 line-clamp-3 text-sm leading-relaxed break-words">
+                          {a.message}
+                        </h3>
+                      </div>
+                    </div>
                   </div>
 
-                  {pop === a._id && (
-                    <div className="bg-black/30 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-screen h-[120vh] flex items-center justify-center"><div className="w-full sm:w-150 max-h-60 sm:max-h-80 overflow-y-scroll text-sm sm:text-lg bg-white/70 rounded-2xl text-stone-800 font- backdrop-blur-sm p-5 px-7 sm:px-9 shadow-lg shadow-black/30
-                    [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50
-                    "><h2 className="text-xl text-red-600 font-bold mb-2 sm:mb-4">Announcement:</h2>{a.message}</div></div>
-                  )}
-
-                <p className="text-xs italic sm:text-sm text-stone-700 mt-3">
-                  {new Date(a.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true })}
-                </p>
-                <p className="text-xs italic sm:text-sm text-stone-700">
-                  Announcement by: {a.role}
-                </p>
+                  {/* Meta Information */}
+                  <div className="border-t border-gray-200 pt-4">
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <FiCalendar className="w-4 h-4" />
+                        <span>
+                          {new Date(a.createdAt).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true
+                          })}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <FiUser className="w-4 h-4" />
+                        <span className="font-medium capitalize">{a.role}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           })}
         </div>
-      </div>
+      )}
+
+      {/* ANNOUNCEMENT DETAIL MODAL */}
+      {pop && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6"
+          onClick={() => setPop(null)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-6 border-b border-gray-100 flex justify-between items-start bg-gradient-to-r from-blue-50 to-purple-50">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">
+                  Announcement Details
+                </h3>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <FiUser className="w-4 h-4" />
+                  <span className="font-medium text-md capitalize">
+                    Posted by: {announcements.find(a => a._id === pop)?.role}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setPop(null)}
+                className="p-2 rounded-full hover:bg-white/50 transition-colors"
+              >
+                <FiX className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-2 rounded-lg bg-blue-100">
+                      <FiVolume2 className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <h4 className="font-semibold text-gray-800">Announcement</h4>
+                  </div>
+                  <div className="bg-gray-50 rounded-xl p-1 md:p-4">
+                    <p className="text-gray-700 md:text-lg leading-relaxed whitespace-pre-wrap break-words">
+                      {announcements.find(a => a._id === pop)?.message}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-gray-700 mb-2">
+                    <FiCalendar className="w-5 h-5 text-gray-600" />
+                    <span className="font-medium">Posted On</span>
+                  </div>
+                  <p className="text-gray-800">
+                    {new Date(
+                      announcements.find(a => a._id === pop)?.createdAt
+                    ).toLocaleDateString("en-IN", {
+                      weekday: "long",
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true
+                    })}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

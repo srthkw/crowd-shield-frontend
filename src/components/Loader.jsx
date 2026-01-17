@@ -2,9 +2,13 @@ import React from 'react';
 
 const Loader = () => {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
-        <div className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full" />
+    <div className="flex items-center justify-center h-[120vh] w-full">
+      <div className="relative">
+        {/* Neon gradient circle with pulse animation */}
+        <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-pulse shadow-lg shadow-blue-500/30" />
+
+        {/* Inner glow */}
+        <div className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 blur-sm animate-pulse" style={{ animationDuration: '2s' }} />
       </div>
     </div>
   );

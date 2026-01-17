@@ -6,14 +6,17 @@ import ProtectRoute from "./utils/protectRoute";
 import { AuthProvider } from "./context/AuthContext";
 import AuthRedirect from "../redirect/AuthRedirect";
 import EventDashboard from "./pages/EventDashboard";
-// pages
 import Login from "./pages/Login";
 import Events from "./pages/Events";
 import UnderDev from "./pages/UnderDev";
+import LandingPage from "./pages/LandingPage";
 // later you'll add Events, Dashboard, etc.
 
 const router = createBrowserRouter([
   { path: "/", element: (
+  <LandingPage />
+) },
+  { path: "/login", element: (
   <AuthRedirect>
   <Login />
   </AuthRedirect>

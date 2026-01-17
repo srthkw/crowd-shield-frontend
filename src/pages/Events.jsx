@@ -2,13 +2,21 @@ import { useRef, useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { FiXCircle, FiInfo, FiMapPin, FiCalendar } from "react-icons/fi";
+import { FiSearch, FiMapPin, FiCalendar, FiInfo, FiX } from 'react-icons/fi';
 import Loader from "../components/Loader";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  // Add to your component's state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // Filter events based on search query
+  const filteredEvents = events.filter(event =>
+    event.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -29,73 +37,231 @@ export default function Events() {
 
   return (
     <>
-      <div className="p-0 z-0 ">
-        <div className="bg-default"></div>
-        <Navbar className=""/>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2 md:p-2">
+        {/* Background decorative element */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/20 pointer-events-none" />
 
-        <div className="flex justify-center items-center my-2">
-          <h1 className="sm:text-xl text-stone-700 px-3 text-xl font-bold">Events</h1>
+        <Navbar />
+
+        {/* Header Section */}
+        <div className="relative z-10 mb-8 mt-3 md:mb-12">
+          <div className="flex flex-col items-center text-center">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3">
+              Events
+            </h1>
+
+            {/* Search Bar */}
+            <div className="w-full max-w-2xl mx-auto mb-6">
+              <div className="relative">
+                <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search events by name..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <FiX className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+              {searchQuery && (
+                <p className="text-sm text-gray-500 mt-2 text-center">
+                  Showing {filteredEvents.length} of {events.length} events
+                </p>
+              )}
+            </div>
+
+            {/* Decorative line */}
+            <div className="w-50 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
+          </div>
         </div>
 
-        <div className="border-b border-black/30 w-[90vw] sm:w-[95vw] my-2 relative z-1 left-1/2 -translate-x-1/2"></div>
-
-        {loading && <div className="flex justify-center absolute top-0 left-0 right-0 bottom-0" ><Loader /></div>}
-
-        {!loading && events.length === 0 && (
-          <p className="text-white/90 p-3 flex justify-center font-bold text-2xl">No events available</p>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
+              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          </div>
         )}
 
-        {!loading && events.length > 0 && (
-          <div className="flex items-center justify-center">
-          <div className="p-2 w-[99vw] sm:w-[91vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-            {events.map((event) => (
-              <div
-                key={event._id}
-                className="bg-white/70 glass-bg text-black/80 border-none py-4 px-6 text-start flex flex-col relative border rounded shadow cursor-pointer hover:scale-[1.01] transition"
-                onClick={() => navigate(`/event/${event._id}`)}
-              >
-                <div className="w-[80%] h-[45%]">
-                <h2 className="h-12 sm:h-13 font-semibold mb-5 text-md sm:text-lg line-clamp-2 text-ellipsis text-black/70">{event.name}</h2>
-                </div>
-                <div className="border-b border-black/20 w-full my-2"></div>
+        {/* Empty State */}
+        {!loading && filteredEvents.length === 0 && (
+          <div className="flex flex-col items-center justify-center min-h-[400px] text-center px-4">
+            <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mb-6">
+              {searchQuery ? (
+                <FiSearch className="w-12 h-12 text-gray-400" />
+              ) : (
+                <FiCalendar className="w-12 h-12 text-gray-400" />
+              )}
+            </div>
+            <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+              {searchQuery ? 'No Matching Events Found' : 'No Events Available'}
+            </h3>
+            <p className="text-gray-500 max-w-md">
+              {searchQuery
+                ? `No events found for "${searchQuery}". Try a different search term.`
+                : 'There are no events scheduled at the moment. Check back later!'}
+            </p>
+          </div>
+        )}
 
-                {/* description button */}
-                <button className="absolute top-2 right-1 p-1 text-xs font-medium text-black/70 cursor-pointer" onClick={(e) => {
-                  e.stopPropagation();
-                  const card = document.getElementById(`event-desc-${event._id}`);
-                  card.classList.toggle("hidden");
-
-                }}>
-                  <FiInfo className="text-2xl m-1" />
-                </button>
-
-                <div id={`event-desc-${event._id}`} className="bg-[#f2fbfe] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[150%] w-full h-full p-2 hidden rounded shadow flex gap-2 cursor-default" onClick={(e) => {
-                    e.stopPropagation();
-                  }}>
-                  <button className="absolute text-black top-4 right-3 z-10 cursor-pointer" onClick={(e) => {
-                    e.stopPropagation();
-                    const card = document.getElementById(`event-desc-${event._id}`);
-                    card.classList.toggle("hidden");
-                  }}>
-                    <FiXCircle className="text-2xl " />
+        {/* Events Grid */}
+        {!loading && filteredEvents.length > 0 && (
+          <div className="relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
+              {filteredEvents.map((event) => (
+                <div
+                  key={event._id}
+                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-gray-100 cursor-pointer relative"
+                  onClick={() => navigate(`/event/${event._id}`)}
+                >
+                  {/* Info Button - Positioned properly on all cards */}
+                  <button
+                    className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-all cursor-pointer z-10 shadow-sm hover:shadow-md"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedEvent(event);
+                    }}
+                  >
+                    <FiInfo className="w-5 h-5" />
                   </button>
-                  <div className="overflow-y-auto scrollbar-thin [scrollbar-color:rgba(0,0,0,0.3)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-black/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-black/50">
-                  <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%] mb-5">{event.name}</p>
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 mb-5 w-[80%]"><p className="font-bold flex text-stone-800 items-center gap-1"><FiMapPin/>At:</p>{event.location}</p>
-                    <p className="text-sm font-semibold text-black/80 mt-0 ml-5 w-[80%]"><p className="font-bold flex text-stone-800 items-center gap-1"><FiInfo/> Event Description:</p> {event.description}</p>
+
+                  {/* Event Header */}
+                  <div className="p-6 pb-4">
+                    <div className="mb-4">
+                      <h2 className="text-md font-bold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2 pr-10">
+                        {event.name}
+                      </h2>
+                    </div>
+
+                    {/* Event Details */}
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <FiMapPin className="w-4 h-4 flex-shrink-0 text-blue-500" />
+                        <span className="text-sm line-clamp-1">{event.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <FiCalendar className="w-4 h-4 flex-shrink-0 text-purple-500" />
+                        <span className="text-sm">
+                          {new Date(event.date).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric"
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Event Footer */}
+                  <div className="p-4 pt-0">
+                    <button
+                      className="w-full py-2 bg-gradient-to-r text-sm from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity group-hover:shadow-lg"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/event/${event._id}`);
+                      }}
+                    >
+                      View Details
+                    </button>
                   </div>
                 </div>
-                {/* ------------ */}
+              ))}
+            </div>
+          </div>
+        )}
 
-                <div className="flex flex-col gap-1 mt-auto text-sm font-normal">
-                  <div className=" flex gap-1.5 items-center"><FiMapPin className="text-md"/><span className="line-clamp-1 w-full">{event.location}</span></div>
-                  <span className=" truncate flex gap-1.5 items-center"><FiCalendar />
-                    {new Date(event.date).toLocaleDateString("en-IN", {day: "2-digit", month: "long", year: "numeric"})}
-                  </span>
+        {/* Event Details Modal */}
+        {selectedEvent && (
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6 animate-fadeIn"
+            onClick={() => setSelectedEvent(null)}
+          >
+            <div
+              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full sm:max-h-[85vh] overflow-hidden transform transition-all duration-300 scale-100"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="p-4 border-b border-gray-100 flex justify-between items-start bg-gradient-to-r from-blue-50 to-purple-50">
+                <div className="flex-1 min-w-0 pr-10">
+                  {/* Fixed: Title now wraps properly */}
+                  <h3 className="text-md md:text-2xl font-bold text-gray-800 break-words whitespace-normal">
+                    {selectedEvent.name}
+                  </h3>
+                </div>
+                <button
+                  className="p-2 rounded-full hover:bg-white/50 transition-colors cursor-pointer flex-shrink-0 absolute top-4 right-4"
+                  onClick={() => setSelectedEvent(null)}
+                >
+                  <FiX className="w-6 h-6 text-gray-500 hover:text-gray-700" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-6 overflow-y-auto max-h-[60vh]">
+                <div className="space-y-6">
+                  <div className=" text-sm sm:text-md">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="p-2 rounded-lg bg-blue-100">
+                        <FiInfo className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <h4 className="font-semibold text-gray-800 text-lg">Event Description</h4>
+                    </div>
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <p className="text-gray-600 leading-relaxed whitespace-pre-wrap break-words">
+                        {selectedEvent.description || 'No description provided.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 text-sm sm:text-md">
+                      <div className="flex items-center gap-2 text-gray-700 mb-2">
+                        <FiMapPin className="w-5 h-5 text-blue-600" />
+                        <span className="font-medium">Location</span>
+                      </div>
+                      <p className="text-gray-600 font-medium break-words">{selectedEvent.location}</p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-4 text-sm sm:text-md">
+                      <div className="flex items-center gap-2 text-gray-700 mb-2">
+                        <FiCalendar className="w-5 h-5 text-purple-600" />
+                        <span className="font-medium">Event Date</span>
+                      </div>
+                      <p className="text-gray-600 font-medium">
+                        {new Date(selectedEvent.date).toLocaleDateString("en-IN", {
+                          weekday: 'long',
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric"
+                        })}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Modal Footer */}
+              <div className="sm:p-6 p-2 border-t border-gray-100 flex flex-col sm:flex-row gap-3 sm:justify-between">
+                <button
+                  className="sm:px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+                  onClick={() => {
+                    setSelectedEvent(null);
+                    navigate(`/event/${selectedEvent._id}`);
+                  }}
+                >
+                  View Full Event Details
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

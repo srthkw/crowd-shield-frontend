@@ -45,7 +45,7 @@ const LandingPage = () => {
   {/* Navigation - Lighter */}
   <nav className="relative z-10 px-6 py-4 md:py-6 md:px-12">
     <div className="max-w-7xl mx-auto flex justify-between items-center">
-      <div className="flex items-center justify-center gap-3 w-full">
+      <div className="flex items-center justify-start gap-3 w-full">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
           <span className="text-white font-bold text-xl">CS</span>
         </div>
@@ -63,9 +63,11 @@ const LandingPage = () => {
         {/* Left Content */}
         <div className="flex-1 max-w-2xl">
           <div className="mb-6">
+            <div className="flex justify-center md:justify-start">
             <span className="inline-block px-3 md:px-4 py-2.5 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-sm font-medium mb-6 border border-blue-200/50">
               Full-Stack Event Management Platform
             </span>
+            </div>
             <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
               Secure, Scalable &<br />
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -79,7 +81,7 @@ const LandingPage = () => {
           </div>
 
           {/* CTA Buttons - Lighter */}
-          <div className="flex flex-wrap gap-4 md:mb-12">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 md:mb-12">
             <button
               onClick={() => {
                 console.log("Bro!")
@@ -202,7 +204,7 @@ const LandingPage = () => {
               <div className="md:text-base text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium border border-blue-200">
                 Render (Backend)
               </div>
-              <div className="md:text-base text-sm px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium border border-gray-300">
+              <div className="md:text-base text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium border border-blue-200">
                 Vercel (Frontend)
               </div>
             </div>

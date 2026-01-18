@@ -37,7 +37,7 @@ export default function Events() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2 md:p-2">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 p-2 md:p-2">
         {/* Background decorative element */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/20 pointer-events-none" />
 

@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
+import Loader2 from "../Loader2";
 
 export default function LostFoundTab({ eventId }) {
     const { user } = useAuth();
+    const [files, setFiles] = useState([]);
     const [lostItems, setLostItems] = useState([]);
     const [foundItems, setFoundItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -45,6 +47,7 @@ export default function LostFoundTab({ eventId }) {
         "Other"
     ];
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,10 +56,10 @@ export default function LostFoundTab({ eventId }) {
                 const found = res.data.filter(i => i.type === "found");
                 const sortByOwnership = (items) =>
                     items.sort((a, b) => (a.reportedBy === user.id ? -1 : 0) - (b.reportedBy === user.id ? -1 : 0));
-                  
-                  setLostItems(sortByOwnership(lost));
-                  setFoundItems(sortByOwnership(found));
-                  
+
+                setLostItems(sortByOwnership(lost));
+                setFoundItems(sortByOwnership(found));
+
             } catch (err) {
                 console.error("Failed:", err);
             } finally {
@@ -83,53 +86,74 @@ export default function LostFoundTab({ eventId }) {
         setShowModal(true);
     };
 
+    const handleFileChange = (e) => {
+        setFiles([e.target.files[0]]);
+    };
+
     const submitReport = async () => {
-        const { type, itemName, description, location, phone } = form;
-        if (!itemName.trim() || !description.trim() || !location.trim() || !phone.trim()) {
+        const { itemName, description, location, phone, type } = form;
+
+        if (!itemName || !description || !location || !phone) {
             alert("All fields are required");
             return;
         }
 
+        if (type === "found" && files.length === 0) {
+            alert("Select at least one image");
+            return;
+        }
+
+        const formData = new FormData();
+
+        formData.append("eventId", eventId);
+        formData.append("type", type);
+        formData.append("itemName", itemName);
+        formData.append("description", description);
+        formData.append("location", location);
+        formData.append("phone", phone);
+
+        files.forEach(file => {
+            formData.append("image", file); // MUST match multer field
+        });
+
         try {
-            const res = await axios.post("/lostfound", {
-                eventId,
-                ...form
+            const res = await axios.post("/lostfound", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
 
-            // Optimistic update — add new card instantly
-            const createdItem = res.data.item;  // extract actual new report
+            const createdItem = res.data.item;
 
-            if (form.type === "lost") {
+            if (type === "lost") {
                 setLostItems(prev => [createdItem, ...prev]);
             } else {
                 setFoundItems(prev => [createdItem, ...prev]);
             }
 
-            // 🔥 if a match exists, show highlight pop-up
-            if (res.data.match) {
+            if (res.data.match?.length) {
                 setMatchInfo({
                     newItem: createdItem,
-                    existingMatches: res.data.match
+                    existingMatches: res.data.match,
                 });
             }
 
-
-            // Reset + close modal
             setShowModal(false);
+            setFiles([]);
             setForm({
                 type: "lost",
                 itemName: "",
                 description: "",
                 location: "",
-                phone: ""
+                phone: "",
             });
-            setShowTypes(false); // hide dropdown
 
         } catch (err) {
-            console.error("Report failed:", err);
-            alert("Failed to report");
+            console.error(err);
+            alert("Failed to report item");
         }
     };
+
 
     const claimItem = async (item) => {
         try {
@@ -174,11 +198,7 @@ export default function LostFoundTab({ eventId }) {
     };
 
 
-    if (loading) return <div className="flex flex-row justify-center items-center gap-2 mt-6">
-    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce" />
-    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce [animation-delay:-.3s]" />
-    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 animate-bounce [animation-delay:-.5s]" />
-  </div>;
+    if (loading) return <Loader2 />;
 
     return (
         <div className="space-y-6">
@@ -203,6 +223,12 @@ export default function LostFoundTab({ eventId }) {
             {showModal && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
                     <div className="bg-gray-900 p-6 rounded w-96 space-y-4">
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />
 
                         <h2 className="text-xl font-bold">
                             {form.type === "lost" ? "Report Lost Item" : "Report Found Item"}
@@ -292,16 +318,35 @@ export default function LostFoundTab({ eventId }) {
                     >
                         View Details
                     </button>
+                    <button
+                        className="underline ml-2 mt-2"
+                        onClick={() => setMatchInfo(null)}
+                    >
+                        Close
+                    </button>
                 </div>
             )}
 
 
             {/* LOST LIST */}
             <div>
-                <h2 className="text-xl font-bold mb-2">Lost Items</h2>
+                <h2 className="text-xl font-bold mb-2 text-black">Lost Items</h2>
                 {lostItems.length === 0 && <p>No lost items reported yet.</p>}
                 {lostItems.map(item => (
                     <div key={item._id} className="border p-4 rounded bg-gray-900 mb-3">
+                        {item.imageUrls?.length > 0 && (
+                            <div className="flex gap-2 mt-2">
+                                {item.imageUrls.map((url, idx) => (
+                                    <img
+                                        key={idx}
+                                        src={url}
+                                        alt={item.itemName}
+                                        className="h-24 w-24 object-cover rounded border"
+                                        loading="lazy"
+                                    />
+                                ))}
+                            </div>
+                        )}
                         <p className="font-semibold text-lg">{item.itemName}</p>
                         <p className="text-gray-300">{item.description}</p>
                         <p className="text-gray-400 text-sm">{item.location} • {new Date(item.createdAt).toLocaleString()}</p>
@@ -320,10 +365,23 @@ export default function LostFoundTab({ eventId }) {
 
             {/* FOUND LIST */}
             <div>
-                <h2 className="text-xl font-bold mb-2">Found Items</h2>
+                <h2 className="text-xl font-bold mb-2 text-black">Found Items</h2>
                 {foundItems.length === 0 && <p>No found items reported yet.</p>}
                 {foundItems.map(item => (
                     <div key={item._id} className="border p-4 rounded bg-gray-900 mb-3">
+                        {item.imageUrls?.length > 0 && (
+                            <div className="flex gap-2 mt-2">
+                                {item.imageUrls.map((url, idx) => (
+                                    <img
+                                        key={idx}
+                                        src={url}
+                                        alt={item.itemName}
+                                        className="h-24 w-24 object-cover rounded border"
+                                        loading="lazy"
+                                    />
+                                ))}
+                            </div>
+                        )}
                         <p className="font-semibold text-lg">{item.itemName}</p>
                         <p className="text-gray-300">{item.description}</p>
                         <p className="text-gray-400 text-sm">{item.location} • {new Date(item.createdAt).toLocaleString()}</p>

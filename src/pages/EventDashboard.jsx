@@ -34,12 +34,12 @@ export default function EventDashboard() {
         fetchEvent();
     }, [eventId]);
 
-    if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-[120vw] h-[120vh] z-10 bg-black/10"><Loader /></div>;
+    if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-[120vw] h-[120vh] z-10 bg-white/10"><Loader /></div>;
     if (!event) return <p className="p-4 text-red-500">Event not found</p>;
 
     return (
         <>
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 min-h-screen">
                 <Navbar />
 
                 <div className="max-w-7xl mx-auto px-1 md:px-3 py-2 md:py-8">
@@ -126,7 +126,7 @@ export default function EventDashboard() {
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={`shrink-0 px-6 py-4 font-medium text-sm md:text-base transition-all duration-300 relative ${activeTab === tab
+                                        className={`shrink-0 px-6 py-4 font-medium text-sm md:text-base capitalize transition-all duration-300 relative ${activeTab === tab
                                             ? "text-blue-600"
                                             : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                                             }`}

@@ -122,7 +122,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar px-4 md:px-6">
-                                {["announcements", "reports", "SOS", "Lost-Found" ].map((tab) => (
+                                {["announcements", "SOS", "Lost-Found", "reports" ].map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}

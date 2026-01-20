@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Crowd-shield</string>
+    <string name="title_activity_main">Crowd-shield</string>
+    <string name="package_name">com.sarthak.crowdshield</string>
+    <string name="custom_url_scheme">com.sarthak.crowdshield</string>
+</resources>

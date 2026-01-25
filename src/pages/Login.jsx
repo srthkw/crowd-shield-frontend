@@ -39,11 +39,11 @@ const Login = () => {
 
   return (
     <>
-      <div className="fixed inset-0 z-10 grid place-items-center p-4 bg-gradient-to-br from-blue-300/90 via-purple-300/90 to-gray-300">
+      <div className="fixed inset-0 z-10 grid place-items-center p-4 bg-gradient-to-br from-blue-300/50 via-purple-300/50 to-gray-200">
 
       <div className="fixed inset-0 z-20 grid place-items-center p-4">
 
-        <div className="glass-bg bg-gray-400/30 border-none text-shadow-lg shadow-black/50 sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
+        <div className="glass-bg bg-gray-500/30 border-none text-shadow-lg shadow-black/50 sm:w-auto w-[80vw] sm:max-w-max max-w-[300px] sm:h-auto mb-10">
 
 
           <h1 className="text-[var(--textcolor)] text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-3 sm:mb-5">

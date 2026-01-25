@@ -4,6 +4,18 @@ import { useNavigate } from 'react-router-dom';
 const LandingPage = () => {
   const navigate = useNavigate();
   const [activeFeature, setActiveFeature] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const technologies = [
+    { name: "React", color: "from-blue-400 to-cyan-400", desc: "Frontend Framework" },
+    { name: "Tailwind CSS", color: "from-teal-400 to-emerald-400", desc: "Styling" },
+    { name: "Node.js", color: "from-green-400 to-lime-400", desc: "Backend Runtime" },
+    { name: "Express", color: "from-gray-400 to-gray-300", desc: "API Framework" },
+    { name: "MongoDB", color: "from-green-500 to-emerald-500", desc: "Database" },
+    { name: "JWT", color: "from-red-400 to-pink-400", desc: "Authentication" },
+    { name: "Vercel", color: "from-gray-800 to-gray-900", desc: "Frontend Hosting" },
+    { name: "Render", color: "from-blue-500 to-indigo-500", desc: "Backend Hosting" }
+  ];
 
   const features = [
     {
@@ -45,7 +57,7 @@ const LandingPage = () => {
   {/* Navigation - Lighter */}
   <nav className="relative z-10 px-6 py-4 md:py-6 md:px-12">
     <div className="max-w-7xl mx-auto flex justify-between items-center">
-      <div className="flex items-center justify-start gap-3 w-full">
+      <div className="flex items-center justify-center md:justify-start gap-3 w-full">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
           <span className="text-white font-bold text-xl">CS</span>
         </div>
@@ -151,78 +163,104 @@ const LandingPage = () => {
 
   {/* Tech Stack Section - Lighter */}
   <section className="relative z-10 px-6 md:px-12 pt-12 md:pt-25">
-    <div className="max-w-7xl mx-auto">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Built With Modern Tech Stack
-        </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Leveraging industry-leading technologies for performance and scalability
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-        {[
-          { name: "React", color: "from-blue-400 to-cyan-400", desc: "Frontend Framework" },
-          { name: "Tailwind CSS", color: "from-teal-400 to-emerald-400", desc: "Styling" },
-          { name: "Node.js", color: "from-green-400 to-lime-400", desc: "Backend Runtime" },
-          { name: "Express", color: "from-gray-400 to-gray-300", desc: "API Framework" },
-          { name: "MongoDB", color: "from-green-500 to-emerald-500", desc: "Database" },
-          { name: "JWT", color: "from-red-400 to-pink-400", desc: "Authentication" },
-          { name: "Vercel", color: "from-gray-800 to-gray-900", desc: "Frontend Hosting" },
-          { name: "Render", color: "from-blue-500 to-indigo-500", desc: "Backend Hosting" }
-        ].map((tech, index) => (
-          <div
-            key={index}
-            className="group bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:scale-[1.02] shadow-sm"
-          >
-            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tech.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
-              <span className="text-white font-bold">{tech.name.charAt(0)}</span>
-            </div>
-            <h3 className="text-sm md:text-lg font-semibold text-gray-800 mb-2">{tech.name}</h3>
-            <p className="text-xs md:text-sm text-gray-600">{tech.desc}</p>
+      <div className="max-w-7xl mx-auto">
+        {/* Header with toggle button */}
+        <div className="md:text-center mb-8">
+          <div className="flex items-center justify-center gap-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900">
+              Built With Modern Tech Stack
+            </h2>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200 group"
+              aria-label={isOpen ? "Collapse tech stack" : "Expand tech stack"}
+            >
+              <svg
+                className={`w-5 h-5 text-blue-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
+          <p className="text-gray-600 max-w-2xl mx-auto mt-4">
+            Leveraging industry-leading technologies for performance and scalability
+          </p>
+        </div>
 
-  {/* Deployment Section - Lighter */}
-  <section className="relative z-10 px-6 md:px-12 py-5 md:py-10">
-    <div className="max-w-7xl mx-auto">
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-3xl p-6 md:p-12 border border-gray-200 shadow-lg">
-        <div className="grid md:grid-cols-2 gap-3 md:gap-8 items-center">
-          <div>
-            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-4">
-              Deployment
-            </h3>
-            <p className="text-sm md:text-base text-gray-700 mb-6">
-              Separately deployed frontend and backend with environment-based 
-              configurations for maximum reliability and scalability.
-            </p>
-            <div className="flex items-center gap-2 md:gap-4">
-              <div className="md:text-base text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium border border-blue-200">
-                Render (Backend)
+        {/* Collapsible Content */}
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          {/* Tech Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8">
+            {technologies.map((tech, index) => (
+              <div
+                key={index}
+                className="group bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:scale-[1.02] shadow-sm"
+              >
+                <div
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tech.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}
+                >
+                  <span className="text-white font-bold">{tech.name.charAt(0)}</span>
+                </div>
+                <h3 className="text-sm md:text-lg font-semibold text-gray-800 mb-2">
+                  {tech.name}
+                </h3>
+                <p className="text-xs md:text-sm text-gray-600">{tech.desc}</p>
               </div>
-              <div className="md:text-base text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium border border-blue-200">
-                Vercel (Frontend)
-              </div>
-            </div>
+            ))}
           </div>
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-              <div className="text-sm text-gray-600 mb-2">API Security</div>
-              <div className="text-sm md:text-lg font-semibold text-gray-800">JWT Protected</div>
-            </div>
-            <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-              <div className="text-sm text-gray-600 mb-2">Database</div>
-              <div className="text-sm md:text-lg font-semibold text-gray-800">MongoDB Atlas</div>
+
+          {/* Deployment Section */}
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-3xl p-6 md:p-12 border border-gray-200 shadow-lg">
+            <div className="grid md:grid-cols-2 gap-3 md:gap-8 items-center">
+              <div>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 md:mb-4">
+                  Deployment
+                </h3>
+                <p className="text-sm md:text-base text-gray-700 mb-6">
+                  Separately deployed frontend and backend with environment-based
+                  configurations for maximum reliability and scalability.
+                </p>
+                <div className="flex items-center gap-2 md:gap-4">
+                  <div className="md:text-base text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium border border-blue-200">
+                    Render (Backend)
+                  </div>
+                  <div className="md:text-base text-sm px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium border border-blue-200">
+                    Vercel (Frontend)
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 md:gap-4">
+                <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+                  <div className="text-sm text-gray-600 mb-2">API Security</div>
+                  <div className="text-sm md:text-lg font-semibold text-gray-800">
+                    JWT Protected
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+                  <div className="text-sm text-gray-600 mb-2">Database</div>
+                  <div className="text-sm md:text-lg font-semibold text-gray-800">
+                    MongoDB Atlas
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
-    </div>
-  </section>
+    </section>
 </div>
   );
 };

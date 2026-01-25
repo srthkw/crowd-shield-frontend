@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import Loader2 from "../Loader2";
-import { FiInfo, FiMapPin, FiCalendar, FiCheckCircle, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { FiInfo, FiMapPin, FiCamera } from "react-icons/fi";
 
 export default function LostFoundTab({ eventId }) {
     const { user } = useAuth();
@@ -25,28 +25,34 @@ export default function LostFoundTab({ eventId }) {
     });
 
     const ITEM_TYPES = [
-        "Phone",
-        "Wallet",
         "Bag",
-        "Laptop",
-        "Earbuds",
+        "Book",
         "Camera",
+        "Cash",
+        "Charger",
+        "Child",
+        "Clothes",
+        "Documents",
+        "Earbuds",
+        "Elderly Person",
         "Headphones",
-        "Watch",
+        "ID Card",
         "Jewelry",
         "Keys",
-        "Power Bank",
-        "Water Bottle",
-        "Book",
-        "Clothes",
-        "Shoes",
+        "Laptop",
+        "Medication",
+        "Other",
         "Passport",
-        "Child",
-        "Elderly Person",
-        "Cash",
         "Person",
-        "Documents",
-        "Other"
+        "Phone",
+        "Power Bank",
+        "Shoes",
+        "Spectacles",
+        "Tablet",
+        "Umbrella",
+        "Wallet",
+        "Watch",
+        "Water Bottle"
     ];
 
 
@@ -135,13 +141,6 @@ export default function LostFoundTab({ eventId }) {
                 setFoundItems(prev => [createdItem, ...prev]);
             }
 
-            // if (res.data.match?.length) {
-            //     setMatchInfo({
-            //         newItem: createdItem,
-            //         existingMatches: res.data.match,
-            //     });
-            // }
-
             setShowModal(false);
             setSubmitload(false);
             setFiles([]);
@@ -171,14 +170,6 @@ export default function LostFoundTab({ eventId }) {
                 setFoundItems(prev => prev.filter(i => i._id !== item._id));
             }
 
-            // If modal is showing matches, update that too
-            // if (matchInfo) {
-            //     setMatchInfo(prev => ({
-            //         ...prev,
-            //         existingMatches: prev.existingMatches.filter(i => i._id !== item._id)
-            //     }));
-            // }
-
         } catch (err) {
             alert(err.response?.data?.message || "Failed to claim item");
         }
@@ -195,6 +186,7 @@ export default function LostFoundTab({ eventId }) {
                 newItem: item,
                 existingMatches: null,
             });
+            // Show matches modal when matches are found
             setShowMatchModal(true);
         } catch (err) {
             alert(err.response?.data?.message || "Failed to check matches");
@@ -205,413 +197,457 @@ export default function LostFoundTab({ eventId }) {
     if (loading) return <Loader2 />;
 
     return (
-<div className="space-y-8">
+        <div className="space-y-8">
 
-{/* Report Buttons - Enhanced with gradient and hover effects */}
-<div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
-    <button
-        onClick={() => openModal("lost")}
-        className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold shadow-lg shadow-red-500/20 hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
-    >
-        Report Lost
-    </button>
-    <button
-        onClick={() => openModal("found")}
-        className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold shadow-lg shadow-green-500/20 hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
-    >
-        Report Found
-    </button>
-</div>
-
-{/* Main Modal - Redesigned with glass morphism and improved layout */}
-{showModal && (
-    <div className="fixed inset-0 h-full bg-black/50 backdrop-blur-sm flex items-center justify-center md:text-md text-sm z-50 p-4">
-        <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 backdrop-blur-sm rounded-2xl shadow-2xl shadow-blue-500/10 w-full max-w-md md:space-y-3 space-y-2 p-5">
-            {/* Modal Header */}
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-800">
-                    {form.type === "lost" ? "Report Lost Item" : "Report Found Item"}
-                </h2>
+            {/* Report Buttons - Enhanced with gradient and hover effects */}
+            <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
+                <button
+                    onClick={() => openModal("lost")}
+                    className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold shadow-lg shadow-red-500/20 hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
+                >
+                    Report Lost
+                </button>
+                <button
+                    onClick={() => openModal("found")}
+                    className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold shadow-lg shadow-green-500/20 hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
+                >
+                    Report Found
+                </button>
             </div>
 
-            {/* File Input - Styled to match theme */}
-            <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">
-                    Upload Images
-                </label>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-blue-600 file:to-purple-600 file:text-white"
-                />
-            </div>
+            {/* Main Modal - Redesigned with glass morphism and improved layout */}
+            {showModal && (
+                <div className="fixed inset-0 h-full bg-black/50 backdrop-blur-sm flex items-center justify-center md:text-md text-sm z-50 p-4">
+                    <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 backdrop-blur-sm rounded-2xl shadow-2xl shadow-blue-500/10 w-full max-w-md md:space-y-3 space-y-2 p-5">
+                        {/* Modal Header */}
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold text-gray-800">
+                                {form.type === "lost" ? "Report Lost Item" : "Report Found Item"}
+                            </h2>
+                        </div>
 
-            {/* Item Type Dropdown - Enhanced with better styling */}
-            <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">
-                    Item Type
-                </label>
-                <div className="relative" ref={dropdownRef}>
-                    <input
-                        type="text"
-                        placeholder="Select options from the dropdown for better results"
-                        value={form.itemName}
-                        onChange={e => setForm({ ...form, itemName: e.target.value })}
-                        className="w-full p-3 text-sm text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-                        onFocus={() => setShowTypes(true)}
-                    />
-                    
-                    {showTypes && (
-                        <div className="absolute z-50 left-0 right-0 mt-1 text-stone-700 bg-white border border-gray-200 rounded-xl shadow-lg shadow-blue-500/10 max-h-48 overflow-y-auto">
-                            {ITEM_TYPES
-                                .filter(type =>
-                                    type.toLowerCase().includes(form.itemName.toLowerCase())
-                                )
-                                .map(type => (
-                                    <div
-                                        key={type}
-                                        className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0"
-                                        onClick={() => {
-                                            setForm({ ...form, itemName: type });
-                                            setShowTypes(false);
-                                        }}
-                                    >
-                                        {type}
+                        {/* File Input - Styled to match theme */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-gray-700">
+                                Upload Images
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-blue-600 file:to-purple-600 file:text-white"
+                            />
+                        </div>
+
+                        {/* Item Type Dropdown - Enhanced with better styling */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-gray-700">
+                                Item Type
+                            </label>
+                            <div className="relative" ref={dropdownRef}>
+                                <input
+                                    type="text"
+                                    placeholder="Select options from the dropdown for better results"
+                                    value={form.itemName}
+                                    onChange={e => setForm({ ...form, itemName: e.target.value })}
+                                    className="w-full p-3 text-sm text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                                    onFocus={() => setShowTypes(true)}
+                                />
+
+                                {showTypes && (
+                                    <div className="absolute z-50 left-0 right-0 mt-1 text-stone-700 bg-white border border-gray-200 rounded-xl shadow-lg shadow-blue-500/10 max-h-48 overflow-y-auto">
+                                        {ITEM_TYPES
+                                            .filter(type =>
+                                                type.toLowerCase().includes(form.itemName.toLowerCase())
+                                            )
+                                            .map(type => (
+                                                <div
+                                                    key={type}
+                                                    className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0"
+                                                    onClick={() => {
+                                                        setForm({ ...form, itemName: type });
+                                                        setShowTypes(false);
+                                                    }}
+                                                >
+                                                    {type}
+                                                </div>
+                                            ))}
                                     </div>
-                                ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Description Textarea */}
-            <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">
-                    Description
-                </label>
-                <textarea
-                    placeholder="Provide detailed description..."
-                    value={form.description}
-                    onChange={e => setForm({ ...form, description: e.target.value })}
-                    className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 md:min-h-[100px] resize-y leading-relaxed"
-                />
-            </div>
-
-            {/* Location Input */}
-            <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">
-                    Location
-                </label>
-                <input
-                    type="text"
-                    placeholder="Where was it lost/found?"
-                    value={form.location}
-                    onChange={e => setForm({ ...form, location: e.target.value })}
-                    className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-                />
-            </div>
-
-            {/* Phone Input */}
-            <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">
-                    Phone Number
-                </label>
-                <input
-                    type="tel"
-                    placeholder="Your contact number"
-                    value={form.phone}
-                    onChange={e => setForm({ ...form, phone: e.target.value })}
-                    className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-                />
-            </div>
-
-            {/* Modal Actions */}
-            <div className="flex justify-end gap-3 pt-4">
-                <button
-                    onClick={() => setShowModal(false)}
-                    className="px-5 py-2.5 text-gray-700 font-medium border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 min-h-[44px]"
-                >
-                    Cancel
-                </button>
-                <button
-                    disabled={submitload}
-                    onClick={submitReport}
-                    className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all duration-300 min-h-[44px]"
-                >
-                    {submitload ? "Submitting..." : "Submit Report"}
-                </button>
-            </div>
-        </div>
-    </div>
-)}
-
-{/* Match Notification - Enhanced with better visual hierarchy */}
-
-    <div className="p-5 bg-gradient-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 rounded-xl shadow-lg shadow-yellow-500/10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-                <div ><FiCheckCircle className="text-xl text-stone-700"/></div>
-                <div>
-                    <p className="font-bold text-gray-800">View Potential Matches</p>
-                    <p className="text-gray-600 text-sm mt-1">Items that might match your report.</p>
-                </div>
-            </div>
-            <div className="flex gap-3">
-                <button
-                    className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 min-h-[44px]"
-                    onClick={() => setShowMatchModal(true)}
-                >
-                    View Details
-                </button>
-                <button
-                    className="px-4 py-2 text-gray-600 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 min-h-[44px]"
-                    onClick={() => setMatchInfo(null)}
-                >
-                    Dismiss
-                </button>
-            </div>
-        </div>
-    </div>
-
-
-{/* Lost Items Section */}
-<div className="space-y-4">
-    <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Lost Items</h2>
-        <span className="px-3 py-1 bg-gradient-to-r from-red-50 to-pink-50 text-red-600 text-sm font-semibold rounded-full">
-            {lostItems.length} items
-        </span>
-    </div>
-    
-    {lostItems.length === 0 ? (
-        <div className="p-8 text-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border-2 border-dashed border-blue-200/30">
-            <div className="text-4xl mb-3">📭</div>
-            <p className="text-gray-600 font-medium">No lost items reported yet</p>
-            <p className="text-gray-500 text-sm mt-1">Be the first to report a lost item</p>
-        </div>
-    ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {lostItems.map(item => (
-                <div key={item._id} onClick={() => checkMatches(item)} className={`cursor-pointer bg-white/95 backdrop-blur-sm rounded-xl shadow-lg shadow-blue-500/10 p-5 space-y-4 hover:shadow-xl hover:shadow-blue-500/15 transition-all duration-300 ${item.reportedBy.toString() === user.id ? "border-2 border-blue-300" : "border border-gray-200"}`}>
-                    {/* Item Images - With placeholder for no images */}
-                    <div className="flex gap-2 overflow-x-auto pb-2">
-                        {item.imageUrls?.length > 0 ? (
-                            item.imageUrls.map((url, idx) => (
-                                <img
-                                    key={idx}
-                                    src={url}
-                                    alt={item.itemName}
-                                    className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
-                                    loading="lazy"
-                                />
-                            ))
-                        ) : (
-                            <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
-                                <div className="text-4xl text-gray-400 mb-2">📷</div>
-                                <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                )}
                             </div>
-                        )}
-                    </div>
-                    
-                    {/* Item Details */}
-                    <div className="space-y-3">
-                        <h3 className="font-bold text-lg text-gray-800 line-clamp-1">{item.itemName}</h3>
-                        <p className="text-gray-600 leading-relaxed line-clamp-2">{item.description}</p>
-                        {item.reportedBy.toString() === user.id && (
-                            <span className="inline-block bg-blue-500 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                                Reported by you
-                            </span>
-                        )}
-                        <div className="flex items-center justify-between text-sm">
-                            <span className="flex items-center gap-1 text-gray-500">
-                                📍 {item.location}
-                            </span>
-                            <span className="text-gray-400">
-                                {new Date(item.createdAt).toLocaleDateString()}
-                            </span>
                         </div>
-                    </div>
-                    
-                    {/* Claim Button - Conditionally shown */}
-                    {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
-                        <button
-                            onClick={() => claimItem(item)}
-                            className="w-full py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 text-sm"
-                        >
-                            Mark as Claimed
-                        </button>
-                    )}
-                </div>
-            ))}
-        </div>
-    )}
-</div>
 
-{/* Found Items Section */}
-<div className="space-y-4">
-    <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-800">Found Items</h2>
-        <span className="px-3 py-1 bg-gradient-to-r from-green-50 to-emerald-50 text-green-600 text-sm font-semibold rounded-full">
-            {foundItems.length} items
-        </span>
-    </div>
-    
-    {foundItems.length === 0 ? (
-        <div className="p-8 text-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border-2 border-dashed border-blue-200/30">
-            <div className="text-4xl mb-3">🔍</div>
-            <p className="text-gray-600 font-medium">No found items reported yet</p>
-            <p className="text-gray-500 text-sm mt-1">Be the first to report a found item</p>
-        </div>
-    ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {foundItems.map(item => (
-                <div key={item._id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg shadow-blue-500/10 border border-gray-200 p-5 space-y-4 hover:shadow-xl hover:shadow-blue-500/15 transition-all duration-300">
-                    {/* Item Images - With placeholder for no images */}
-                    <div className="flex gap-2 overflow-x-auto pb-2">
-                        {item.imageUrls?.length > 0 ? (
-                            item.imageUrls.map((url, idx) => (
-                                <img
-                                    key={idx}
-                                    src={url}
-                                    alt={item.itemName}
-                                    className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
-                                    loading="lazy"
-                                />
-                            ))
-                        ) : (
-                            <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
-                                <div className="text-4xl text-gray-400 mb-2">📷</div>
-                                <p className="text-xs text-gray-500 text-center px-2">No image</p>
-                            </div>
-                        )}
-                    </div>
-                    
-                    {/* Item Details */}
-                    <div className="space-y-3">
-                        <h3 className="font-bold text-lg text-gray-800 line-clamp-1">{item.itemName}</h3>
-                        <p className="text-gray-600 leading-relaxed line-clamp-2">{item.description}</p>
-                        <div className="flex items-center justify-between text-sm">
-                            <span className="flex items-center gap-1 text-gray-500">
-                                📍 {item.location}
-                            </span>
-                            <span className="text-gray-400">
-                                {new Date(item.createdAt).toLocaleDateString()}
-                            </span>
+                        {/* Description Textarea */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-gray-700">
+                                Description
+                            </label>
+                            <textarea
+                                placeholder="Provide detailed description..."
+                                value={form.description}
+                                onChange={e => setForm({ ...form, description: e.target.value })}
+                                className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 md:min-h-[100px] resize-y leading-relaxed"
+                            />
                         </div>
-                    </div>
-                    
-                    {/* Claim Button - Conditionally shown */}
-                    {(user.id === item.reportedBy || user.role === "admin") && (
-                        <button
-                            onClick={() => claimItem(item)}
-                            className="w-full py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 text-sm"
-                        >
-                            Mark as Claimed
-                        </button>
-                    )}
-                </div>
-            ))}
-        </div>
-    )}
-</div>
 
-{/* Match Details Modal */}
-{showMatchModal && (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl shadow-blue-500/20 w-full max-w-2xl space-y-6 p-8">
-            {/* Modal Header */}
-            <div className="flex justify-between items-center">
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-800">Possible Match Found</h2>
-                    <p className="text-gray-600 text-sm mt-1">Compare details below</p>
-                </div>
-                <button
-                    onClick={() => setShowMatchModal(false)}
-                    className="text-gray-500 hover:text-gray-700 text-xl transition-colors"
-                    aria-label="Close modal"
-                >
-                    ✕
-                </button>
-            </div>
+                        {/* Location Input */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-gray-700">
+                                Location
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Where was it lost/found?"
+                                value={form.location}
+                                onChange={e => setForm({ ...form, location: e.target.value })}
+                                className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                            />
+                        </div>
 
-            {/* Refresh Button */}
-            <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl">
-                <div>
-                    <p className="text-sm font-semibold text-gray-700">Last updated:</p>
-                    <p className="text-xs text-gray-500">{new Date().toLocaleTimeString()}</p>
-                </div>
-            </div>
+                        {/* Phone Input */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-gray-700">
+                                Phone Number
+                            </label>
+                            <input
+                                type="tel"
+                                placeholder="Your contact number"
+                                value={form.phone}
+                                onChange={e => setForm({ ...form, phone: e.target.value })}
+                                className="w-full p-3 text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
+                            />
+                        </div>
 
-            {/* Newly Reported Item */}
-            {matchInfo &&
-            <div className="space-y-3">
-                <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border-2 border-blue-200/30">
-                    <h4 className="font-bold text-xl text-gray-800 mb-2">{matchInfo.newItem.itemName}</h4>
-                    <p className="text-gray-600 mb-3 leading-relaxed">{matchInfo.newItem.description}</p>
-                    <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-700 font-medium">📍 {matchInfo.newItem.location}</span>
-                        <span className="text-gray-500">{new Date(matchInfo.newItem.createdAt).toLocaleString()}</span>
-                    </div>
-                </div>
-            </div>
-            }
-            {!matchInfo && 
-            <div>
-                <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
-                <h2 className="text-stone-700">No item reported yet</h2>
-                </div>
-            }
-
-            {/* Matched Items */}
-            {matchInfo &&
-            <div className="space-y-3">
-                <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
-                    <span>Potential Matches</span>
-                    <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
-                        {matchInfo.existingMatches == null ? "No" : matchInfo.existingMatches.length} items
-                    </span>
-                </h3>
-                
-                <div className="space-y-4">
-                    {matchInfo.existingMatches == null && (
-                        <h2 className="text-stone-700">No matches found</h2>
-                    )}
-
-                    {matchInfo.existingMatches !== null && matchInfo.existingMatches.map(m => (
-                        <div
-                            key={m._id}
-                            className="bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-300/50 space-y-3"
-                        >
-                            <h4 className="font-bold text-lg text-gray-800">{m.itemName}</h4>
-                            <p className="text-gray-600 leading-relaxed">{m.description}</p>
-                            <div className="flex items-center justify-between text-sm">
-                                <span className="text-gray-700 font-medium">📍 {m.location}</span>
-                                <span className="text-gray-500">{new Date(m.createdAt).toLocaleString()}</span>
-                            </div>
+                        {/* Modal Actions */}
+                        <div className="flex justify-end gap-3 pt-4">
                             <button
-                                onClick={() => window.location.href = `tel:${m.phone}`}
-                                className="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-2"
+                                onClick={() => setShowModal(false)}
+                                className="px-5 py-2.5 text-gray-700 font-medium border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-300 min-h-[44px]"
                             >
-                                📞 Contact Reporter
+                                Cancel
+                            </button>
+                            <button
+                                disabled={submitload}
+                                onClick={submitReport}
+                                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all duration-300 min-h-[44px]"
+                            >
+                                {submitload ? "Submitting..." : "Submit Report"}
                             </button>
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </div>
-            }
-            {!matchInfo && 
-            <div>
-                <h3 className="font-bold text-gray-800 text-lg">Potential matches</h3>
-                <h2 className="text-stone-700">No match found</h2>
-                </div>
-            }
+            )}
 
+            {/* Lost Items Section */}
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold text-gray-800">Lost Items</h2>
+                    <span className="px-3 py-1 bg-gradient-to-r from-red-50 to-pink-50 text-red-600 text-sm font-semibold rounded-full">
+                        {lostItems.length} items
+                    </span>
+                </div>
+
+                {lostItems.length === 0 ? (
+                    <div className="p-8 text-center flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border-2 border-dashed border-blue-200/30">
+                        <div className="text-gray-600 text-5xl mb-3"><FiInfo /></div>
+                        <p className="text-gray-600 font-medium">No lost items reported yet</p>
+                        <p className="text-gray-500 text-sm mt-1">Be the first to report a lost item</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {lostItems.map(item => (
+                            <div
+                                key={item._id}
+                                onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}
+                                className={`bg-white relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
+                                    ? "border-blue-300 bg-blue-50/30"
+                                    : "border-gray-100 hover:border-gray-200"
+                                    }`}
+                            >
+                                {item.reportedBy.toString() === user.id && (
+                                    <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 gap-1 bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                        Reported by you
+                                    </span>
+                                )}
+                                {/* Item Header with Status */}
+                                <div className="p-4 pb-3">
+                                    <div className="flex justify-between items-start gap-3">
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-semibold text-gray-800 text-base line-clamp-1 mb-1">
+                                                {item.itemName}
+                                            </h3>
+
+                                        </div>
+                                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                                            {new Date(item.createdAt).toLocaleTimeString("en-IN", {
+                                                  hour: "2-digit",
+                                                  minute: "2-digit",
+                                                  hour12: true
+                                            })}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Item Images */}
+                                <div className="flex flex-row mb-">
+                                    <div className="px-1.5 pb-3">
+                                        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+                                            {item.imageUrls?.length > 0 ? (
+                                                item.imageUrls.map((url, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={url}
+                                                        alt={item.itemName}
+                                                        className="h-19 w-19 md:h-20 md:w-20 object-cover rounded-lg border border-gray-200 shadow-sm flex-shrink-0"
+                                                        loading="lazy"
+                                                    />
+                                                ))
+                                            ) : (
+                                                <div className="h-19 w-19 md:h-20 md:w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-100 flex-shrink-0">
+                                                    <div className="text-2xl text-gray-400 mb-1"><FiCamera /></div>
+                                                    <p className="text-xs text-gray-500">No image</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 h-18 w-45 md:w-90">
+                                        {item.description}</p>
+                                </div>
+
+                                {/* Item Details */}
+                                <div className="px-4 pb-4">
+                                    <div className="space-y-3">
+
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-lg">
+                                                <div><FiMapPin className="text-gray-400" /></div>
+                                                <span className="line-clamp-1 text-xs">{item.location}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="px-4 pb-2">
+                                <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md">
+                                    View Details
+                                </button>
+                                </div>
+
+                                {/* Claim Button */}
+                                {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
+                                    <div className="px-4 pb-4">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                claimItem(item);
+                                            }}
+                                            className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                                        >
+                                            Mark as Claimed
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Found Items Section */}
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold text-gray-800">Found Items</h2>
+                    <span className="px-3 py-1 bg-gradient-to-r from-green-50 to-emerald-50 text-green-600 text-sm font-semibold rounded-full">
+                        {foundItems.length} items
+                    </span>
+                </div>
+
+                {foundItems.length === 0 ? (
+                    <div className="p-8 text-center flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border-2 border-dashed border-blue-200/30">
+                        <div className="text-gray-600 text-5xl mb-3"><FiInfo /></div>
+                        <p className="text-gray-600 font-medium">No found items reported yet</p>
+                        <p className="text-gray-500 text-sm mt-1">Be the first to report a found item</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {foundItems.map(item => (
+                            <div key={item._id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg shadow-blue-500/10 border border-gray-200 p-5 space-y-4 hover:shadow-xl hover:shadow-blue-500/15 transition-all duration-300" onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}>
+                                {/* Item Images - With placeholder for no images */}
+                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                    {item.imageUrls?.length > 0 ? (
+                                        item.imageUrls.map((url, idx) => (
+                                            <img
+                                                key={idx}
+                                                src={url}
+                                                alt={item.itemName}
+                                                className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
+                                                loading="lazy"
+                                            />
+                                        ))
+                                    ) : (
+                                        <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
+                                            <div className="text-4xl text-gray-400 mb-2">📷</div>
+                                            <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Item Details */}
+                                <div className="space-y-3">
+                                    <h3 className="font-bold text-lg text-gray-800 line-clamp-1">{item.itemName}</h3>
+                                    <p className="text-gray-600 leading-relaxed line-clamp-2">{item.description}</p>
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="flex items-center gap-1 text-gray-500">
+                                            <FiMapPin /> {item.location}
+                                        </span>
+                                        <span className="text-gray-400">
+                                            {new Date(item.createdAt).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Claim Button - Conditionally shown */}
+                                {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            claimItem(item)
+                                        }}
+                                        className="w-full py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 text-sm"
+                                    >
+                                        Mark as Claimed
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Match Details Modal */}
+            {showMatchModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl shadow-blue-500/20 w-full max-w-2xl space-y-6 p-8">
+                        {/* Modal Header */}
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">Possible Match Found</h2>
+                                <p className="text-gray-600 text-sm mt-1">Compare details below</p>
+                            </div>
+                            <button
+                                onClick={() => setShowMatchModal(false)}
+                                className="text-gray-500 hover:text-gray-700 text-xl transition-colors"
+                                aria-label="Close modal"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Refresh Button */}
+                        <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl">
+                            <div>
+                                <p className="text-sm font-semibold text-gray-700">Last updated:</p>
+                                <p className="text-xs text-gray-500">{new Date().toLocaleTimeString()}</p>
+                            </div>
+                        </div>
+
+                        {/* Newly Reported Item */}
+                        {matchInfo &&
+                            <div className="space-y-3">
+                                <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
+                                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border-2 border-blue-200/30">
+                                    {matchInfo.newItem.imageUrls?.length > 0 ? (
+                                        matchInfo.newItem.imageUrls.map((url, idx) => (
+                                            <img
+                                                key={idx}
+                                                src={url}
+                                                alt={matchInfo.newItem.itemName}
+                                                className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
+                                                loading="lazy"
+                                            />
+                                        ))
+                                    ) : (
+                                        <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
+                                            <div className="text-4xl text-gray-400 mb-2">📷</div>
+                                            <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                        </div>
+                                    )}
+                                    <h4 className="font-bold text-xl text-gray-800 mb-2">{matchInfo.newItem.itemName}</h4>
+                                    <p className="text-gray-600 mb-3 leading-relaxed">{matchInfo.newItem.description}</p>
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-700 font-medium">📍 {matchInfo.newItem.location}</span>
+                                        <span className="text-gray-500">{new Date(matchInfo.newItem.createdAt).toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        {/* Matched Items */}
+                        {matchInfo &&
+                            <div className="space-y-3">
+                                <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
+                                    <span>Potential Matches</span>
+                                    <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
+                                        {matchInfo.existingMatches == null ? "No" : matchInfo.existingMatches.length} items
+                                    </span>
+                                </h3>
+
+                                <div className="space-y-4">
+                                    {matchInfo.existingMatches == null && (
+                                        <h2 className="text-stone-700">No matches found</h2>
+                                    )}
+
+                                    {matchInfo.existingMatches !== null && matchInfo.existingMatches.map(m => (
+                                        <div
+                                            key={m._id}
+                                            className="bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-300/50 space-y-3"
+                                        >
+                                            {m.imageUrls?.length > 0 ? (
+                                                m.imageUrls.map((url, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={url}
+                                                        alt={m.itemName}
+                                                        className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
+                                                        loading="lazy"
+                                                    />
+                                                ))
+                                            ) : (
+                                                <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
+                                                    <div className="text-4xl text-gray-400 mb-2">📷</div>
+                                                    <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                                </div>
+                                            )}
+                                            <h4 className="font-bold text-lg text-gray-800">{m.itemName}</h4>
+                                            <p className="text-gray-600 leading-relaxed">{m.description}</p>
+                                            <div className="flex items-center justify-between text-sm">
+                                                <span className="text-gray-700 font-medium">📍 {m.location}</span>
+                                                <span className="text-gray-500">{new Date(m.createdAt).toLocaleString()}</span>
+                                            </div>
+                                            <button
+                                                onClick={() => window.location.href = `tel:${m.phone}`}
+                                                className="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-2"
+                                            >
+                                                📞 Contact Reporter
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        }
+
+                        {!matchInfo &&
+                            <div>
+                                <h3 className="font-bold text-gray-800 text-lg">Potential matches</h3>
+                                <h2 className="text-stone-700">No match found</h2>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            )}
         </div>
-    </div>
-)}
-</div>
 
     );
 }

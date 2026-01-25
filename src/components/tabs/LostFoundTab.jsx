@@ -111,6 +111,7 @@ export default function LostFoundTab({ eventId }) {
 
         if (type === "found" && files.length === 0) {
             alert("Select at least one image");
+            setSubmitload(false);
             return;
         }
 
@@ -359,7 +360,7 @@ export default function LostFoundTab({ eventId }) {
                         {lostItems.map(item => (
                             <div
                                 key={item._id}
-                                onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}
+                                onClick={() => (item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") && checkMatches(item)}
                                 className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
                                     ? "border-blue-300 bg-blue-50/30"
                                     : "border-gray-100 hover:border-gray-200"
@@ -429,13 +430,13 @@ export default function LostFoundTab({ eventId }) {
                                     </div>
                                 </div>
 
-                                {item.reportedBy.toString() === user.id && (
+                                {(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") && (
                                     <span className="text-gray-500 text-xs italic mb-3 text-center">
                                         Tap card to view matches
                                     </span>
                                 )}
 
-                                <div className={`my-auto flex flex-col justify-center items-center ${item.reportedBy.toString() === user.id ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
+                                <div className={`my-auto flex flex-col justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
 
                                     {/* Read Details Button */}
                                     <div className="px-4 pb-2 w-full">

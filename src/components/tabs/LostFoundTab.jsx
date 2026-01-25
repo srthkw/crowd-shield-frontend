@@ -13,8 +13,9 @@ export default function LostFoundTab({ eventId }) {
     const [showTypes, setShowTypes] = useState(false);
     const [submitload, setSubmitload] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const dropdownRef = useRef(null);
     const [showMatchModal, setShowMatchModal] = useState(false);
+    const dropdownRef = useRef(null);
+    const [setDetails, setSetDetails] = useState(false);
     const [matchInfo, setMatchInfo] = useState(null);
     const [form, setForm] = useState({
         type: "lost",
@@ -41,7 +42,6 @@ export default function LostFoundTab({ eventId }) {
         "Keys",
         "Laptop",
         "Medication",
-        "Other",
         "Passport",
         "Person",
         "Phone",
@@ -52,7 +52,8 @@ export default function LostFoundTab({ eventId }) {
         "Umbrella",
         "Wallet",
         "Watch",
-        "Water Bottle"
+        "Water Bottle",
+        "Other",
     ];
 
 
@@ -359,7 +360,7 @@ export default function LostFoundTab({ eventId }) {
                             <div
                                 key={item._id}
                                 onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}
-                                className={`bg-white relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
+                                className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
                                     ? "border-blue-300 bg-blue-50/30"
                                     : "border-gray-100 hover:border-gray-200"
                                     }`}
@@ -380,18 +381,18 @@ export default function LostFoundTab({ eventId }) {
                                         </div>
                                         <span className="text-xs text-gray-500 whitespace-nowrap">
                                             {new Date(item.createdAt).toLocaleTimeString("en-IN", {
-                                                  hour: "2-digit",
-                                                  minute: "2-digit",
-                                                  hour12: true
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: true
                                             })}
                                         </span>
                                     </div>
                                 </div>
 
                                 {/* Item Images */}
-                                <div className="flex flex-row mb-">
+                                <div className="flex flex-row">
                                     <div className="px-1.5 pb-3">
-                                        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+                                        <div className="flex gap-2 overflow-x-auto pb-1 mx-1 px-1">
                                             {item.imageUrls?.length > 0 ? (
                                                 item.imageUrls.map((url, idx) => (
                                                     <img
@@ -411,7 +412,7 @@ export default function LostFoundTab({ eventId }) {
                                         </div>
                                     </div>
 
-                                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 h-18 w-45 md:w-90">
+                                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 h-18 md:pr-3 md:pl-2">
                                         {item.description}</p>
                                 </div>
 
@@ -420,39 +421,119 @@ export default function LostFoundTab({ eventId }) {
                                     <div className="space-y-3">
 
                                         <div className="flex items-center gap-2 text-sm">
-                                            <div className="flex items-center gap-1 text-gray-600 bg-gray-50 px-2.5 py-1 rounded-lg">
-                                                <div><FiMapPin className="text-gray-400" /></div>
+                                            <div className="flex items-center justify-center gap-1 text-gray-600 bg-gray-50 w-full px-2.5 py-1.5 rounded-lg">
+                                                <div><FiMapPin className="text-gray-400 text-xs" /></div>
                                                 <span className="line-clamp-1 text-xs">{item.location}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div className="px-4 pb-2">
-                                <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md">
-                                    View Details
-                                </button>
-                                </div>
 
-                                {/* Claim Button */}
-                                {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
-                                    <div className="px-4 pb-4">
-                                        <button
+                                {item.reportedBy.toString() === user.id && (
+                                    <span className="text-gray-500 text-xs italic mb-3 text-center">
+                                        Tap card to view matches
+                                    </span>
+                                )}
+
+                                <div className={`my-auto flex flex-col justify-center items-center ${item.reportedBy.toString() === user.id ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
+
+                                    {/* Read Details Button */}
+                                    <div className="px-4 pb-2 w-full">
+                                        <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                claimItem(item);
-                                            }}
-                                            className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
-                                        >
-                                            Mark as Claimed
+                                                setSetDetails(item);
+                                            }}>
+                                            Read Details
                                         </button>
                                     </div>
-                                )}
+
+                                    {/* Claim Button */}
+                                    {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
+                                        <div className="px-4 pb-4 w-full">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    claimItem(item);
+                                                }}
+                                                className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                                            >
+                                                Mark as Claimed
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>
                 )}
             </div>
+
+
+            {setDetails && (
+                <div className="fixed inset-0 h-screen z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+                    <div className="bg-white rounded-xl shadow-xl shadow-blue-500/10 border border-gray-200 w-full max-w-sm">
+
+                        {/* Header with close button */}
+                        <div className="flex justify-between items-center p-4 border-b border-gray-100">
+                            <h2 className="text-lg font-semibold text-gray-800">Item Details</h2>
+                            <button
+                                onClick={() => setSetDetails(null)}
+                                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-4 space-y-4">
+                            <div className="flex flex-col items-center">
+                                {/* Item Name */}
+                                <h3 className="font-medium text-gray-800 text-base">{setDetails.itemName}</h3>
+
+                                <div className="px-1.5 py-2">
+                                    <div className="flex gap-2 overflow-x-auto -mx-1 px-1">
+                                        {setDetails.imageUrls?.length > 0 ? (
+                                            setDetails.imageUrls.map((url, idx) => (
+                                                <img
+                                                    key={idx}
+                                                    src={url}
+                                                    alt={setDetails.itemName}
+                                                    className="h-35 w-35 md:h-50 md:w-50 object-cover rounded-lg border border-gray-200 shadow-sm flex-shrink-0"
+                                                    loading="lazy"
+                                                />
+                                            ))
+                                        ) : (
+                                            <div className="h-35 w-35 md:h-50 md:w-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-100 flex-shrink-0">
+                                                <div className="text-2xl text-gray-400 mb-1"><FiCamera /></div>
+                                                <p className="text-xs text-gray-500">No image</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Scrollable Description */}
+                            <div className="flex items-center gap-2">
+                                <div className="gap-1.5 text-gray-700 bg-blue-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto no-scrollbar">
+                                    <div className="flex items-center gap-1 font-semibold mb-1"><FiInfo className="text-gray-400" /><span>Description</span></div>
+                                    <span>{setDetails.description}</span>
+                                </div>
+                            </div>
+
+                            {/* Location */}
+                            <div className="flex items-center gap-2">
+                                <div className="gap-1.5 text-gray-700 bg-gray-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto">
+                                    <div className="flex items-center gap-1 font-semibold mb-1"><FiMapPin className="text-gray-400" /><span>Location</span></div>
+                                    <span>{setDetails.location}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Found Items Section */}
             <div className="space-y-4">

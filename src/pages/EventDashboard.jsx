@@ -2,14 +2,12 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import API from "../api/axios";
-import { useNavigate } from "react-router-dom";
 import AnnouncementTab from "../components/tabs/AnnouncementTab";
 import LostFoundTab from "../components/tabs/LostFoundTab";
 import { Link } from "react-router-dom";
 import ReportsTab from "../components/tabs/ReportsTab";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
-import Bg from "../components/Bg";
 
 export default function EventDashboard() {
     const { eventId } = useParams();
@@ -17,7 +15,6 @@ export default function EventDashboard() {
     const [pageload, setPageload] = useState(true);
     const [activeTab, setActiveTab] = useState("announcements"); // default tab
     const [expanded, setExpanded] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEvent = async () => {

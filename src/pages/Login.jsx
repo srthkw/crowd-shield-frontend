@@ -1,5 +1,4 @@
 import React from 'react'
-import Bg from '../components/Bg'
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";

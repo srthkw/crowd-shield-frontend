@@ -166,7 +166,7 @@ export default function AnnouncementTab({ eventId }) {
 
                 {/* Announcement Content */}
                 <div className="p-6 pb-4 flex flex-col">
-                  <div className="mb-4 relative pr-10 h-full">
+                  <div className="mb-4 relative md:pr-10 h-full">
                     <div className="flex items-start gap-3">
                       <div className="md:p-2 p-1 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 flex-shrink-0">
                         <FiVolume2 className="md:w-5 md:h-5  text-blue-600" />

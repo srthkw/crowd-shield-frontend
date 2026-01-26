@@ -392,19 +392,19 @@ export default function LostFoundTab({ eventId }) {
                                 {/* Item Images */}
                                 <div className="flex flex-row">
                                     <div className="px-1.5 pb-3">
-                                        <div className="flex gap-2 overflow-x-auto pb-1 mx-1 px-1">
+                                        <div className="flex gap-2 overflow-x-auto pb-1">
                                             {item.imageUrls?.length > 0 ? (
                                                 item.imageUrls.map((url, idx) => (
                                                     <img
                                                         key={idx}
                                                         src={url}
                                                         alt={item.itemName}
-                                                        className="h-19 w-19 md:h-20 md:w-20 object-cover rounded-lg border border-gray-200 shadow-sm flex-shrink-0"
+                                                        className="h-21 w-21 md:h-20 md:w-20 object-cover rounded-lg border border-gray-200 shadow-sm flex-shrink-0"
                                                         loading="lazy"
                                                     />
                                                 ))
                                             ) : (
-                                                <div className="h-19 w-19 md:h-20 md:w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-100 flex-shrink-0">
+                                                <div className="h-21 w-21 md:h-20 md:w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-100 flex-shrink-0">
                                                     <div className="text-2xl text-gray-400 mb-1"><FiCamera /></div>
                                                     <p className="text-xs text-gray-500">No image</p>
                                                 </div>
@@ -412,7 +412,7 @@ export default function LostFoundTab({ eventId }) {
                                         </div>
                                     </div>
 
-                                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 h-18 md:pr-3 md:pl-2">
+                                    <p className="text-xs md:text-sm text-gray-600 bg-gray-100/50 rounded-lg leading-relaxed line-clamp-4 md:line-clamp-3 h-21 md:h-19 px-2 py-1 md:pb-2 w-full mr-1 md:mr-2 md:pr-3 md:pl-2">
                                         {item.description}</p>
                                 </div>
 
@@ -435,11 +435,11 @@ export default function LostFoundTab({ eventId }) {
                                     </span>
                                 )}
 
-                                <div className={`my-auto flex flex-col md:flex-row md:gap-0 justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
+                                <div className={`my-auto flex flex-col md:flex-row md:gap-0 justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-3 md:pt-4 bg-gray-100/70 h-full rounded-b-xl"}`}>
 
                                     {/* Read Details Button */}
-                                    <div className="px-4 md:px-2 pb-2 md:pb-4 w-full">
-                                        <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                                    <div className="px-2 pb-2 md:pb-4 w-full">
+                                        <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setSetDetails(item);
@@ -565,63 +565,100 @@ export default function LostFoundTab({ eventId }) {
                                         Reported by you
                                     </span>
                                 )}
-                                {/* Item Images - With placeholder for no images */}
-                                <div className="flex gap-2 overflow-x-auto pb-2">
-                                    {item.imageUrls?.length > 0 ? (
-                                        item.imageUrls.map((url, idx) => (
-                                            <img
-                                                key={idx}
-                                                src={url}
-                                                alt={item.itemName}
-                                                className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
-                                                loading="lazy"
-                                            />
-                                        ))
-                                    ) : (
-                                        <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
-                                            <div className="text-4xl text-gray-400 mb-2">📷</div>
-                                            <p className="text-xs text-gray-500 text-center px-2">No image</p>
-                                        </div>
-                                    )}
-                                </div>
+                                {/* Item Header with Status */}
+                                <div className="p-4 pb-3">
+                                    <div className="flex justify-between items-start gap-3">
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-semibold text-gray-800 text-base line-clamp-1 mb-1">
+                                                {item.itemName}
+                                            </h3>
 
-                                {/* Item Details */}
-                                <div className="space-y-3">
-                                    <h3 className="font-bold text-lg text-gray-800 line-clamp-1">{item.itemName}</h3>
-                                    <p className="text-gray-600 leading-relaxed line-clamp-2">{item.description}</p>
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="flex items-center gap-1 text-gray-500">
-                                            <FiMapPin /> {item.location}
-                                        </span>
-                                        <span className="text-gray-400">
-                                            {new Date(item.createdAt).toLocaleDateString()}
+                                        </div>
+                                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                                            {new Date(item.createdAt).toLocaleTimeString("en-IN", {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: true
+                                            })}
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Read Details Button */}
-                                <div className="px-4 md:px-2 pb-2 md:pb-4 w-full">
-                                    <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setSetDetails(item);
-                                        }}>
-                                        Read Details
-                                    </button>
+                                {/* Item Images */}
+                                <div className="flex flex-row">
+                                    <div className="px-1.5 pb-3">
+                                        <div className="flex gap-2 overflow-x-auto pb-1">
+                                            {item.imageUrls?.length > 0 ? (
+                                                item.imageUrls.map((url, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={url}
+                                                        alt={item.itemName}
+                                                        className="h-21 w-21 md:h-20 md:w-20 object-cover rounded-lg border border-gray-200 shadow-sm flex-shrink-0"
+                                                        loading="lazy"
+                                                    />
+                                                ))
+                                            ) : (
+                                                <div className="h-21 w-21 md:h-20 md:w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-100 flex-shrink-0">
+                                                    <div className="text-2xl text-gray-400 mb-1"><FiCamera /></div>
+                                                    <p className="text-xs text-gray-500">No image</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <p className="text-xs md:text-sm text-gray-600 bg-gray-100/50 rounded-lg leading-relaxed line-clamp-4 md:line-clamp-3 h-21 md:h-19 px-2 py-1 md:pb-2 w-full mr-1 md:mr-2 md:pr-3 md:pl-2">
+                                        {item.description}</p>
                                 </div>
 
-                                {/* Claim Button - Conditionally shown */}
-                                {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            claimItem(item)
-                                        }}
-                                        className="w-full py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 text-sm"
-                                    >
-                                        Mark as Claimed
-                                    </button>
+                                {/* Item Details */}
+                                <div className="px-4 pb-4">
+                                    <div className="space-y-3">
+
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <div className="flex items-center justify-center gap-1 text-gray-600 bg-gray-50 w-full px-2.5 py-1.5 rounded-lg">
+                                                <div><FiMapPin className="text-gray-400 text-xs" /></div>
+                                                <span className="line-clamp-1 text-xs">{item.location}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") && (
+                                    <span className="text-gray-500 text-xs italic mb-3 text-center">
+                                        Tap card to view matches
+                                    </span>
                                 )}
+
+                                <div className={`my-auto flex flex-col md:flex-row md:gap-0 justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
+
+                                    {/* Read Details Button */}
+                                    <div className="px-2 pb-2 md:pb-4 w-full">
+                                        <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSetDetails(item);
+                                            }}>
+                                            Read Details
+                                        </button>
+                                    </div>
+
+                                    {/* Claim Button */}
+                                    {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
+                                        <div className="px-2 pb-4 w-full">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    claimItem(item);
+                                                }}
+                                                className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                                            >
+                                                Mark as Claimed
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
                             </div>
                         ))}
                     </div>

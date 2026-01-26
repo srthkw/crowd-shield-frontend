@@ -12,6 +12,7 @@ export default function LostFoundTab({ eventId }) {
     const [loading, setLoading] = useState(true);
     const [showTypes, setShowTypes] = useState(false);
     const [submitload, setSubmitload] = useState(false);
+    const [claimLoad, setClaimLoad] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
     const dropdownRef = useRef(null);
@@ -174,6 +175,8 @@ export default function LostFoundTab({ eventId }) {
 
         } catch (err) {
             alert(err.response?.data?.message || "Failed to claim item");
+        } finally {
+            setClaimLoad(null);
         }
     };
 
@@ -453,12 +456,13 @@ export default function LostFoundTab({ eventId }) {
                                         <div className="px-2 pb-4 w-full">
                                             <button
                                                 onClick={(e) => {
+                                                    setClaimLoad(item._id);
                                                     e.stopPropagation();
                                                     claimItem(item);
                                                 }}
                                                 className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                                             >
-                                                Mark as Claimed
+                                                {claimLoad === item._id ? "Claiming..." : "Mark as Claimed"}
                                             </button>
                                         </div>
                                     )}
@@ -648,12 +652,13 @@ export default function LostFoundTab({ eventId }) {
                                         <div className="px-2 pb-4 w-full">
                                             <button
                                                 onClick={(e) => {
+                                                    setClaimLoad(item._id);
                                                     e.stopPropagation();
                                                     claimItem(item);
                                                 }}
                                                 className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                                             >
-                                                Mark as Claimed
+                                                {claimLoad === item._id ? "Claiming..." : "Mark as Claimed"}
                                             </button>
                                         </div>
                                     )}

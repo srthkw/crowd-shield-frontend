@@ -67,7 +67,7 @@ const Login = () => {
 
             <button type="submit" className="glass-btn w-[70%] sm:px-3 px-2 sm:py-2.5 py-2 mx-auto my-1 sm:my-3 text-md">{loading ? "Logging you in..." : "Login"}</button>
             
-            {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 w-[120vw] h-[120vh] z-50 bg-white/50"><Loader /></div>}
+            {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 w-screen h-screen z-50 bg-white/50"><Loader /></div>}
 
             <div>
               <p className="text-white/100 mt-2 text-xs sm:text-[clamp(0.5rem,2vw,1rem)] font-[500] opacity-90 leading-relaxed">

@@ -2,18 +2,18 @@ import { useEffect, useState, useRef } from "react";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import Loader2 from "../Loader2";
-import { FiInfo, FiMapPin, FiCamera, FiXCircle } from "react-icons/fi";
+import { FiInfo, FiMapPin, FiRefreshCw, FiCamera, FiXCircle } from "react-icons/fi";
 import ItemCard from "../ItemCard";
 
 export default function LostFoundTab({ eventId }) {
     const { user } = useAuth();
+    const [animate, setAnimate] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [claimLoad, setClaimLoad] = useState(null);
     const [files, setFiles] = useState([]);
     const [lostItems, setLostItems] = useState([]);
     const [foundItems, setFoundItems] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [showTypes, setShowTypes] = useState(false);
-    const [submitload, setSubmitload] = useState(false);
-    const [claimLoad, setClaimLoad] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
     const dropdownRef = useRef(null);
@@ -102,18 +102,18 @@ export default function LostFoundTab({ eventId }) {
     };
 
     const submitReport = async () => {
-        setSubmitload(true);
+        setAnimate("submit");
         const { itemName, description, location, phone, type } = form;
 
         if (!itemName || !description || !location || !phone) {
             alert("All fields are required");
-            setSubmitload(false);
+            setAnimate(null);
             return;
         }
 
         if (type === "found" && files.length === 0) {
             alert("Select at least one image");
-            setSubmitload(false);
+            setAnimate(null);
             return;
         }
 
@@ -146,7 +146,7 @@ export default function LostFoundTab({ eventId }) {
             }
 
             setShowModal(false);
-            setSubmitload(false);
+            setAnimate(null);
             setFiles([]);
             setForm({
                 type: "lost",
@@ -183,6 +183,7 @@ export default function LostFoundTab({ eventId }) {
 
     const checkMatches = async (item) => {
         try {
+            setAnimate("refresh")
             const res = await axios.post(`/lostfound/matches/${eventId}`, { item });
             const matches = res.data;
             setMatchInfo(matches.length > 0 ? {
@@ -196,6 +197,8 @@ export default function LostFoundTab({ eventId }) {
             setShowMatchModal(true);
         } catch (err) {
             alert(err.response?.data?.message || "Failed to check matches");
+        }finally {
+            setAnimate(null);
         }
     };
 
@@ -333,11 +336,11 @@ export default function LostFoundTab({ eventId }) {
                                 Cancel
                             </button>
                             <button
-                                disabled={submitload}
+                                disabled={animate === "submit"}
                                 onClick={submitReport}
                                 className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all duration-300 min-h-[44px]"
                             >
-                                {submitload ? "Submitting..." : "Submit Report"}
+                                {animate === "submit" ? "Submitting..." : "Submit Report"}
                             </button>
                         </div>
                     </div>
@@ -479,9 +482,9 @@ export default function LostFoundTab({ eventId }) {
             {/* Match Details Modal */}
             {showMatchModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl shadow-blue-500/20 w-full h-screen overflow-auto no-scrollbar max-w-2xl space-y-6 p-8">
+                    <div className="flex flex-col bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden shadow-blue-500/20 w-screen h-[85vh] md:h-[95vh] max-w-4xl py-5 md:p-6">
                         {/* Modal Header */}
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center md:gap-15 gap-8 mb-6 px-6">
                             <div>
                                 <h2 className="text-lg md:text-2xl font-bold text-gray-800">Possible Match Found</h2>
                                 <p className="text-gray-600 text-xs md:text-sm mt-">Compare details below</p>
@@ -495,19 +498,9 @@ export default function LostFoundTab({ eventId }) {
                             </button>
                         </div>
 
-                        {/* Refresh Button */}
-                        <div className="flex items-center justify-between gap-2 bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl">
-                            <div>
-                                <p className="text-xs text-gray-500">Last updated: {new Date().toLocaleTimeString(
-                                    "en-US",
-                                    { hour12: true, hour: "numeric", minute: "numeric" }
-                                )}</p>
-                            </div>
-                        </div>
-
                         {/* Newly Reported Item */}
                         {matchInfo &&
-                            <div className="space-y-3">
+                            <div className="space-y-3 overflow-y-scroll no-scrollbar rounded-lg bg-gray-200/50 p-3">
                                 <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
                                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border-2 border-blue-200/30">
                                     {matchInfo.newItem.imageUrls?.length > 0 ? (
@@ -533,61 +526,81 @@ export default function LostFoundTab({ eventId }) {
                                         <span className="text-gray-500">{new Date(matchInfo.newItem.createdAt).toLocaleString()}</span>
                                     </div>
                                 </div>
-                            
-                            <div className="space-y-3">
-                                <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
-                                    <span>Potential Matches</span>
-                                    <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
-                                        {matchInfo.existingMatches == null ? "No" : matchInfo.existingMatches.length} items
-                                    </span>
-                                </h3>
 
-                                <div className="space-y-4">
-                                    {matchInfo.existingMatches == null && (
-                                        <h2 className="text-stone-700">No matches found</h2>
-                                    )}
-
-                                    {matchInfo.existingMatches !== null && matchInfo.existingMatches.map(m => (
-                                        <div
-                                            key={m._id}
-                                            className="bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-300/50 space-y-3"
-                                        >
-                                            {m.imageUrls?.length > 0 ? (
-                                                m.imageUrls.map((url, idx) => (
-                                                    <img
-                                                        key={idx}
-                                                        src={url}
-                                                        alt={m.itemName}
-                                                        className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
-                                                        loading="lazy"
-                                                    />
-                                                ))
-                                            ) : (
-                                                <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
-                                                    <div className="text-4xl text-gray-400 mb-2">📷</div>
-                                                    <p className="text-xs text-gray-500 text-center px-2">No image</p>
-                                                </div>
-                                            )}
-                                            <h4 className="font-bold text-lg text-gray-800">{m.itemName}</h4>
-                                            <p className="text-gray-600 leading-relaxed">{m.description}</p>
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span className="text-gray-700 font-medium">📍 {m.location}</span>
-                                                <span className="text-gray-500">{new Date(m.createdAt).toLocaleString()}</span>
-                                            </div>
-                                            <button
-                                                onClick={() => window.location.href = `tel:${m.phone}`}
-                                                className="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-2"
-                                            >
-                                                📞 Contact Reporter
-                                            </button>
+                                <div className="space-y-3">
+                                    <h3 className="font-bold text-gray-800 text-lg flex flex-col gap-2 md:gap-0 md:flex-row items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                        <span>Potential Matches</span>
+                                        <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
+                                            {matchInfo.existingMatches == null ? "No" : matchInfo.existingMatches.length} items
+                                        </span>
                                         </div>
-                                    ))}
+
+                                        {/* Refresh Button */}
+                                        <div className="flex justify-center items-center mt-auto font-medium">
+                                            <div
+                                                className="flex items-center justify-center bg-blue-200/20 border-2 border-gray-200 px-3 py-2 rounded-xl"
+                                                onClick={() => checkMatches(matchInfo.newItem)}
+                                            >
+                                                <div className="text-xs text-gray-900 flex items-center justify-center">
+                                                    <button className="flex items-center justify-center rounded-lg mr-3 bg-gray-300/80 px-2 py-2">
+                                                    <span >
+                                                        <FiRefreshCw className={`size-3.5 mr-2 ${animate === "refresh" && "animate-spin"}`} />
+                                                    </span>Refresh</button>
+                                                    <span>Last updated: {new Date().toLocaleTimeString(
+                                                    "en-US",
+                                                    { hour12: true, hour: "numeric", minute: "numeric" }
+                                                )}</span></div>
+                                            </div>
+                                        </div>
+                                    </h3>
+
+                                    <div className="space-y-4">
+                                        {matchInfo.existingMatches == null && (
+                                            <h2 className="text-stone-700">No matches found</h2>
+                                        )}
+
+                                        {matchInfo.existingMatches !== null && matchInfo.existingMatches.map(m => (
+                                            <div
+                                                key={m._id}
+                                                className="bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-300/50 space-y-3"
+                                            >
+                                                {m.imageUrls?.length > 0 ? (
+                                                    m.imageUrls.map((url, idx) => (
+                                                        <img
+                                                            key={idx}
+                                                            src={url}
+                                                            alt={m.itemName}
+                                                            className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
+                                                            loading="lazy"
+                                                        />
+                                                    ))
+                                                ) : (
+                                                    <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
+                                                        <div className="text-4xl text-gray-400 mb-2">📷</div>
+                                                        <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                                    </div>
+                                                )}
+                                                <h4 className="font-bold text-lg text-gray-800">{m.itemName}</h4>
+                                                <p className="text-gray-600 leading-relaxed">{m.description}</p>
+                                                <div className="flex items-center justify-between text-sm">
+                                                    <span className="text-gray-700 font-medium">📍 {m.location}</span>
+                                                    <span className="text-gray-500">{new Date(m.createdAt).toLocaleString()}</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => window.location.href = `tel:${m.phone}`}
+                                                    className="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-2"
+                                                >
+                                                    📞 Contact Reporter
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                            </div>
                         }
-
                     </div>
+
                 </div>
             )}
         </div>

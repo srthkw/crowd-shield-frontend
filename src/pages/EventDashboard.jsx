@@ -31,7 +31,7 @@ export default function EventDashboard() {
         fetchEvent();
     }, [eventId]);
 
-    if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-[120vw] h-[120vh] z-10 bg-white/10"><Loader /></div>;
+    if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-screen h-screen z-10 bg-white/10"><Loader /></div>;
     if (!event) return <p className="p-4 text-red-500">Event not found</p>;
 
     return (

@@ -364,10 +364,9 @@ export default function LostFoundTab({ eventId }) {
                                 className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
                                     ? "border-blue-300 bg-blue-50/30"
                                     : "border-gray-100 hover:border-gray-200"
-                                    }`}
-                            >
+                                    }`}>
                                 {item.reportedBy.toString() === user.id && (
-                                    <span className="absolute -top-2 left-1/2 transform -translate-x-1/2 gap-1 bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                    <span className="absolute -top-2.5 left-1/2 transform -translate-x-1/2 gap-1 bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
                                         Reported by you
                                     </span>
                                 )}
@@ -436,10 +435,10 @@ export default function LostFoundTab({ eventId }) {
                                     </span>
                                 )}
 
-                                <div className={`my-auto flex flex-col justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
+                                <div className={`my-auto flex flex-col md:flex-row md:gap-0 justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-2 bg-gray-100/70 h-full rounded-b-xl"}`}>
 
                                     {/* Read Details Button */}
-                                    <div className="px-4 pb-2 w-full">
+                                    <div className="px-4 md:px-2 pb-2 md:pb-4 w-full">
                                         <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -451,7 +450,7 @@ export default function LostFoundTab({ eventId }) {
 
                                     {/* Claim Button */}
                                     {(user.id === item.reportedBy || user.role === "admin" || user.role === "organizer") && (
-                                        <div className="px-4 pb-4 w-full">
+                                        <div className="px-2 pb-4 w-full">
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -554,7 +553,18 @@ export default function LostFoundTab({ eventId }) {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {foundItems.map(item => (
-                            <div key={item._id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg shadow-blue-500/10 border border-gray-200 p-5 space-y-4 hover:shadow-xl hover:shadow-blue-500/15 transition-all duration-300" onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}>
+                            <div
+                                key={item._id}
+                                onClick={() => (item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") && checkMatches(item)}
+                                className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
+                                    ? "border-blue-300 bg-blue-50/30"
+                                    : "border-gray-100 hover:border-gray-200"
+                                    }`}>
+                                {item.reportedBy.toString() === user.id && (
+                                    <span className="absolute -top-2.5 left-1/2 transform -translate-x-1/2 gap-1 bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                        Reported by you
+                                    </span>
+                                )}
                                 {/* Item Images - With placeholder for no images */}
                                 <div className="flex gap-2 overflow-x-auto pb-2">
                                     {item.imageUrls?.length > 0 ? (
@@ -587,6 +597,17 @@ export default function LostFoundTab({ eventId }) {
                                             {new Date(item.createdAt).toLocaleDateString()}
                                         </span>
                                     </div>
+                                </div>
+
+                                {/* Read Details Button */}
+                                <div className="px-4 md:px-2 pb-2 md:pb-4 w-full">
+                                    <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSetDetails(item);
+                                        }}>
+                                        Read Details
+                                    </button>
                                 </div>
 
                                 {/* Claim Button - Conditionally shown */}

@@ -19,7 +19,7 @@ const ItemCard = ({
             key={item._id}
             onClick={() => isOwner && checkMatches(item)}
             className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
-                ? "border-blue-300 bg-blue-50/30"
+                ? "border-blue-300 bg-blue-50/30 cursor-pointer hover:border-blue-400"
                 : "border-gray-100 hover:border-gray-200"
                 }`}>
             {item.reportedBy.toString() === user.id && (
@@ -80,7 +80,7 @@ const ItemCard = ({
                     <div className="flex items-center gap-2 text-sm">
                         <div className="flex items-center justify-center gap-1 text-gray-600 bg-gray-50 w-full px-2.5 py-1.5 rounded-lg">
                             <div><FiMapPin className="text-gray-400 text-xs" /></div>
-                            <span className="line-clamp-1 text-xs">{item.location}</span>
+                            <span className="line-clamp-1 text-xs wrap-break-word">{item.location}</span>
                         </div>
                     </div>
                 </div>
@@ -96,7 +96,7 @@ const ItemCard = ({
 
                 {/* Read Details Button */}
                 <div className="px-2 pb-2 md:pb-4 w-full">
-                    <button className="w-full px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                    <button className="w-full cursor-pointer px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                         onClick={(e) => {
                             e.stopPropagation();
                             setSetDetails(item);
@@ -114,7 +114,7 @@ const ItemCard = ({
                                 claimItem(item);
                                 setClaimLoad(item._id);
                             }}
-                            className="w-full px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                            className="w-full cursor-pointer px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                         >
                             {claimLoad === item._id ? "Claiming..." : "Mark as Claimed"}
                         </button>

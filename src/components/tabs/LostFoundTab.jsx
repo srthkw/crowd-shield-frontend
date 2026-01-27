@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import Loader2 from "../Loader2";
-import { FiInfo, FiMapPin, FiRefreshCw, FiCamera, FiXCircle } from "react-icons/fi";
+import { FiInfo, FiMapPin, FiRefreshCw, FiCamera, FiXCircle, FiPhoneCall } from "react-icons/fi";
 import ItemCard from "../ItemCard";
 
 export default function LostFoundTab({ eventId }) {
@@ -197,7 +197,7 @@ export default function LostFoundTab({ eventId }) {
             setShowMatchModal(true);
         } catch (err) {
             alert(err.response?.data?.message || "Failed to check matches");
-        }finally {
+        } finally {
             setAnimate(null);
         }
     };
@@ -463,15 +463,16 @@ export default function LostFoundTab({ eventId }) {
                             <div className="flex items-center gap-2">
                                 <div className="gap-1.5 text-gray-700 bg-blue-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto no-scrollbar">
                                     <div className="flex items-center gap-1 font-semibold mb-1"><FiInfo className="text-gray-400" /><span>Description</span></div>
-                                    <span>{setDetails.description}</span>
+                                    <span className="break-words whitespace-pre-wrap">{setDetails.description}</span>
                                 </div>
                             </div>
 
                             {/* Location */}
                             <div className="flex items-center gap-2">
-                                <div className="gap-1.5 text-gray-700 bg-gray-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto">
+                                <div className="gap-1.5 text-gray-700 bg-gray-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto
+                                no-scrollbar">
                                     <div className="flex items-center gap-1 font-semibold mb-1"><FiMapPin className="text-gray-400" /><span>Location</span></div>
-                                    <span>{setDetails.location}</span>
+                                    <span className="break-words whitespace-pre-wrap">{setDetails.location}</span>
                                 </div>
                             </div>
                         </div>
@@ -500,57 +501,61 @@ export default function LostFoundTab({ eventId }) {
 
                         {/* Newly Reported Item */}
                         {matchInfo &&
-                            <div className="space-y-3 overflow-y-scroll no-scrollbar rounded-lg bg-gray-200/50 p-3">
+                            <div className="space-y-3 overflow-y-scroll no-scrollbar h-full rounded-lg bg-gray-200/50 p-3">
                                 <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
-                                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-xl border-2 border-blue-200/30">
-                                    {matchInfo.newItem.imageUrls?.length > 0 ? (
-                                        matchInfo.newItem.imageUrls.map((url, idx) => (
-                                            <img
-                                                key={idx}
-                                                src={url}
-                                                alt={matchInfo.newItem.itemName}
-                                                className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
-                                                loading="lazy"
-                                            />
-                                        ))
-                                    ) : (
-                                        <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
-                                            <div className="text-4xl text-gray-400 mb-2">📷</div>
-                                            <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                <div className="bg-gray-200/90 p-2.5 rounded-xl max-w-100 border-1 border-dashed border-blue-800/30">
+                                    <div className="flex flex-row items-center justify-around">
+                                        {matchInfo.newItem.imageUrls?.length > 0 ? (
+                                            matchInfo.newItem.imageUrls.map((url, idx) => (
+                                                <img
+                                                    key={idx}
+                                                    src={url}
+                                                    alt={matchInfo.newItem.itemName}
+                                                    className="h-20 w-20 object-cover rounded-l-lg border-1 border-white shadow-sm flex-shrink-0"
+                                                    loading="lazy"
+                                                />
+                                            ))
+                                        ) : (
+                                            <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-l-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
+                                                <div className="text-4xl text-gray-400 mb-2"><FiCamera /></div>
+                                                <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                            </div>
+                                        )}
+                                        <div className="bg-gray-100/70 p-3.5 rounded-r-lg flex-1">
+                                        <h3 className="font-semibold text-xl text-gray-600">{matchInfo.newItem.itemName}</h3>
+                                        <span className="text-gray-600 text-sm">Reported at: {new Date(matchInfo.newItem.createdAt).toLocaleTimeString("en-IN", {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: true
+                                        })}</span>
                                         </div>
-                                    )}
-                                    <h4 className="font-bold text-xl text-gray-800 mb-2">{matchInfo.newItem.itemName}</h4>
-                                    <p className="text-gray-600 mb-3 leading-relaxed">{matchInfo.newItem.description}</p>
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="text-gray-700 font-medium">📍 {matchInfo.newItem.location}</span>
-                                        <span className="text-gray-500">{new Date(matchInfo.newItem.createdAt).toLocaleString()}</span>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
-                                    <h3 className="font-bold text-gray-800 text-lg flex flex-col gap-2 md:gap-0 md:flex-row items-center justify-between">
+                                    <h3 className="font-bold text-gray-800 text-lg flex flex-col md:flex-row gap-2 md:gap-0 items-cente md:justify-between">
                                         <div className="flex items-center gap-2">
-                                        <span>Potential Matches</span>
-                                        <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
-                                            {matchInfo.existingMatches == null ? "No" : matchInfo.existingMatches.length} items
-                                        </span>
+                                            <span>Potential Matches</span>
+                                            <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
+                                                {matchInfo.existingMatches == null ? "No" : matchInfo.existingMatches.length} items
+                                            </span>
                                         </div>
 
                                         {/* Refresh Button */}
-                                        <div className="flex justify-center items-center mt-auto font-medium">
+                                        <div className="flex mt-auto font-medium">
                                             <div
                                                 className="flex items-center justify-center bg-blue-200/20 border-2 border-gray-200 px-3 py-2 rounded-xl"
                                                 onClick={() => checkMatches(matchInfo.newItem)}
                                             >
                                                 <div className="text-xs text-gray-900 flex items-center justify-center">
                                                     <button className="flex items-center justify-center rounded-lg mr-3 bg-gray-300/80 px-2 py-2">
-                                                    <span >
-                                                        <FiRefreshCw className={`size-3.5 mr-2 ${animate === "refresh" && "animate-spin"}`} />
-                                                    </span>Refresh</button>
+                                                        <span >
+                                                            <FiRefreshCw className={`size-3.5 mr-2 ${animate === "refresh" && "animate-spin"}`} />
+                                                        </span>Refresh</button>
                                                     <span>Last updated: {new Date().toLocaleTimeString(
-                                                    "en-US",
-                                                    { hour12: true, hour: "numeric", minute: "numeric" }
-                                                )}</span></div>
+                                                        "en-US",
+                                                        { hour12: true, hour: "numeric", minute: "numeric" }
+                                                    )}</span></div>
                                             </div>
                                         </div>
                                     </h3>
@@ -582,16 +587,16 @@ export default function LostFoundTab({ eventId }) {
                                                     </div>
                                                 )}
                                                 <h4 className="font-bold text-lg text-gray-800">{m.itemName}</h4>
-                                                <p className="text-gray-600 leading-relaxed">{m.description}</p>
-                                                <div className="flex items-center justify-between text-sm">
-                                                    <span className="text-gray-700 font-medium">📍 {m.location}</span>
+                                                <p className="text-gray-600 leading-relaxed line-clamp-4 wrap-break-word">{m.description}</p>
+                                                <div className="flex flex-col justify-between text-sm">
+                                                    <span className="text-gray-700 font-medium line-clamp-2 wrap-break-word">{m.location}</span>
                                                     <span className="text-gray-500">{new Date(m.createdAt).toLocaleString()}</span>
                                                 </div>
                                                 <button
                                                     onClick={() => window.location.href = `tel:${m.phone}`}
                                                     className="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-2"
                                                 >
-                                                    📞 Contact Reporter
+                                                    <FiPhoneCall className="text-lg" />Contact Reporter
                                                 </button>
                                             </div>
                                         ))}

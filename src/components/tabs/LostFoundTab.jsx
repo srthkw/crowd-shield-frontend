@@ -7,6 +7,10 @@ import ItemCard from "../ItemCard";
 
 export default function LostFoundTab({ eventId }) {
     const { user } = useAuth();
+    const dropdownRef = useRef(null);
+    const refs = useRef({});
+    const [overflowMap, setOverflowMap] = useState({});
+    const [readMore, setReadMore] = useState(null);
     const [animate, setAnimate] = useState(null);
     const [loading, setLoading] = useState(true);
     const [claimLoad, setClaimLoad] = useState(null);
@@ -16,7 +20,6 @@ export default function LostFoundTab({ eventId }) {
     const [showTypes, setShowTypes] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
-    const dropdownRef = useRef(null);
     const [setDetails, setSetDetails] = useState(false);
     const [matchInfo, setMatchInfo] = useState(null);
     const [form, setForm] = useState({
@@ -201,6 +204,21 @@ export default function LostFoundTab({ eventId }) {
             setAnimate(null);
         }
     };
+
+    useEffect(() => {
+        if (!matchInfo?.existingMatches?.length) return;
+      
+        const next = {};
+      
+        matchInfo.existingMatches.forEach((m) => {
+          const el = refs.current[m._id];
+          if (!el) return;
+      
+          next[m._id] = el.scrollHeight > el.clientHeight;
+        });
+      
+        setOverflowMap(next);
+      }, [matchInfo]);
 
 
     if (loading) return <Loader2 />;
@@ -483,7 +501,7 @@ export default function LostFoundTab({ eventId }) {
             {/* Match Details Modal */}
             {showMatchModal && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="flex flex-col bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden shadow-blue-500/20 w-screen h-[85vh] md:h-[95vh] max-w-4xl py-5 md:p-6">
+                    <div className="flex flex-col bg-gray-50 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden shadow-blue-500/20 w-screen h-[85vh] md:h-[95vh] max-w-4xl py-5 md:p-6">
                         {/* Modal Header */}
                         <div className="flex justify-between items-center md:gap-15 gap-8 mb-6 px-6">
                             <div>
@@ -491,7 +509,9 @@ export default function LostFoundTab({ eventId }) {
                                 <p className="text-gray-600 text-xs md:text-sm mt-">Compare details below</p>
                             </div>
                             <button
-                                onClick={() => setShowMatchModal(false)}
+                                onClick={() =>{
+                                     setReadMore(null);
+                                     setShowMatchModal(false)}}
                                 className="text-gray-500 hover:text-gray-700 text-3xl transition-colors"
                                 aria-label="Close modal"
                             >
@@ -501,9 +521,9 @@ export default function LostFoundTab({ eventId }) {
 
                         {/* Newly Reported Item */}
                         {matchInfo &&
-                            <div className="space-y-3 overflow-y-scroll no-scrollbar h-full rounded-lg bg-gray-200/50 p-3">
+                            <div className="space-y-3 overflow-y-scroll no-scrollbar h-full rounded-lg bg-blue-50 p-3 border-1 border-blue-300/30">
                                 <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
-                                <div className="bg-gray-200/90 p-2.5 rounded-xl max-w-100 border-1 border-dashed border-blue-800/30">
+                                <div className="bg-blue-100 p-2.5 rounded-xl max-w-100 border-1 border-dashed border-blue-800/30">
                                     <div className="flex flex-row items-center justify-around">
                                         {matchInfo.newItem.imageUrls?.length > 0 ? (
                                             matchInfo.newItem.imageUrls.map((url, idx) => (
@@ -522,12 +542,12 @@ export default function LostFoundTab({ eventId }) {
                                             </div>
                                         )}
                                         <div className="bg-gray-100/70 p-3.5 rounded-r-lg flex-1">
-                                        <h3 className="font-semibold text-xl text-gray-600">{matchInfo.newItem.itemName}</h3>
-                                        <span className="text-gray-600 text-sm">Reported at: {new Date(matchInfo.newItem.createdAt).toLocaleTimeString("en-IN", {
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                            hour12: true
-                                        })}</span>
+                                            <h3 className="font-semibold text-xl text-gray-600">{matchInfo.newItem.itemName}</h3>
+                                            <span className="text-gray-600 text-sm">Reported at: {new Date(matchInfo.newItem.createdAt).toLocaleTimeString("en-IN", {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: true
+                                            })}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -568,36 +588,90 @@ export default function LostFoundTab({ eventId }) {
                                         {matchInfo.existingMatches !== null && matchInfo.existingMatches.map(m => (
                                             <div
                                                 key={m._id}
-                                                className="bg-gradient-to-r from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-300/50 space-y-3"
+                                                className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
                                             >
-                                                {m.imageUrls?.length > 0 ? (
-                                                    m.imageUrls.map((url, idx) => (
-                                                        <img
-                                                            key={idx}
-                                                            src={url}
-                                                            alt={m.itemName}
-                                                            className="h-20 w-20 object-cover rounded-lg border-2 border-white shadow-sm flex-shrink-0"
-                                                            loading="lazy"
-                                                        />
-                                                    ))
-                                                ) : (
-                                                    <div className="h-20 w-20 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border-2 border-dashed border-blue-200/50 flex-shrink-0">
-                                                        <div className="text-4xl text-gray-400 mb-2">📷</div>
-                                                        <p className="text-xs text-gray-500 text-center px-2">No image</p>
+                                                {/* Top Gradient Accent */}
+                                                <div className="h-1.5 bg-gradient-to-r from-green-400 to-emerald-500"></div>
+
+                                                {/* Content */}
+                                                <div className="p-4 space-y-4">
+
+                                                    {/* Header with Images and Title */}
+                                                    <div className="flex items-start gap-4">
+                                                        {/* Image Container */}
+                                                        <div className="flex-shrink-0">
+                                                            {m.imageUrls?.length > 0 ? (
+                                                                <div className="relative">
+                                                                    <img
+                                                                        src={m.imageUrls[0]}
+                                                                        alt={m.itemName}
+                                                                        className="h-16 w-16 object-cover rounded-lg border border-gray-100 shadow-sm"
+                                                                        loading="lazy"
+                                                                    />
+                                                                    {m.imageUrls.length > 1 && (
+                                                                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 text-white text-xs font-medium rounded-full flex items-center justify-center border border-white">
+                                                                            +{m.imageUrls.length - 1}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            ) : (
+                                                                <div className="h-16 w-16 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200">
+                                                                    <svg className="w-6 h-6 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                    </svg>
+                                                                    <p className="text-xs text-gray-500">No image</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Title and Date */}
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex justify-between items-start gap-2">
+                                                                <h4 className="font-semibold text-gray-800 text-base line-clamp-2 flex-1">
+                                                                    {m.itemName}
+                                                                </h4>
+                                                                <span className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
+                                                                    {new Date(m.createdAt).toLocaleDateString()}
+                                                                </span>
+                                                            </div>
+
+                                                            {/* Location */}
+                                                            <div className="mt-2 flex items-center gap-1 text-sm text-gray-600">
+                                                                <div><FiMapPin className="text-gray-400" /></div>
+                                                                <span className="line-clamp-1 wrap-break-word">{m.location}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                )}
-                                                <h4 className="font-bold text-lg text-gray-800">{m.itemName}</h4>
-                                                <p className="text-gray-600 leading-relaxed line-clamp-4 wrap-break-word">{m.description}</p>
-                                                <div className="flex flex-col justify-between text-sm">
-                                                    <span className="text-gray-700 font-medium line-clamp-2 wrap-break-word">{m.location}</span>
-                                                    <span className="text-gray-500">{new Date(m.createdAt).toLocaleString()}</span>
+
+                                                    {/* Description */}
+                                                    <div>
+                                                        <div key={m._id} className={`relative pr-1 bg-gray-200/50 p-1.5 rounded-lg`}>
+                                                            <p ref={(el) => {
+                                                                if (el) {
+                                                                    refs.current[m._id] = el;
+                                                                }
+                                                            }} className={`text-sm text-gray-600 leading-relaxed whitespace-pre-wrap wrap-break-word ${readMore === m._id ? "line-clamp-none" : "line-clamp-3"}`}>
+                                                                {m.description}
+                                                            </p>
+                                                        </div>
+                                                        
+                                                        {overflowMap[m._id] &&
+                                                        <button onClick={() => setReadMore(readMore === m._id ? null : m._id)} className="text-xs text-blue-600 hover:underline">
+                                                            {readMore === m._id ? "Show Less" : "Read More"}
+                                                        </button>
+                                                        }
+                                                    </div>
+
+                                                    {/* Contact Button */}
+                                                    <button
+                                                        onClick={() => window.location.href = `tel:${m.phone}`}
+                                                        className="w-full py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow flex items-center justify-center gap-2 group"
+                                                    >
+                                                        <FiPhoneCall />
+                                                        Contact Reporter
+                                                    </button>
+
                                                 </div>
-                                                <button
-                                                    onClick={() => window.location.href = `tel:${m.phone}`}
-                                                    className="w-full py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-2"
-                                                >
-                                                    <FiPhoneCall className="text-lg" />Contact Reporter
-                                                </button>
                                             </div>
                                         ))}
                                     </div>

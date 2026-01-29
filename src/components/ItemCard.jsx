@@ -69,7 +69,7 @@ const ItemCard = ({
                     </div>
                 </div>
 
-                <p className="text-xs md:text-sm text-gray-600 bg-gray-100/50 rounded-lg leading-relaxed line-clamp-4 md:line-clamp-3 h-21 md:h-19 px-2 py-1 md:pb-2 w-full mr-1 md:mr-2 md:pr-3 md:pl-2">
+                <p className="text-xs md:text-sm text-gray-600 bg-gray-100/50 rounded-lg leading-relaxed line-clamp-4 md:line-clamp-3 h-21 md:h-19 px-2 py-1 md:pb-2 w-full mr-1 md:mr-2 md:pr-3 md:pl-2 wrap-break-word">
                     {item.description}</p>
             </div>
 

@@ -151,7 +151,7 @@ export default function AnnouncementTab({ eventId }) {
             return (
               <div
                 key={a._id}
-                className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer group border-t-4 border-blue-500/70"
+                className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 rounded-2xl hover:shadow-sm transition-all duration-300 overflow-hidden cursor-pointer group border-y-4 border-gray-300"
                 onClick={() => setPop(pop === a._id ? null : a._id)}
               >
                 {/* Delete button */}
@@ -160,7 +160,7 @@ export default function AnnouncementTab({ eventId }) {
                     onClick={(e) => e.stopPropagation() || handleDelete(a._id)}
                     className="absolute top-1 md:top-4 right-1 md:right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all shadow-sm"
                   >
-                    <FiTrash2 className="w-5 h-5" />
+                    <FiTrash2 className="w-4 md:w-5 h-4 md:h-5" />
                   </button>
                 )}
 

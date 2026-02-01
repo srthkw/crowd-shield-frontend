@@ -6,7 +6,7 @@ import AnnouncementTab from "../components/tabs/AnnouncementTab";
 import LostFoundTab from "../components/tabs/LostFoundTab";
 import { Link } from "react-router-dom";
 import ReportsTab from "../components/tabs/ReportsTab";
-import SosTab from "../components/tabs/SosTab";
+import HelplinesTab from "../components/tabs/HelplinesTab";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
 
@@ -42,7 +42,7 @@ export default function EventDashboard() {
 
                 <div className="max-w-screen flex-1 flex flex-col min-h-0 mx-auto px-1 md:px-3 py-2 md:py-8">
                     {/* Event Header Card */}
-                    <div className={`bg-white/60 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 border-violet-500/70 ${expanded ? "ring-2 ring-blue-500/20" : ""}`}>
+                    <div className={`bg-white/60 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 border-violet-500/70`}>
 
                         {/* Header */}
                         <div className={`px-4 md:px-8 md:pt-8 pt-4 ${expanded ? "mb-4" : ""}`}>
@@ -116,11 +116,11 @@ export default function EventDashboard() {
                     </div>
 
                     {/* Tabs Section */}
-                    <div className="bg-white/60 rounded-2xl shadow-lg overflow-auto flex-1 min-h-0 ">
+                    <div className="bg-white/60 rounded-2xl shadow-lg overflow-auto flex-1 min-h-0  border-b-4 border-violet-500/70">
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["announcements", "SOS", "Lost-Found", "reports" ].map((tab) => (
+                                {["announcements", "Helplines", "Lost-Found", "reports" ].map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -149,8 +149,8 @@ export default function EventDashboard() {
                             {activeTab === "reports" && (
                                 <ReportsTab eventId={event._id} />
                             )}
-                            {activeTab === "SOS" && (
-                                <SosTab/>
+                            {activeTab === "Helplines" && (
+                                <HelplinesTab eventId={event._id} />
                             )}
                         </div>
                     </div>

@@ -82,12 +82,12 @@ const ItemCard = ({
                     </div>
                 </div>
             </div>
-
-            {isOwner && (
+            
+{/* {isOwner && (
                 <span className="text-gray-500 text-xs italic mb-3 text-center">
                     Tap card to view matches
                 </span>
-            )}
+            )} */}
 
             <div className={`my-auto flex flex-col md:flex-row md:gap-0 justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-3 md:pt-4 bg-gray-100/70 h-full rounded-b-xl"}`}>
 

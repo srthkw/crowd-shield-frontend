@@ -1,7 +1,7 @@
 import React from 'react'
 import { FcOnlineSupport, FcDepartment, FcHighPriority, FcDisapprove } from "react-icons/fc";
 
-const SosTab = () => {
+const HelplinesTab = () => {
   const emergencyNumbers = [
     { 
       id: 1, 
@@ -113,4 +113,4 @@ const SosTab = () => {
   )
 }
 
-export default SosTab
+export default HelplinesTab

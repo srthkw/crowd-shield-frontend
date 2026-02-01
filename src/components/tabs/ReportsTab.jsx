@@ -9,6 +9,36 @@ export default function ReportsTab() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  function timeAgo(input) {
+    const date = new Date(input);
+  
+    if (isNaN(date.getTime())) {
+      console.warn("Invalid date passed to timeAgo:", input);
+      return "";
+    }
+  
+    const now = Date.now();
+    const diffMs = now - date.getTime();
+  
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+  
+    if (diffSeconds < 10) return "Just now";
+    if (diffSeconds < 60) return `${diffSeconds}s ago`;
+    if (diffMinutes < 60) return `${diffMinutes} min${diffMinutes > 1 ? "s" : ""} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 30) return `${diffDays} days ago`;
+  
+    // only show date for really old stuff
+    return date.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+  }  
 
   const deleteReport = async (item) => {
     if (!confirm("Are you sure you want to delete this report?")) return;
@@ -84,7 +114,14 @@ export default function ReportsTab() {
                   {item.claimed ? <span className="flex items-center justify-center gap-1"><FiCheck />Claimed</span> : <span className="flex items-center justify-center gap-1"><FiClock />Pending</span>}
                 </span>
                 <span className="text-xs text-gray-500">
-                  {new Date(item.createdAt).toLocaleDateString()}
+                  {new Date(item.createdAt).toLocaleDateString(
+                    "en-IN",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}
                 </span>
               </div>
             </div>
@@ -129,7 +166,7 @@ export default function ReportsTab() {
               {/* Actions */}
               <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                 <div className="text-xs text-gray-500">
-                  Reported {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  Reported {timeAgo(item.createdAt)}
                 </div>
                 <button
                   onClick={() => deleteReport(item)}

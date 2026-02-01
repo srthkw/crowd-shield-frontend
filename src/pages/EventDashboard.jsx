@@ -120,7 +120,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["announcements", "Helplines", "Lost-Found", "reports" ].map((tab) => (
+                                {[ "Helplines", "announcements", "Lost-Found", "item reports" ].map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -146,7 +146,7 @@ export default function EventDashboard() {
                             {activeTab === "Lost-Found" && (
                                 <LostFoundTab eventId={event._id} />
                             )}
-                            {activeTab === "reports" && (
+                            {activeTab === "item reports" && (
                                 <ReportsTab eventId={event._id} />
                             )}
                             {activeTab === "Helplines" && (

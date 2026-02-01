@@ -58,9 +58,7 @@ const LandingPage = () => {
   <nav className="relative z-10 px-6 py-4 md:py-6 md:px-12">
     <div className="max-w-7xl mx-auto flex justify-between items-center">
       <div className="flex items-center justify-center md:justify-start gap-3 w-full">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
-          <span className="text-white font-bold text-xl">CS</span>
-        </div>
+      <div><img src="../../src/assets/favicon.png" alt="" className="w-10 h-10" /></div>
         <span className="md:text-4xl text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Crowd-Shield
         </span>

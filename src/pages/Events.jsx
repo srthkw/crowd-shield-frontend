@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -37,12 +37,13 @@ export default function Events() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 p-2 md:p-2">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50">
         {/* Background decorative element */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/20 pointer-events-none" />
 
         <Navbar />
 
+        <div className="p-2">
         {/* Header Section */}
         <div className="relative z-10 mb-8 mt-3 md:mb-12">
           <div className="flex flex-col items-center text-center">
@@ -264,6 +265,7 @@ export default function Events() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </>
   );

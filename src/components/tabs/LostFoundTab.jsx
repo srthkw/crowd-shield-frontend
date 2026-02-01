@@ -61,6 +61,36 @@ export default function LostFoundTab({ eventId }) {
         "Other",
     ];
 
+    function timeAgo(input) {
+        const date = new Date(input);
+      
+        if (isNaN(date.getTime())) {
+          console.warn("Invalid date passed to timeAgo:", input);
+          return "";
+        }
+      
+        const now = Date.now();
+        const diffMs = now - date.getTime();
+      
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+      
+        if (diffSeconds < 10) return "Just now";
+        if (diffSeconds < 60) return `${diffSeconds}s ago`;
+        if (diffMinutes < 60) return `${diffMinutes} min${diffMinutes > 1 ? "s" : ""} ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+        if (diffDays === 1) return "Yesterday";
+        if (diffDays < 30) return `${diffDays} days ago`;
+      
+        // only show date for really old stuff
+        return date.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+      }      
 
     useEffect(() => {
         const fetchData = async () => {
@@ -185,6 +215,8 @@ export default function LostFoundTab({ eventId }) {
     };
 
     const checkMatches = async (item) => {
+        setReadMore(null);
+        setOverflowMap({});
         try {
             setAnimate("refresh")
             const res = await axios.post(`/lostfound/matches/${eventId}`, { item });
@@ -207,18 +239,26 @@ export default function LostFoundTab({ eventId }) {
 
     useEffect(() => {
         if (!matchInfo?.existingMatches?.length) return;
-      
+
         const next = {};
-      
+
         matchInfo.existingMatches.forEach((m) => {
-          const el = refs.current[m._id];
-          if (!el) return;
-      
-          next[m._id] = el.scrollHeight > el.clientHeight;
+            const el = refs.current[m._id];
+            if (!el) return;
+
+            next[m._id] = el.scrollHeight > el.clientHeight;
         });
-      
+
         setOverflowMap(next);
-      }, [matchInfo]);
+    }, [matchInfo]);
+
+    useEffect(() => {
+        if (!showMatchModal) {
+            setReadMore(null);
+            setOverflowMap({});
+        }
+    }, [showMatchModal]);
+
 
 
     if (loading) return <Loader2 />;
@@ -392,6 +432,7 @@ export default function LostFoundTab({ eventId }) {
                                 claimItem={claimItem}
                                 setClaimLoad={setClaimLoad}
                                 claimLoad={claimLoad}
+                                timeAgo={timeAgo}
                             />
                         ))}
                     </div>
@@ -425,6 +466,7 @@ export default function LostFoundTab({ eventId }) {
                                 claimItem={claimItem}
                                 setClaimLoad={setClaimLoad}
                                 claimLoad={claimLoad}
+                                timeAgo={timeAgo}
                             />
                         ))}
                     </div>
@@ -509,9 +551,9 @@ export default function LostFoundTab({ eventId }) {
                                 <p className="text-gray-600 text-xs md:text-sm mt-">Compare details below</p>
                             </div>
                             <button
-                                onClick={() =>{
-                                     setReadMore(null);
-                                     setShowMatchModal(false)}}
+                                onClick={() => {
+                                    setShowMatchModal(false)
+                                }}
                                 className="text-gray-500 hover:text-gray-700 text-3xl transition-colors"
                                 aria-label="Close modal"
                             >
@@ -523,7 +565,7 @@ export default function LostFoundTab({ eventId }) {
                         {matchInfo &&
                             <div className="space-y-3 overflow-y-scroll no-scrollbar h-full rounded-lg bg-blue-50 p-3 border-1 border-blue-300/30">
                                 <h3 className="font-bold text-gray-800 text-lg">Your Reported Item</h3>
-                                <div className="bg-blue-100 p-2.5 rounded-xl max-w-100 border-1 border-dashed border-blue-800/30">
+                                <div className="bg-white p-2.5 rounded-xl max-w-100 border-t-6 border-blue-500/70">
                                     <div className="flex flex-row items-center justify-around">
                                         {matchInfo.newItem.imageUrls?.length > 0 ? (
                                             matchInfo.newItem.imageUrls.map((url, idx) => (
@@ -543,11 +585,7 @@ export default function LostFoundTab({ eventId }) {
                                         )}
                                         <div className="bg-gray-100/70 p-3.5 rounded-r-lg flex-1">
                                             <h3 className="font-semibold text-xl text-gray-600">{matchInfo.newItem.itemName}</h3>
-                                            <span className="text-gray-600 text-sm">Reported at: {new Date(matchInfo.newItem.createdAt).toLocaleTimeString("en-IN", {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                                hour12: true
-                                            })}</span>
+                                            <span className="text-gray-600 text-sm"> Reported {timeAgo(matchInfo.newItem.createdAt)}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -564,11 +602,11 @@ export default function LostFoundTab({ eventId }) {
                                         {/* Refresh Button */}
                                         <div className="flex mt-auto font-medium">
                                             <div
-                                                className="flex items-center justify-center bg-blue-200/20 border-2 border-gray-200 px-3 py-2 rounded-xl"
+                                                className="flex items-center justify-center bg-white border-2 border-gray-200 px-2 py-1.5 rounded-xl"
                                                 onClick={() => checkMatches(matchInfo.newItem)}
                                             >
                                                 <div className="text-xs text-gray-900 flex items-center justify-center">
-                                                    <button className="flex items-center justify-center rounded-lg mr-3 bg-gray-300/80 px-2 py-2">
+                                                    <button className="flex items-center justify-center rounded-lg mr-2 bg-gray-300/80 px-2 py-2">
                                                         <span >
                                                             <FiRefreshCw className={`size-3.5 mr-2 ${animate === "refresh" && "animate-spin"}`} />
                                                         </span>Refresh</button>
@@ -594,7 +632,7 @@ export default function LostFoundTab({ eventId }) {
                                                 <div className="h-1.5 bg-gradient-to-r from-green-400 to-emerald-500"></div>
 
                                                 {/* Content */}
-                                                <div className="p-4 space-y-4">
+                                                <div className="p-4 space-y-3">
 
                                                     {/* Header with Images and Title */}
                                                     <div className="flex items-start gap-4">
@@ -608,11 +646,6 @@ export default function LostFoundTab({ eventId }) {
                                                                         className="h-16 w-16 object-cover rounded-lg border border-gray-100 shadow-sm"
                                                                         loading="lazy"
                                                                     />
-                                                                    {m.imageUrls.length > 1 && (
-                                                                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 text-white text-xs font-medium rounded-full flex items-center justify-center border border-white">
-                                                                            +{m.imageUrls.length - 1}
-                                                                        </div>
-                                                                    )}
                                                                 </div>
                                                             ) : (
                                                                 <div className="h-16 w-16 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border border-gray-200">
@@ -624,23 +657,24 @@ export default function LostFoundTab({ eventId }) {
                                                             )}
                                                         </div>
 
-                                                        {/* Title and Date */}
-                                                        <div className="flex-1 min-w-0">
-                                                            <div className="flex justify-between items-start gap-2">
+                                                        {/* Title and Timestamp */}
+                                                        <div className="flex-1 min-w-0 items-center">
+                                                            <div className="flex flex-col my-2 gap-1">
                                                                 <h4 className="font-semibold text-gray-800 text-base line-clamp-2 flex-1">
                                                                     {m.itemName}
                                                                 </h4>
                                                                 <span className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
-                                                                    {new Date(m.createdAt).toLocaleDateString()}
+                                                                    Reported {timeAgo(m.createdAt)}
                                                                 </span>
+
                                                             </div>
 
-                                                            {/* Location */}
-                                                            <div className="mt-2 flex items-center gap-1 text-sm text-gray-600">
-                                                                <div><FiMapPin className="text-gray-400" /></div>
-                                                                <span className="line-clamp-1 wrap-break-word">{m.location}</span>
-                                                            </div>
                                                         </div>
+                                                    </div>
+                                                    {/* Location */}
+                                                    <div className="mt-2 flex items-center gap-1 bg-gray-200/50 p-1 rounded-lg text-sm text-gray-600">
+                                                        <div><FiMapPin className="text-gray-400" /></div>
+                                                        <span className="line-clamp-1 wrap-break-word">{m.location}</span>
                                                     </div>
 
                                                     {/* Description */}
@@ -654,12 +688,14 @@ export default function LostFoundTab({ eventId }) {
                                                                 {m.description}
                                                             </p>
                                                         </div>
-                                                        
-                                                        {overflowMap[m._id] &&
-                                                        <button onClick={() => setReadMore(readMore === m._id ? null : m._id)} className="text-xs text-blue-600 hover:underline">
-                                                            {readMore === m._id ? "Show Less" : "Read More"}
-                                                        </button>
-                                                        }
+
+                                                        {/* Read More Button */}
+                                                        <div className="mt-1 flex justify-end">
+                                                            {overflowMap[m._id] &&
+                                                                <button onClick={() => setReadMore(readMore === m._id ? null : m._id)} className="text-xs text-blue-600 hover:underline">
+                                                                    {readMore === m._id ? "Show Less" : "Read More"}
+                                                                </button>
+                                                            }</div>
                                                     </div>
 
                                                     {/* Contact Button */}

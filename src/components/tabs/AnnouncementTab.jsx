@@ -151,21 +151,21 @@ export default function AnnouncementTab({ eventId }) {
             return (
               <div
                 key={a._id}
-                className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden cursor-pointer group"
+                className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer group border-t-4 border-blue-500/70"
                 onClick={() => setPop(pop === a._id ? null : a._id)}
               >
                 {/* Delete button */}
                 {canDelete && (
                   <button
                     onClick={(e) => e.stopPropagation() || handleDelete(a._id)}
-                    className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all shadow-sm"
+                    className="absolute top-1 md:top-4 right-1 md:right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-red-50 text-gray-400 hover:text-red-600 transition-all shadow-sm"
                   >
                     <FiTrash2 className="w-5 h-5" />
                   </button>
                 )}
 
                 {/* Announcement Content */}
-                <div className="p-6 pb-4 flex flex-col">
+                <div className="p-3 pb-4 flex flex-col">
                   <div className="mb-4 relative md:pr-10 h-full">
                     <div className="flex items-start gap-3">
                       <div className="md:p-2 p-1 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 flex-shrink-0">

@@ -6,6 +6,7 @@ import AnnouncementTab from "../components/tabs/AnnouncementTab";
 import LostFoundTab from "../components/tabs/LostFoundTab";
 import { Link } from "react-router-dom";
 import ReportsTab from "../components/tabs/ReportsTab";
+import SosTab from "../components/tabs/SosTab";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
 
@@ -41,7 +42,7 @@ export default function EventDashboard() {
 
                 <div className="max-w-screen flex-1 flex flex-col min-h-0 mx-auto px-1 md:px-3 py-2 md:py-8">
                     {/* Event Header Card */}
-                    <div className={`bg-white/60 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 ${expanded ? "ring-2 ring-blue-500/20" : ""}`}>
+                    <div className={`bg-white/60 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 border-violet-500/70 ${expanded ? "ring-2 ring-blue-500/20" : ""}`}>
 
                         {/* Header */}
                         <div className={`px-4 md:px-8 md:pt-8 pt-4 ${expanded ? "mb-4" : ""}`}>
@@ -149,17 +150,7 @@ export default function EventDashboard() {
                                 <ReportsTab eventId={event._id} />
                             )}
                             {activeTab === "SOS" && (
-                                <div className="flex flex-col items-center justify-center py-12 md:py-16 text-center">
-                                    <div className="w-20 h-20 bg-gradient-to-br from-red-50 to-red-100 rounded-full flex items-center justify-center mb-6">
-                                        <span className="text-2xl font-bold text-red-600">SOS</span>
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                                        Emergency/SOS Features
-                                    </h3>
-                                    <p className="text-gray-600 max-w-md">
-                                        This section is currently under development. Check back soon for emergency features.
-                                    </p>
-                                </div>
+                                <SosTab/>
                             )}
                         </div>
                     </div>

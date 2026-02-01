@@ -7,7 +7,8 @@ const ItemCard = ({
     setSetDetails,
     claimItem,
     setClaimLoad,
-    claimLoad
+    claimLoad,
+    timeAgo
 }) => {
     const isOwner =
         item.reportedBy.toString() === user.id ||
@@ -18,9 +19,9 @@ const ItemCard = ({
         <div
             key={item._id}
             onClick={() => isOwner && checkMatches(item)}
-            className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-2 ${item.reportedBy.toString() === user.id
-                ? "border-blue-300 bg-blue-50/30 cursor-pointer hover:border-blue-400"
-                : "border-gray-100 hover:border-gray-200"
+            className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-0.5 ${item.reportedBy.toString() === user.id
+                ? "border-t-4 border-blue-500/70 cursor-pointer"
+                : "border-t-4 border-green-500/70"
                 }`}>
             {item.reportedBy.toString() === user.id && (
                 <span className="absolute -top-2.5 left-1/2 transform -translate-x-1/2 gap-1 bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
@@ -37,11 +38,7 @@ const ItemCard = ({
 
                     </div>
                     <span className="text-xs text-gray-500 whitespace-nowrap">
-                        {new Date(item.createdAt).toLocaleTimeString("en-IN", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true
-                        })}
+                        {timeAgo(item.createdAt)}
                     </span>
                 </div>
             </div>
@@ -101,7 +98,7 @@ const ItemCard = ({
                             e.stopPropagation();
                             setSetDetails(item);
                         }}>
-                        Read Details
+                        View Details
                     </button>
                 </div>
 

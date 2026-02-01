@@ -5,7 +5,6 @@ import { useAuth } from "../../hooks/useAuth";
 
 export default function ReportsTab() {
   const { eventId } = useParams();
-  const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 

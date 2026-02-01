@@ -1,5 +1,5 @@
 import React from 'react'
-import {useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LogoutBTN from './buttons/LogoutBTN';
 import CreateEVNT from './buttons/CreateEVNT';
 import { useNavigate } from "react-router-dom";
@@ -12,53 +12,67 @@ const Navbar = () => {
 
     useEffect(() => {
         function handleClickOutside(e) {
-          if (menuRef.current && !menuRef.current.contains(e.target)) {
-            setOpen(false)
-          }
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setOpen(false)
+            }
         }
-    
+
         if (open) {
-          document.addEventListener("mousedown", handleClickOutside)
+            document.addEventListener("mousedown", handleClickOutside)
         }
-    
+
         return () => {
-          document.removeEventListener("mousedown", handleClickOutside)
+            document.removeEventListener("mousedown", handleClickOutside)
         }
-      }, [open])
+    }, [open])
 
     return (
-        <div className="sticky top-0 w-full z-50 flex justify-between p-3 content-center m-0 glass-bg shadow-lg shadow-black/5 bg-white/45 rounded-none">
-            <h3 className="text-black/80 text-xl font-bold" onClick={() => navigate(`/`)}>
-                Crowd-Shield
-            </h3>
-            <div ref={menuRef}>
-                <button
-                    onClick={() => setOpen(!open)}
-                    className={`text-xl transition-transform duration-300 text-black/80 text-xl m-0 cursor-pointer ${open ? "rotate-180" : ""}`}
-                    
-                >
-                    ☰
-                </button>
+        <div className="sticky top-0 w-full z-50 bg-white border-b border-gray-200 shadow-sm">
+            <div className="mx-auto px-4 sm:px-6">
+                <div className="flex justify-between items-center h-16">
 
-                {/* MOBILE DROPDOWN MENU */}
-                <div className={`absolute z-10 top-13 right-0 rounded-tr-none rounded-xl flex flex-col gap-2 justify-center shadow-lg items-center transition-h duration-900 ease-in-out overflow-hidden ${open ? "max-h-96" : "max-h-0"}`}>
-                        {/* {(user.role === "admin" || user.role === "organizer") && (
+                    {/* Logo */}
+                    <div
+                        className="flex items-center gap-3 cursor-pointer"
+                        onClick={() => navigate('/')}
+                    >
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-md">
+                            <span className="text-white font-bold text-lg">CS</span>
+                        </div>
+                        <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            Crowd-Shield
+                        </span>
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <div className="relative" ref={menuRef}>
                         <button
-                            className="text-black/80 bg-white/70 w-full p-2 px-3 rounded-2xl font-semibold"
-                            onClick={() => {
-                                setOpen(false);
-                                navigate("/events/create");
-                            }}
+                            onClick={() => setOpen(!open)}
+                            className="p-2 rounded-lg transition-colors duration-200 focus:outline-none"
+                            aria-label="Menu"
                         >
-                            Create an event
+                            <div className="w-6 h-5 relative">
+                                {/* Animated Hamburger Icon */}
+                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-300 ${open ? 'top-2 rotate-45' : 'top-0'
+                                    }`}></span>
+                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-300 top-2 ${open ? 'opacity-0' : 'opacity-100'
+                                    }`}></span>
+                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-300 ${open ? 'top-2 -rotate-45' : 'top-4'
+                                    }`}></span>
+                            </div>
                         </button>
-                    )} */}
-                    <div className="bg-stone-100 border-1 border-white/40 backdrop-blur-sm p-4">
-                        <CreateEVNT />
-                        <div className="border-b border-black/30 w-full my-2 relative z-1 left-1/2 -translate-x-1/2 "></div>
-                        <LogoutBTN />
+
+                        {/* Mobile Dropdown Menu */}
+                        <div className={`absolute -right-3.5 md:-right-5 top-12 md:top-13 bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] transition-all duration-300 overflow-hidden ${open ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-2 invisible'
+                            }`}>
+                            <div className="p-4 space-y-3">
+                                <CreateEVNT />
+                                <div className="h-px bg-gray-200"></div>
+                                <LogoutBTN />
+                            </div>
+                        </div>
                     </div>
-                    </div>
+                </div>
             </div>
         </div>
     )

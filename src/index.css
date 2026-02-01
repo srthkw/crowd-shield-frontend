@@ -51,6 +51,15 @@
     width: 0;
     height: 0;
   }
+
+  .no-scrollbar-zero {
+    -ms-overflow-style: none;  /* IE + Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  .no-scrollbar-zero::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Brave */
+  }
 }
 
 /* MOVE BUTTON STYLES HERE — NOT BASE */

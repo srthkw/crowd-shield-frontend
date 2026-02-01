@@ -44,9 +44,9 @@ const ItemCard = ({
             </div>
 
             {/* Item Images */}
-            <div className="flex flex-row">
-                <div className="px-1.5 pb-3">
-                    <div className="flex gap-2 overflow-x-auto pb-1">
+            <div className="flex flex-row pb-3">
+                <div className="px-1.5">
+                    <div className="flex gap-2 overflow-x-auto">
                         {item.imageUrls?.length > 0 ? (
                             item.imageUrls.map((url, idx) => (
                                 <img
@@ -66,7 +66,7 @@ const ItemCard = ({
                     </div>
                 </div>
 
-                <p className="text-xs md:text-sm text-gray-600 bg-gray-100/50 rounded-lg leading-relaxed line-clamp-4 md:line-clamp-3 h-21 md:h-19 px-2 py-1 md:pb-2 w-full mr-1 md:mr-2 md:pr-3 md:pl-2 wrap-break-word">
+                <p className="text-xs md:text-sm text-gray-600 bg-gray-100/50 rounded-lg leading-relaxed line-clamp-4 md:line-clamp-3 md:h-19 px-2 py-1 md:pb-2 w-full mr-1 md:mr-2 md:pr-3 md:pl-2 wrap-break-word">
                     {item.description}</p>
             </div>
 

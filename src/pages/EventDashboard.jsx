@@ -140,6 +140,9 @@ export default function EventDashboard() {
 
                         {/* Tab Content */}
                         <div className="p-4 md:p-6">
+                            {activeTab === "Helplines" && (
+                                <HelplinesTab eventId={event._id} />
+                            )}
                             {activeTab === "announcements" && (
                                 <AnnouncementTab eventId={event._id} />
                             )}
@@ -148,9 +151,6 @@ export default function EventDashboard() {
                             )}
                             {activeTab === "item reports" && (
                                 <ReportsTab eventId={event._id} />
-                            )}
-                            {activeTab === "Helplines" && (
-                                <HelplinesTab eventId={event._id} />
                             )}
                         </div>
                     </div>

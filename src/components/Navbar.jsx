@@ -36,10 +36,9 @@ const Navbar = () => {
                         className="flex items-center gap-3 cursor-pointer"
                         onClick={() => navigate('/')}
                     >
-                        {/* <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-md">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-md">
                             <span className="text-white font-bold text-lg">CS</span>
-                        </div> */}
-                        <div><img src="../../src/assets/favicon.png" alt="" className="w-10 h-10" /></div>
+                        </div>
                         <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                             Crowd-Shield
                         </span>

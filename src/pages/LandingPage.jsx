@@ -103,7 +103,7 @@ const LandingPage = () => {
               Login
             </button>
             <button
-              onClick={() => navigate('/underdev')}
+              onClick={() => navigate('/signup')}
               className="px-8 py-2.5 bg-white text-gray-800 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-sm"
             >
               Sign-up

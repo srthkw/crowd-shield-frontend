@@ -14,7 +14,7 @@ export default function EventDashboard() {
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
     const [pageload, setPageload] = useState(true);
-    const [activeTab, setActiveTab] = useState("announcements"); // default tab
+    const [activeTab, setActiveTab] = useState("Helplines"); // default tab
     const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {

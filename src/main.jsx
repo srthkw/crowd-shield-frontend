@@ -8,7 +8,7 @@ import AuthRedirect from "../redirect/AuthRedirect";
 import EventDashboard from "./pages/EventDashboard";
 import Login from "./pages/Login";
 import Events from "./pages/Events";
-import UnderDev from "./pages/UnderDev";
+import Signup from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
 // later you'll add Events, Dashboard, etc.
 
@@ -38,9 +38,9 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "/underdev",
+    path: "/signup",
     element: (
-        <UnderDev />
+        <Signup />
     )
   }
   

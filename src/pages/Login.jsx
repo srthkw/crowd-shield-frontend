@@ -61,9 +61,10 @@ const Login = () => {
               <input placeholder="Password" type="password" {...register("password", { required: true })} onChange={() => setError("")} className="p-3 bg-gray-200 w-full font-medium text-xs mb-4 md:mb-5 sm:text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300" />
 
               {error && (
+                <div className="w-full flex justify-center text-center">
                 <p className="sm:w-auto font-semibold text-xs sm:text-sm text-red-500 w-full">
                   {error}
-                </p>
+                </p></div>
               )}
 
               <button type="submit" className="w-full py-2.5 mt-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl active:scale-[0.98]">{loading ? "Logging you in..." : "Login"}</button>

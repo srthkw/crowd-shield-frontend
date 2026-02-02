@@ -35,11 +35,11 @@ const navigate = useNavigate();
         formData
       );
 
-      setSuccess("Account created. You can now log in.");
+      setSuccess("Account created. You will be redirected to login page.");
       setFormData({ name: "", email: "", phone: "", password: "" });
       setTimeout(() => {
         navigate("/login");
-      }, 5000);
+      }, 3000);
     } catch (err) {
       setError(
         err.response?.data?.message ||

@@ -60,6 +60,7 @@ const CreateEvent = () => {
                     </h1>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Event name *</label>
                         <input
                             type="text"
                             name="name"
@@ -69,6 +70,7 @@ const CreateEvent = () => {
                             className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
                         />
 
+                        <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Name *</label>
                         <input
                             type="text"
                             name="location"
@@ -78,6 +80,7 @@ const CreateEvent = () => {
                             className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
                         />
 
+                        <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Date *</label>
                         <input
                             type="date"
                             name="date"
@@ -92,6 +95,7 @@ const CreateEvent = () => {
                             className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
 
+                        <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Description *</label>
                         <textarea
                             name="description"
                             placeholder="Description *"
@@ -121,10 +125,6 @@ const CreateEvent = () => {
                             {loading ? "Creating event..." : "Create event"}
                         </button>
                     </form>
-
-                    <p className="text-xs text-gray-400 mt-6 text-center">
-                        Only verified organizers should be here. If you’re not, why are you?
-                    </p>
                 </div>
             </div>
         </div>

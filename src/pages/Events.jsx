@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useAuth } from "../hooks/useAuth";
 import { FiSearch, FiMapPin, FiCalendar, FiInfo, FiX } from 'react-icons/fi';
 import Loader from "../components/Loader";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const navigate = useNavigate();
   // Add to your component's state
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,6 +19,17 @@ export default function Events() {
   const filteredEvents = events.filter(event =>
     event.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const deleteEvent = async (eventId) => {
+    try {
+      await API.delete(`/events/${eventId}`);
+      setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
+      alert("Event deleted successfully");
+    } catch (err) {
+      console.error("Failed to delete event", err);
+      alert("Failed to delete event");
+    }
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -47,7 +60,7 @@ export default function Events() {
         {/* Header Section */}
         <div className="relative z-10 mb-8 mt-3 md:mb-12">
           <div className="flex flex-col items-center text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-600 mb-3">
               Events
             </h1>
 
@@ -249,9 +262,9 @@ export default function Events() {
               </div>
 
               {/* Modal Footer */}
-              <div className="sm:p-6 p-2 border-t border-gray-100 flex flex-col sm:flex-row gap-3 sm:justify-between">
+              <div className="sm:p-6 p-2 border-t border-gray-100 flex flex-col sm:flex-row gap-2 sm:justify-between">
                 <button
-                  className="sm:px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+                  className="sm:px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
                   onClick={() => {
                     setSelectedEvent(null);
                     navigate(`/event/${selectedEvent._id}`);
@@ -259,6 +272,17 @@ export default function Events() {
                 >
                   View Full Event Details
                 </button>
+                
+                { (user._id === selectedEvent.createdBy || user.role === 'admin') && (
+                <button onClick={() => {
+                  deleteEvent(selectedEvent._id);
+                  setSelectedEvent(null);
+                }}
+                  className="sm:px-6 py-2 bg-red-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+                >
+                  Delete Event
+                </button>)}
+                
               </div>
             </div>
           </div>

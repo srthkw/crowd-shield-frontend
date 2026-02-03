@@ -8,14 +8,18 @@ import AuthRedirect from "../redirect/AuthRedirect";
 import EventDashboard from "./pages/EventDashboard";
 import Login from "./pages/Login";
 import Events from "./pages/Events";
+import CreateEvent from "./pages/CreateEvent";
 import Signup from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
 // later you'll add Events, Dashboard, etc.
 
 const router = createBrowserRouter([
   { path: "/", element: (
+  <AuthRedirect>
   <LandingPage />
+  </AuthRedirect>
 ) },
+
   { path: "/login", element: (
   <AuthRedirect>
   <Login />
@@ -26,6 +30,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectRoute>
         <Events />
+      </ProtectRoute>
+    )
+  },
+  {
+    path: "/create-event",
+    element: (
+      <ProtectRoute>
+        <CreateEvent />
       </ProtectRoute>
     )
   },

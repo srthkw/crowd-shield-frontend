@@ -51,7 +51,7 @@ const navigate = useNavigate();
   };
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-blue-300/50 via-purple-300/50 to-gray-200 flex items-center justify-center px-2 py-4">
+<div className="min-h-screen bg-gradient-to-br from-blue-300/50 via-purple-300/50 to-gray-200 flex items-center justify-center px-2">
   {/* Background decorative elements */}
   <div className="absolute inset-0 overflow-hidden">
     <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-300/20 rounded-full blur-3xl" />

@@ -14,7 +14,7 @@ const CreateEVNT = () => {
             {(user.role === "admin" || user.role === "organizer") && (
                 <button
                     className="text-black/80 sm:text-sm text-sm p-1 w-full font-semibold flex items-center justify-center align-middle cursor-pointer"
-                    onClick={() => navigate("/events/create")}
+                    onClick={() => navigate("/create-event")}
                 >
                     <FiPlusCircle className="size-4 mr-2 mt-0.5"/><span>Create an event</span>
                 </button>

@@ -52,7 +52,7 @@ export default function Events() {
             </h1>
 
             {/* Search Bar */}
-            <div className="w-full max-w-2xl mx-auto mb-6">
+            <div className="w-full max-w-2xl mx-auto">
               <div className="relative">
                 <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
@@ -78,8 +78,6 @@ export default function Events() {
               )}
             </div>
 
-            {/* Decorative line */}
-            <div className="w-50 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
           </div>
         </div>
 
@@ -136,7 +134,7 @@ export default function Events() {
                   </button>
 
                   {/* Event Header */}
-                  <div className="p-6 pb-4">
+                  <div className="p-6 pb-4 flex flex-col justify-between min-h-[165px]">
                     <div className="mb-4">
                       <h2 className="text-md font-bold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2 pr-10">
                         {event.name}

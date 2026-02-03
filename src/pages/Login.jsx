@@ -42,7 +42,7 @@ const Login = () => {
 
         <div className="fixed inset-0 z-20 grid place-items-center p-4">
 
-          <div className="p-8 md:py-12 md:px-10 rounded-2xl bg-white/70 text-gray-600 w-full md:w-auto md:max-w-ma sm:h-auto mb-10">
+          <div className="p-8 md:py-12 md:px-10 rounded-2xl bg-white/90 text-gray-600 w-full md:w-auto md:max-w-ma sm:h-auto mb-10">
 
 
             <div className="text-center">

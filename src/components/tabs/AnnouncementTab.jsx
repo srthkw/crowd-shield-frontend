@@ -27,19 +27,17 @@ export default function AnnouncementTab({ eventId }) {
     };
 
     fetchAnnouncements();
-  }, [eventId]);
 
-  useEffect(() => {
     const fetchEvent = async () => {
-        try {
-            const res = await axios.get(`/events/${eventId}`);
-            setEventCreator(res.data.createdBy);
-        } catch (err) {
-            console.error("Failed to load event", err);
-        }
-    };
-    fetchEvent();
-}, [eventId]);
+      try {
+          const res = await axios.get(`/events/${eventId}`);
+          setEventCreator(res.data.createdBy);
+      } catch (err) {
+          console.error("Failed to load event", err);
+      }
+  };
+  fetchEvent();
+  }, [eventId]);
 
   const handleSubmit = async () => {
     if (!message.trim()) return;
@@ -86,7 +84,7 @@ export default function AnnouncementTab({ eventId }) {
   return (
     <div className="py-2 md:py-3">
       {/* CREATE BUTTON — only for organizer/admin */}
-      {(user._id === eventCreator || user.role === "admin") && (
+      {(user.id === eventCreator || user.role === "admin") && (
         <div className="flex justify-center mb-6 md:mb-8">
           <button
             onClick={() => setShowModal(true)}

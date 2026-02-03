@@ -42,7 +42,7 @@ export default function EventDashboard() {
 
                 <div className="max-w-screen flex-1 flex flex-col min-h-0 mx-auto px-1 md:px-3 py-2 md:py-8">
                     {/* Event Header Card */}
-                    <div className={`bg-white/60 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 border-violet-500/70`}>
+                    <div className={`bg-white/60 rounded-2xl w-full shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 border-violet-500/70`}>
 
                         {/* Header */}
                         <div className={`px-4 md:px-8 md:pt-8 pt-4 ${expanded ? "mb-4" : ""}`}>

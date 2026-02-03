@@ -81,6 +81,7 @@ const CreateEvent = () => {
                         <input
                             type="date"
                             name="date"
+                            placeholder="Date *"
                             value={formData.date}
                             min={today}
                             inputMode="none"
@@ -93,7 +94,7 @@ const CreateEvent = () => {
 
                         <textarea
                             name="description"
-                            placeholder="Optional description *"
+                            placeholder="Description *"
                             rows="4"
                             value={formData.description}
                             onChange={handleChange}

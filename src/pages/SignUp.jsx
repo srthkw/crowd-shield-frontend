@@ -60,7 +60,7 @@ const navigate = useNavigate();
 
   <div className="relative w-full max-w-lg">
     {/* Card */}
-    <div className="bg-white/70 py-1 backdrop-blur-sm rounded-xl shadow-xl shadow-blue-500/10 border border-blue-200/30">
+    <div className="bg-white/90 py-1 backdrop-blur-sm rounded-xl shadow-xl shadow-blue-500/10 border border-blue-200/30">
       {/* Header */}
       <div className="p-5 text-center"><h1 className="text-violet-400 md:mb-1 text-[clamp(1.5rem,4vw,2.2rem)] font-bold">
             Crowd-Shield

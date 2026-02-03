@@ -262,15 +262,15 @@ export default function Events() {
               </div>
 
               {/* Modal Footer */}
-              <div className="sm:p-6 p-2 border-t border-gray-100 flex flex-col sm:flex-row gap-2 sm:justify-between">
+              <div className="sm:p-6 p-2 border-t border-gray-100 flex flex-row sm:flex-row gap-2 justify-center">
                 <button
-                  className="sm:px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+                  className="sm:px-6 px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
                   onClick={() => {
                     setSelectedEvent(null);
                     navigate(`/event/${selectedEvent._id}`);
                   }}
                 >
-                  View Full Event Details
+                  View Details
                 </button>
                 
                 { (user._id === selectedEvent.createdBy || user.role === 'admin') && (
@@ -278,7 +278,7 @@ export default function Events() {
                   deleteEvent(selectedEvent._id);
                   setSelectedEvent(null);
                 }}
-                  className="sm:px-6 py-2 bg-red-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
+                  className="sm:px-6 px-3 py-2 bg-red-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
                 >
                   Delete Event
                 </button>)}

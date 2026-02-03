@@ -15,30 +15,40 @@ export default function AnnouncementTab({ eventId }) {
   const [eventCreator, setEventCreator] = useState(null);
 
   useEffect(() => {
-    const fetchAnnouncements = async () => {
+    let isMounted = true;
+  
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`/announcements/event/${eventId}`);
-        setAnnouncements(res.data);
+        setLoading(true);
+  
+        const [annRes, eventRes] = await Promise.all([
+          axios.get(`/announcements/event/${eventId}`),
+          axios.get(`/events/${eventId}`)
+        ]);
+  
+        if (!isMounted) return;
+  
+        setAnnouncements(annRes.data);
+        setEventCreator(eventRes.data.createdBy);
+  
+        console.log({
+          creator: eventRes.data.createdBy,
+          user: user.id
+        });
       } catch (err) {
-        console.error("Failed to fetch announcements", err);
+        console.error("Failed to load event data", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
-
-    fetchAnnouncements();
-
-    const fetchEvent = async () => {
-      try {
-          const res = await axios.get(`/events/${eventId}`);
-          setEventCreator(res.data.createdBy);
-      } catch (err) {
-          console.error("Failed to load event", err);
-      }
-  };
-  fetchEvent();
-  }, [eventId]);
-
+  
+    fetchData();
+  
+    return () => {
+      isMounted = false;
+    };
+  }, [eventId, user.id]);
+ 
   const handleSubmit = async () => {
     if (!message.trim()) return;
     setSubmitting(true);

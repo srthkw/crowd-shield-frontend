@@ -67,7 +67,7 @@ const CreateEvent = () => {
                             placeholder="Event name *"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
+                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
                         />
 
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Name *</label>
@@ -77,7 +77,7 @@ const CreateEvent = () => {
                             placeholder="Location *"
                             value={formData.location}
                             onChange={handleChange}
-                            className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
+                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
                         />
 
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Date *</label>
@@ -92,7 +92,7 @@ const CreateEvent = () => {
                             onPaste={(e) => e.preventDefault()}
                             onClick={(e) => e.target.showPicker()}
                             onChange={handleChange}
-                            className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
 
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Description *</label>
@@ -102,7 +102,7 @@ const CreateEvent = () => {
                             rows="4"
                             value={formData.description}
                             onChange={handleChange}
-                            className="w-full rounded-md border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
+                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
                         />
 
                         {error && (
@@ -120,7 +120,7 @@ const CreateEvent = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-md py-2 md:py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-60"
+                            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-60"
                         >
                             {loading ? "Creating event..." : "Create event"}
                         </button>

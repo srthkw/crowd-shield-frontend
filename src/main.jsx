@@ -9,6 +9,7 @@ import EventDashboard from "./pages/EventDashboard";
 import Login from "./pages/Login";
 import Events from "./pages/Events";
 import CreateEvent from "./pages/CreateEvent";
+import Profile from "./pages/Profile";
 import Signup from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
 // later you'll add Events, Dashboard, etc.
@@ -38,6 +39,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectRoute>
         <CreateEvent />
+      </ProtectRoute>
+    )
+  },
+  {
+    path: "/profile",
+    element: (
+      <ProtectRoute>
+        <Profile />
       </ProtectRoute>
     )
   },

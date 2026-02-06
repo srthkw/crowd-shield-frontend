@@ -27,7 +27,7 @@ const Login = () => {
         password: data.password,
       });
 
-      login(res.data.token, res.data.role, res.data.name, res.data.id);
+      login(res.data.token, res.data.role, res.data.name, res.data.id, res.data.email, res.data.phone);
       navigate("/events");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { FiUser, FiPlusCircle, FiLogOut } from "react-icons/fi";
+import { FiUser, FiPlusCircle, FiLogOut, FiHome } from "react-icons/fi";
 import BtnStyle from './buttons/BtnStyle';
 
 const Navbar = () => {
@@ -73,11 +73,13 @@ const Navbar = () => {
                             }`}>
                             <div className="px-3 py-2 space-y-2 flex flex-col">
 
+                                {/* Home Button */}
+                                <button onClick={() => {navigate('/events');}}>
+                                    <BtnStyle title={<span className="flex items-center"><div><FiHome className="size-4 mr-2 mt-0.5" /></div>Home</span>} to={`/events`} />
+                                </button>
+
                                 {/* Profile Button */}
-                                <button onClick={() => {
-                                    navigate('/profile');
-                                    
-                                }}>
+                                <button onClick={() => {navigate('/profile');}}>
                                     <BtnStyle title={<span className="flex items-center"><div><FiUser className="size-4 mr-2 mt-0.5" /></div>Profile</span>} to={`/profile`} />
                                 </button>
 

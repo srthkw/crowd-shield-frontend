@@ -3,6 +3,7 @@ import API from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
+import BtnStyle from './BtnStyle';
 const LogoutBTN = () => {
     const navigate = useNavigate();
     const { logout } = useAuth();
@@ -12,11 +13,9 @@ const LogoutBTN = () => {
     };
     
     return (
-        <div className="w-full">
-            <button onClick={handleLogout} className="text-black/80 sm:text-sm text-sm p-1 w-full font-semibold flex items-center justify-center align-middle cursor-pointer">
-            <FiLogOut className="size-4 mr-2 mt-0.5" /><span>Logout</span>
-            </button>
-        </div>
+        <button onClick={handleLogout}>
+            <BtnStyle title={<span className="flex items-center"><div><FiLogOut className="size-4 mr-2 mt-0.5" /></div>Logout</span>}/>
+        </button>
     )
 }
 

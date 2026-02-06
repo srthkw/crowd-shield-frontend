@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import LogoutBTN from './buttons/LogoutBTN';
 import CreateEVNT from './buttons/CreateEVNT';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
 
+    const { user } = useAuth();
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
     const navigate = useNavigate();
@@ -53,11 +55,11 @@ const Navbar = () => {
                         >
                             <div className="w-6 h-5 relative">
                                 {/* Animated Hamburger Icon */}
-                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-300 ${open ? 'top-2 rotate-135' : 'top-0'
+                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-400 ${open ? 'top-2 rotate-225' : 'top-0'
                                     }`}></span>
                                 <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-300 top-2 ${open ? 'opacity-0' : 'opacity-100'
                                     }`}></span>
-                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-300 ${open ? 'top-2 -rotate-135' : 'top-4'
+                                <span className={`absolute h-0.5 w-6 bg-gray-700 transition-all duration-400 ${open ? 'top-2 -rotate-225' : 'top-4'
                                     }`}></span>
                             </div>
                         </button>
@@ -65,9 +67,8 @@ const Navbar = () => {
                         {/* Mobile Dropdown Menu */}
                         <div className={`absolute -right-3.5 md:-right-5 top-12 md:top-13 bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] transition-all duration-300 overflow-hidden ${open ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-2 invisible'
                             }`}>
-                            <div className="p-4 space-y-3">
-                                <CreateEVNT />
-                                <div className="h-px bg-gray-200"></div>
+                            <div className="px-3 py-2 space-y-2 flex flex-col">
+                                {(user.role === "admin" || user.role === "organizer") && <CreateEVNT />}
                                 <LogoutBTN />
                             </div>
                         </div>

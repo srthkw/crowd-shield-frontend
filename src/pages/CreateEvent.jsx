@@ -59,7 +59,7 @@ const CreateEvent = () => {
                         Create an Event
                     </h1>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-4 md:max-w-xl">
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Event name *</label>
                         <input
                             type="text"

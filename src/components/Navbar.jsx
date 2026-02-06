@@ -1,16 +1,20 @@
 import React from 'react'
 import { useEffect, useRef, useState } from "react";
-import LogoutBTN from './buttons/LogoutBTN';
-import CreateEVNT from './buttons/CreateEVNT';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { FiUser, FiPlusCircle, FiLogOut } from "react-icons/fi";
+import BtnStyle from './buttons/BtnStyle';
 
 const Navbar = () => {
-
     const { user } = useAuth();
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
     const navigate = useNavigate();
+    const { logout } = useAuth();
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
 
     useEffect(() => {
         function handleClickOutside(e) {
@@ -68,8 +72,26 @@ const Navbar = () => {
                         <div className={`absolute -right-3.5 md:-right-5 top-12 md:top-13 bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] transition-all duration-300 overflow-hidden ${open ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-2 invisible'
                             }`}>
                             <div className="px-3 py-2 space-y-2 flex flex-col">
-                                {(user.role === "admin" || user.role === "organizer") && <CreateEVNT />}
-                                <LogoutBTN />
+
+                                {/* Profile Button */}
+                                <button onClick={() => {
+                                    navigate('/profile');
+                                    
+                                }}>
+                                    <BtnStyle title={<span className="flex items-center"><div><FiUser className="size-4 mr-2 mt-0.5" /></div>Profile</span>} to={`/profile`} />
+                                </button>
+
+                                {/* Create Event Button */}
+                                {(user.role === "admin" || user.role === "organizer") &&
+                                    (<button onClick={() => navigate(`/create-event`)}>
+                                        <BtnStyle title={<span className="flex items-center"><div><FiPlusCircle className="size-4 mr-2 mt-0.5" /></div>Create Event</span>} to={`/create-event`} />
+                                    </button>)}
+
+                                {/* Logout Button */}
+                                <button onClick={handleLogout}>
+                                    <BtnStyle title={<span className="flex items-center"><div><FiLogOut className="size-4 mr-2 mt-0.5" /></div>Logout</span>} to={`/login`} />
+                                </button>
+
                             </div>
                         </div>
                     </div>

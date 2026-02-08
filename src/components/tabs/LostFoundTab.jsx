@@ -20,7 +20,7 @@ export default function LostFoundTab({ eventId }) {
     const [showTypes, setShowTypes] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
-    const [setDetails, setSetDetails] = useState(false);
+    const [details, setDetails] = useState(false);
     const [matchInfo, setMatchInfo] = useState(null);
     const [form, setForm] = useState({
         type: "lost",
@@ -63,34 +63,34 @@ export default function LostFoundTab({ eventId }) {
 
     function timeAgo(input) {
         const date = new Date(input);
-      
+
         if (isNaN(date.getTime())) {
-          console.warn("Invalid date passed to timeAgo:", input);
-          return "";
+            console.warn("Invalid date passed to timeAgo:", input);
+            return "";
         }
-      
+
         const now = Date.now();
         const diffMs = now - date.getTime();
-      
+
         const diffSeconds = Math.floor(diffMs / 1000);
         const diffMinutes = Math.floor(diffSeconds / 60);
         const diffHours = Math.floor(diffMinutes / 60);
         const diffDays = Math.floor(diffHours / 24);
-      
+
         if (diffSeconds < 10) return "Just now";
         if (diffSeconds < 60) return `${diffSeconds}s ago`;
         if (diffMinutes < 60) return `${diffMinutes} min${diffMinutes > 1 ? "s" : ""} ago`;
         if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
         if (diffDays === 1) return "Yesterday";
         if (diffDays < 30) return `${diffDays} days ago`;
-      
+
         // only show date for really old stuff
         return date.toLocaleDateString("en-IN", {
             day: "2-digit",
             month: "short",
             year: "numeric",
-          });
-      }      
+        });
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -171,6 +171,11 @@ export default function LostFoundTab({ eventId }) {
             });
 
             const createdItem = res.data.item;
+
+            if (!createdItem || !createdItem._id) {
+                console.error("Invalid created item:", res.data);
+                return;
+            }
 
             if (type === "lost") {
                 setLostItems(prev => [createdItem, ...prev]);
@@ -422,19 +427,20 @@ export default function LostFoundTab({ eventId }) {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {lostItems.map(item => (
-                            <ItemCard
-                                key={item._id}
-                                item={item}
-                                user={user}
-                                checkMatches={checkMatches}
-                                setSetDetails={setSetDetails}
-                                claimItem={claimItem}
-                                setClaimLoad={setClaimLoad}
-                                claimLoad={claimLoad}
-                                timeAgo={timeAgo}
-                            />
-                        ))}
+                        {lostItems.filter(item => item && item._id)
+                            .map(item => (
+                                <ItemCard
+                                    key={item._id}
+                                    item={item}
+                                    user={user}
+                                    checkMatches={checkMatches}
+                                    setDetails={setDetails}
+                                    claimItem={claimItem}
+                                    setClaimLoad={setClaimLoad}
+                                    claimLoad={claimLoad}
+                                    timeAgo={timeAgo}
+                                />
+                            ))}
                     </div>
                 )}
             </div>
@@ -456,25 +462,26 @@ export default function LostFoundTab({ eventId }) {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {foundItems.map(item => (
-                            <ItemCard
-                                key={item._id}
-                                item={item}
-                                user={user}
-                                checkMatches={checkMatches}
-                                setSetDetails={setSetDetails}
-                                claimItem={claimItem}
-                                setClaimLoad={setClaimLoad}
-                                claimLoad={claimLoad}
-                                timeAgo={timeAgo}
-                            />
-                        ))}
+                        {foundItems.filter(item => item && item._id)
+                            .map(item => (
+                                <ItemCard
+                                    key={item._id}
+                                    item={item}
+                                    user={user}
+                                    checkMatches={checkMatches}
+                                    setDetails={setDetails}
+                                    claimItem={claimItem}
+                                    setClaimLoad={setClaimLoad}
+                                    claimLoad={claimLoad}
+                                    timeAgo={timeAgo}
+                                />
+                            ))}
                     </div>
                 )}
             </div>
 
 
-            {setDetails && (
+            {details && (
                 <div className="fixed inset-0 h-screen z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
                     <div className="bg-white rounded-xl shadow-xl shadow-blue-500/10 border border-gray-200 w-full max-w-sm">
 
@@ -482,7 +489,7 @@ export default function LostFoundTab({ eventId }) {
                         <div className="flex justify-between items-center p-4 border-b border-gray-100">
                             <h2 className="text-lg font-semibold text-gray-800">Item Details</h2>
                             <button
-                                onClick={() => setSetDetails(null)}
+                                onClick={() => setDetails(null)}
                                 className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors duration-200"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -495,16 +502,16 @@ export default function LostFoundTab({ eventId }) {
                         <div className="p-4 space-y-4">
                             <div className="flex flex-col items-center">
                                 {/* Item Name */}
-                                <h3 className="font-medium text-gray-800 text-base">{setDetails.itemName}</h3>
+                                <h3 className="font-medium text-gray-800 text-base">{details.itemName}</h3>
 
                                 <div className="px-1.5 py-2">
                                     <div className="flex gap-2 overflow-x-auto -mx-1 px-1">
-                                        {setDetails.imageUrls?.length > 0 ? (
-                                            setDetails.imageUrls.map((url, idx) => (
+                                        {details.imageUrls?.length > 0 ? (
+                                            details.imageUrls.map((url, idx) => (
                                                 <img
                                                     key={idx}
                                                     src={url}
-                                                    alt={setDetails.itemName}
+                                                    alt={details.itemName}
                                                     className="h-35 w-35 md:h-50 md:w-50 object-cover rounded-lg border border-gray-200 shadow-sm flex-shrink-0"
                                                     loading="lazy"
                                                 />
@@ -523,7 +530,7 @@ export default function LostFoundTab({ eventId }) {
                             <div className="flex items-center gap-2">
                                 <div className="gap-1.5 text-gray-700 bg-blue-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto no-scrollbar">
                                     <div className="flex items-center gap-1 font-semibold mb-1"><FiInfo className="text-gray-400" /><span>Description</span></div>
-                                    <span className="break-words whitespace-pre-wrap">{setDetails.description}</span>
+                                    <span className="break-words whitespace-pre-wrap">{details.description}</span>
                                 </div>
                             </div>
 
@@ -532,7 +539,7 @@ export default function LostFoundTab({ eventId }) {
                                 <div className="gap-1.5 text-gray-700 bg-gray-50 w-full px-3 py-2 rounded-lg text-sm max-h-40 overflow-y-auto
                                 no-scrollbar">
                                     <div className="flex items-center gap-1 font-semibold mb-1"><FiMapPin className="text-gray-400" /><span>Location</span></div>
-                                    <span className="break-words whitespace-pre-wrap">{setDetails.location}</span>
+                                    <span className="break-words whitespace-pre-wrap">{details.location}</span>
                                 </div>
                             </div>
                         </div>

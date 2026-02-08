@@ -4,7 +4,7 @@ const ItemCard = ({
     item,
     user,
     checkMatches,
-    setSetDetails,
+    setDetails,
     claimItem,
     setClaimLoad,
     claimLoad,
@@ -14,6 +14,8 @@ const ItemCard = ({
         item.reportedBy.toString() === user.id ||
         user.role === "admin" ||
         user.role === "organizer";
+
+        console.log(user.id, item.reportedBy.toString(), "Is owner:", isOwner);
 
     return (
         <div
@@ -33,7 +35,7 @@ const ItemCard = ({
                 <div className="flex justify-between items-start gap-3">
                     <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-gray-800 text-base line-clamp-1 mb-1">
-                            {item.itemName}
+                            {user._id}
                         </h3>
 
                     </div>
@@ -98,7 +100,7 @@ const ItemCard = ({
                     <button className="w-full cursor-pointer px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-all duration-300 text-sm shadow-sm hover:shadow-md"
                         onClick={(e) => {
                             e.stopPropagation();
-                            setSetDetails(item);
+                            setDetails(item);
                         }}>
                         View Details
                     </button>

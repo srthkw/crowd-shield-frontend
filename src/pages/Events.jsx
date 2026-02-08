@@ -22,12 +22,12 @@ export default function Events() {
 
   const deleteEvent = async (eventId) => {
     try {
-      await API.delete(`/events/${eventId}`);
+      const res = await API.delete(`/events/${eventId}`);
       setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
-      alert("Event deleted successfully");
+      alert(res.data.message);
     } catch (err) {
       console.error("Failed to delete event", err);
-      alert("Failed to delete event");
+      alert(err.response?.data?.message);
     }
   };
 
@@ -35,7 +35,6 @@ export default function Events() {
     const fetchEvents = async () => {
       try {
         const res = await API.get("/events");
-        console.log("API events →", res.data);
         setEvents(res.data);
 
       } catch (err) {
@@ -273,7 +272,7 @@ export default function Events() {
                   View Details
                 </button>
                 
-                { (user._id === selectedEvent.createdBy || user.role === 'admin') && (
+                { (user.id === selectedEvent.createdBy || user.role === 'admin') && (
                 <button onClick={() => {
                   deleteEvent(selectedEvent._id);
                   setSelectedEvent(null);

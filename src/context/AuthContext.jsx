@@ -9,25 +9,24 @@ export const AuthProvider = ({ children }) => {
     token: localStorage.getItem("token") || null,
     role: localStorage.getItem("role") || null,
     name: localStorage.getItem("name") || null,
+    id: localStorage.getItem("id") || null,
     email: localStorage.getItem("email") || null,
     phone: localStorage.getItem("phone") || null,
-    id: localStorage.getItem("id") || null,
   });
 
-  const login = (token, role, name, user, email, phone, id) => {
+  const login = (token, role, name, id, email, phone) => {
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
     localStorage.setItem("name", name);
+    localStorage.setItem("id", id);
     localStorage.setItem("email", email);
     localStorage.setItem("phone", phone);
-    localStorage.setItem("id", id);
-
-    setUser({ token, role, name, email, phone, id });
+    setUser({ token, role, name, id , email, phone});
   };
 
   const logout = () => {
     localStorage.clear();
-    setUser({ token: null, role: null, name: null, email: null, phone: null, id: null });
+    setUser({ token: null, role: null, name: null, id: null, email: null, phone: null });
   };
 
   return (

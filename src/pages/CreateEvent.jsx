@@ -64,27 +64,24 @@ const CreateEvent = () => {
                         <input
                             type="text"
                             name="name"
-                            placeholder="Event name *"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
+                            className="w-full rounded-xl border-2 bg-white/80 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Name *</label>
                         <input
                             type="text"
                             name="location"
-                            placeholder="Location *"
                             value={formData.location}
                             onChange={handleChange}
-                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
+                            className="w-full rounded-xl border-2 bg-white/80 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Date *</label>
                         <input
                             type="date"
                             name="date"
-                            placeholder="Date *"
                             value={formData.date}
                             min={today}
                             inputMode="none"
@@ -92,17 +89,16 @@ const CreateEvent = () => {
                             onPaste={(e) => e.preventDefault()}
                             onClick={(e) => e.target.showPicker()}
                             onChange={handleChange}
-                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            className="w-full rounded-xl border-2 bg-white/80 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
 
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Description *</label>
                         <textarea
                             name="description"
-                            placeholder="Description *"
                             rows="4"
                             value={formData.description}
                             onChange={handleChange}
-                            className="w-full rounded-xl border-2 bg-white/60 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
+                            className="w-full rounded-xl border-2 bg-white/80 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 
                         {error && (

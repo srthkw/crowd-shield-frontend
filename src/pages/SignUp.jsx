@@ -181,7 +181,7 @@ const navigate = useNavigate();
             Already have an account?{" "}
             <button
               onClick={() => navigate("/login")}
-              className="font-semibold text-blue-500 hover:text-blue-600 transition-colors"
+              className="underline cursor-pointer text-blue-500 hover:text-blue-600 transition-colors"
             >
               Sign in here
             </button>

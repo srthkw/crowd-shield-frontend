@@ -5,12 +5,14 @@ import Navbar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { FiSearch, FiMapPin, FiCalendar, FiInfo, FiX } from 'react-icons/fi';
 import Loader from "../components/Loader";
+import { roleGradients } from "../constants/roleGradient";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
+
   // Add to your component's state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -49,7 +51,7 @@ export default function Events() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50">
+      <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''}`}>
         {/* Background decorative element */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/20 pointer-events-none" />
 

@@ -9,6 +9,8 @@ import ReportsTab from "../components/tabs/ReportsTab";
 import HelplinesTab from "../components/tabs/HelplinesTab";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
+import { roleGradients } from "../constants/roleGradient";
+import { useAuth } from "../hooks/useAuth";
 
 export default function EventDashboard() {
     const { eventId } = useParams();
@@ -16,6 +18,7 @@ export default function EventDashboard() {
     const [pageload, setPageload] = useState(true);
     const [activeTab, setActiveTab] = useState("Helplines"); // default tab
     const [expanded, setExpanded] = useState(false);
+    const { user } = useAuth();
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -37,7 +40,7 @@ export default function EventDashboard() {
 
     return (
         <>
-            <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 min-h-screen flex flex-col">
+            <div className={`bg-gradient-to-br ${roleGradients[user.role] || ''} min-h-screen flex flex-col`}>
                 <Navbar />
 
                 <div className="w-full flex-1 flex flex-col min-h-0 px-1 md:px-3 py-2 md:py-8">

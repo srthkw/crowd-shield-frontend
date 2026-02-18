@@ -31,7 +31,7 @@ const navigate = useNavigate();
 
     try {
       setLoading(true);
-      const res = await API.post("/auth/signup",
+      await API.post("/auth/signup",
         formData
       );
 

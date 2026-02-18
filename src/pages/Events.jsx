@@ -177,13 +177,13 @@ export default function Events() {
                   {/* Event Footer */}
                   <div className="p-4 pt-0">
                     <button
-                      className="w-full py-2 bg-gradient-to-r text-sm from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity group-hover:shadow-lg"
+                      className="w-full py-2 bg-gradient-to-r text-sm from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity group-hover:shadow-lg cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/event/${event._id}`);
                       }}
                     >
-                      View Details
+                      Open Event Dashboard
                     </button>
                   </div>
                 </div>

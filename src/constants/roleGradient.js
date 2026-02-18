@@ -1,6 +1,6 @@
 export const roleGradients = {
-    attendee: 'from-purple-200 via-blue-100 to-green-200',
-    organizer: 'from-green-100 via-blue-100 to-gray-100',
-    admin: 'from-blue-200 via-purple-200 to-gray-200',
+  attendee: 'from-pink-100 via-purple-200 to-indigo-300',
+organizer: 'from-emerald-100 via-emerald-200 to-emerald-300',
+admin: 'from-amber-100 via-amber-200 to-amber-300'  
   };
 

@@ -555,7 +555,7 @@ export default function LostFoundTab({ eventId }) {
                         <div className="flex justify-between items-center md:gap-15 gap-8 mb-6 px-6">
                             <div>
                                 <h2 className="text-lg md:text-2xl font-bold text-gray-800">Possible Match Found</h2>
-                                <p className="text-gray-600 text-xs md:text-sm mt-">Compare details below</p>
+                                <p className="text-gray-600 text-xs md:text-sm">Compare details below</p>
                             </div>
                             <button
                                 onClick={() => {
@@ -598,7 +598,7 @@ export default function LostFoundTab({ eventId }) {
                                 </div>
 
                                 <div className="space-y-3">
-                                    <h3 className="font-bold text-gray-800 text-lg flex flex-col md:flex-row gap-2 md:gap-0 items-cente md:justify-between">
+                                    <h3 className="font-bold text-gray-800 text-lg flex flex-row justify-between md:flex-row gap-2 md:gap-0 items-cente md:justify-between">
                                         <div className="flex items-center gap-2">
                                             <span>Potential Matches</span>
                                             <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 text-xs font-bold rounded-full">
@@ -612,15 +612,10 @@ export default function LostFoundTab({ eventId }) {
                                                 className="flex items-center justify-center bg-white border-2 border-gray-200 px-2 py-1.5 rounded-xl"
                                                 onClick={() => checkMatches(matchInfo.newItem)}
                                             >
-                                                <div className="text-xs text-gray-900 flex items-center justify-center">
-                                                    <button className="flex items-center justify-center rounded-lg mr-2 bg-gray-300/80 px-2 py-2">
+                                                    <button className="flex items-center justify-center rounded-lg">
                                                         <span >
-                                                            <FiRefreshCw className={`size-3.5 mr-2 ${animate === "refresh" && "animate-spin"}`} />
-                                                        </span>Refresh</button>
-                                                    <span>Last updated: {new Date().toLocaleTimeString(
-                                                        "en-US",
-                                                        { hour12: true, hour: "numeric", minute: "numeric" }
-                                                    )}</span></div>
+                                                            <FiRefreshCw className={`size-4 ${animate === "refresh" && "animate-spin"}`} />
+                                                        </span></button>
                                             </div>
                                         </div>
                                     </h3>
@@ -713,7 +708,6 @@ export default function LostFoundTab({ eventId }) {
                                                         <FiPhoneCall />
                                                         Contact Reporter
                                                     </button>
-
                                                 </div>
                                             </div>
                                         ))}

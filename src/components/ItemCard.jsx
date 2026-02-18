@@ -35,7 +35,7 @@ const ItemCard = ({
                 <div className="flex justify-between items-start gap-3">
                     <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-gray-800 text-base line-clamp-1 mb-1">
-                            {user._id}
+                            {item.itemName}
                         </h3>
 
                     </div>
@@ -107,7 +107,7 @@ const ItemCard = ({
                 </div>
 
                 {/* Claim Button */}
-                {isOwner && (
+                {item.reportedBy.toString() === user.id && (
                     <div className="px-2 pb-4 w-full">
                         <button
                             onClick={(e) => {

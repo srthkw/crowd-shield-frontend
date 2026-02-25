@@ -1,12 +1,31 @@
 import React from 'react'
+import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth";
 import Navbar from '../components/Navbar';
 import { FiCheck, FiBox } from "react-icons/fi";
 import { roleGradients } from '../constants/roleGradient';
+import API from '../api/axios';
 
 const Profile = () => {
+  const [orgReqStatus, setOrgReqStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const isOrganizer = user.role === 'organizer';
+
+  async function orgRequest(user) {
+    setLoading(true);
+    try {
+      const res = await API.post("/org-reqs", {
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      });
+      setOrgReqStatus(res.data.message);
+    } catch (err) {
+      setOrgReqStatus([err.response?.data?.message]);
+    }
+    setLoading(false);
+  }
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''} `}>
@@ -90,28 +109,36 @@ const Profile = () => {
               </div>
 
               {/* Apply for organizer */}
-              {isOrganizer ? 
               <div className='flex flex-col justify-center items-center bg-gradient-to-br from-green-200 to-green-300 rounded-xl p-5 border border-blue-200'>
-              <div className='flex items-center gap-3'>
-               <div className='p-2 rounded-lg bg-blue-100'>
-               <div className='text-green-600'><FiCheck className="size-4"/></div>
-               </div>
-               <h3 className='font-semibold text-gray-800'>You are an organizer</h3>
-             </div>
-           </div>
-              :
-              <div className='flex flex-col justify-center items-center bg-gradient-to-br from-green-200 to-green-300 rounded-xl p-5 border border-blue-200'>
-                 <div className='flex items-center gap-3 mb-3'>
-                  <div className='p-2 rounded-lg bg-blue-100'>
-                    <div className='text-green-600'><FiBox className="size-4"/></div>
+
+                {orgReqStatus == null ? (
+                  <div>{isOrganizer ?
+                    <div className='flex items-center gap-3'>
+                      <div className='p-2 rounded-lg bg-blue-100'>
+                        <div className='text-green-600'><FiCheck className="size-4" /></div>
+                      </div>
+                      <h3 className='font-semibold text-gray-800'>You are an organizer</h3>
+                    </div>
+                    :
+                    <div>
+                      <div className='flex items-center gap-3 mb-3'>
+                        <div className='p-2 rounded-lg bg-green-100'>
+                          <div className='text-green-600'><FiBox className="size-4" /></div>
+                        </div>
+                        <h3 className='font-semibold text-gray-800'>Wants to become an organizer ?</h3>
+                      </div>
+                      <div className='flex items-center justify-center gap-2'>
+                        <button disabled={loading} onClick={() => orgRequest(user)} className='text-blue-600 hover:text-blue-800 font-bold text-sm cursor-pointer rounded'>{loading ? "Applying..." : "Click here to apply"}</button>
+                      </div>
+                    </div>
+                  }</div>) : (
+                  <div className='text-center'>
+                    <h3 className='font-semibold text-gray-800 mb-2'>{orgReqStatus}</h3>
                   </div>
-                  <h3 className='font-semibold text-gray-800'>Wants to become an organizer ?</h3>
-                </div>
-                <div className='flex items-center justify-center gap-2'>
-                  <button className='text-blue-600 hover:text-blue-800 font-bold text-sm cursor-pointer rounded'>Click here to apply</button>
-                </div>
-              </div>
+                )
                 }
+
+              </div>
 
             </div>
           </div>

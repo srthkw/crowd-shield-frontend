@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { FiUser, FiPlusCircle, FiLogOut, FiHome } from "react-icons/fi";
+import { FiUser, FiPlusCircle, FiLogOut, FiHome, FiUserPlus } from "react-icons/fi";
 import BtnStyle from './buttons/BtnStyle';
 
 const Navbar = () => {
@@ -33,7 +33,7 @@ const Navbar = () => {
     }, [open])
 
     return (
-        <div className="sticky top-0 w-full z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="sticky top-0 w-full z-50 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-gray-200 shadow-sm">
             <div className="mx-auto px-4 sm:px-6">
                 <div className="flex justify-between items-center h-16">
 
@@ -69,7 +69,7 @@ const Navbar = () => {
                         </button>
 
                         {/* Mobile Dropdown Menu */}
-                        <div className={`absolute -right-3.5 md:-right-5 top-12 md:top-13 bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] transition-all duration-300 overflow-hidden ${open ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-2 invisible'
+                        <div className={`absolute -right-3.5 md:-right-5 top-12 md:top-13 bg-gray-50 rounded-xl shadow-lg border border-gray-200 min-w-[250px] transition-all duration-300 overflow-hidden ${open ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-2 invisible'
                             }`}>
                             <div className="px-3 py-2 space-y-2 flex flex-col">
 
@@ -87,6 +87,12 @@ const Navbar = () => {
                                 {(user.role === "admin" || user.role === "organizer") &&
                                     (<button onClick={() => navigate(`/create-event`)}>
                                         <BtnStyle title={<span className="flex items-center"><div><FiPlusCircle className="size-4 mr-2 mt-0.5" /></div>Create Event</span>} to={`/create-event`} />
+                                    </button>)}
+                               
+                                {/* Create Event Button */}
+                                {(user.role === "admin" )&&
+                                    (<button onClick={() => navigate(`/org-reqs`)}>
+                                        <BtnStyle title={<span className="flex items-center"><div><FiUserPlus className="size-4 mr-2 mt-0.5" /></div>Organization Requests</span>} to={`/org-reqs`} />
                                     </button>)}
 
                                 {/* Logout Button */}

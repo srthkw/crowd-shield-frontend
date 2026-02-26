@@ -20,7 +20,7 @@ const ItemCard = ({
     return (
         <div
             key={item._id}
-            onClick={() => isOwner && checkMatches(item)}
+            onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}
             className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-0.5 ${item.reportedBy.toString() === user.id
                 ? "border-t-4 border-blue-500/70 cursor-pointer"
                 : "border-t-4 border-green-500/70"
@@ -69,7 +69,7 @@ const ItemCard = ({
                 </div>
 
                 <div className="flex-1 relative">
-                <div className="absolute w-full rounded-lg h-full border-x-3 border-gray-200 bg-gray-100/50 z-0"></div>
+                <div className="absolute w-full rounded-lg h-full bg-gray-100/50 z-0"></div>
                 <p className="relative z-5 text-sm md:text-sm text-gray-700 rounded-lg line-clamp-4 px-2 pt-1 mr-1 md:mr-2 md:pr-3 md:pl-2 whitespace-pre-wrap wrap-break-word">
                     {item.description}</p></div>
             </div>
@@ -86,12 +86,6 @@ const ItemCard = ({
                     </div>
                 </div>
             </div>
-            
-{/* {isOwner && (
-                <span className="text-gray-500 text-xs italic mb-3 text-center">
-                    Tap card to view matches
-                </span>
-            )} */}
 
             <div className={`my-auto flex flex-col md:flex-row md:gap-0 justify-center items-center ${(item.reportedBy.toString() === user.id || user.role === "admin" || user.role === "organizer") ? "pt-0" : "pt-3 md:pt-4 bg-gray-100/70 h-full rounded-b-xl"}`}>
 

@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import Select from "react-select";
 import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import Loader2 from "../Loader2";
@@ -7,7 +8,6 @@ import ItemCard from "../ItemCard";
 
 export default function LostFoundTab({ eventId }) {
     const { user } = useAuth();
-    const dropdownRef = useRef(null);
     const refs = useRef({});
     const [overflowMap, setOverflowMap] = useState({});
     const [readMore, setReadMore] = useState(null);
@@ -17,19 +17,11 @@ export default function LostFoundTab({ eventId }) {
     const [files, setFiles] = useState([]);
     const [lostItems, setLostItems] = useState([]);
     const [foundItems, setFoundItems] = useState([]);
-    const [showTypes, setShowTypes] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
     const [details, setDetails] = useState(false);
     const [matchInfo, setMatchInfo] = useState(null);
-    const [form, setForm] = useState({
-        type: "lost",
-        itemName: "",
-        description: "",
-        location: "",
-        phone: ""
-    });
-
+    
     const ITEM_TYPES = [
         "Bag",
         "Book",
@@ -60,7 +52,43 @@ export default function LostFoundTab({ eventId }) {
         "Water Bottle",
         "Other",
     ];
+    
+    const defaultItem = ITEM_TYPES[ITEM_TYPES.length - 1];
+    const [form, setForm] = useState({
+        type: "lost",
+        itemName: defaultItem,
+        description: "",
+        location: "",
+        phone: ""
+    });
 
+    const customStyles = {
+        control: (provided, state) => ({
+          ...provided,
+          backgroundColor: "#f0f9ff",
+          borderColor: state.isFocused ? "#3b82f6" : "#bfdbfe",
+          boxShadow: "none",
+          "&:hover": {
+            borderColor: "#3b82f6"
+          }
+        }),
+      
+        menu: (provided) => ({
+          ...provided,
+          backgroundColor: "#f8fafc"
+        }),
+      
+        option: (provided, state) => ({
+          ...provided,
+          backgroundColor: state.isSelected
+            ? "#6366f1"
+            : state.isFocused
+            ? "#e0e7ff"
+            : "white",
+          color: state.isSelected ? "white" : "#1e293b",
+        }),
+      };
+    
     function timeAgo(input) {
         const date = new Date(input);
 
@@ -112,17 +140,6 @@ export default function LostFoundTab({ eventId }) {
         };
         fetchData();
     }, [eventId]);
-
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-                setShowTypes(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
 
     const openModal = (type) => {
@@ -316,37 +333,15 @@ export default function LostFoundTab({ eventId }) {
                             <label className="block text-sm font-semibold text-gray-700">
                                 Item Type
                             </label>
-                            <div className="relative" ref={dropdownRef}>
-                                <input
-                                    type="text"
-                                    placeholder="Select options from the dropdown for better results"
-                                    value={form.itemName}
-                                    onChange={e => setForm({ ...form, itemName: e.target.value })}
-                                    className="w-full p-3 text-sm text-stone-700 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"
-                                    onFocus={() => setShowTypes(true)}
-                                />
-
-                                {showTypes && (
-                                    <div className="absolute z-50 left-0 right-0 mt-1 text-stone-700 bg-white border border-gray-200 rounded-xl shadow-lg shadow-blue-500/10 max-h-48 overflow-y-auto">
-                                        {ITEM_TYPES
-                                            .filter(type =>
-                                                type.toLowerCase().includes(form.itemName.toLowerCase())
-                                            )
-                                            .map(type => (
-                                                <div
-                                                    key={type}
-                                                    className="px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200 border-b border-gray-100 last:border-b-0"
-                                                    onClick={() => {
-                                                        setForm({ ...form, itemName: type });
-                                                        setShowTypes(false);
-                                                    }}
-                                                >
-                                                    {type}
-                                                </div>
-                                            ))}
-                                    </div>
-                                )}
-                            </div>
+                            <Select
+                                options={ITEM_TYPES.map(type => ({ value: type, label: type }))}
+                                value={{ value: form.itemName, label: form.itemName }}
+                                onChange={e => setForm({ ...form, itemName: e.value })}
+                                isSearchable={true}
+                                isClearable={false}
+                                isDisabled={false}
+                                styles={customStyles}
+                            />
                         </div>
 
                         {/* Description Textarea */}
@@ -612,10 +607,10 @@ export default function LostFoundTab({ eventId }) {
                                                 className="flex items-center justify-center bg-white border-2 border-gray-200 px-2 py-1.5 rounded-xl"
                                                 onClick={() => checkMatches(matchInfo.newItem)}
                                             >
-                                                    <button className="flex items-center justify-center rounded-lg">
-                                                        <span >
-                                                            <FiRefreshCw className={`size-4 ${animate === "refresh" && "animate-spin"}`} />
-                                                        </span></button>
+                                                <button className="flex items-center justify-center rounded-lg">
+                                                    <span >
+                                                        <FiRefreshCw className={`size-4 ${animate === "refresh" && "animate-spin"}`} />
+                                                    </span></button>
                                             </div>
                                         </div>
                                     </h3>
@@ -624,7 +619,8 @@ export default function LostFoundTab({ eventId }) {
                                         {matchInfo.existingMatches == null && (
                                             <h2 className="text-stone-700">No matches found</h2>
                                         )}
-
+                                        
+                                        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${matchInfo.existingMatches == null && "hidden"}`}>
                                         {matchInfo.existingMatches !== null && matchInfo.existingMatches.map(m => (
                                             <div
                                                 key={m._id}
@@ -710,7 +706,7 @@ export default function LostFoundTab({ eventId }) {
                                                     </button>
                                                 </div>
                                             </div>
-                                        ))}
+                                        ))}</div>
                                     </div>
                                 </div>
                             </div>

@@ -12,6 +12,7 @@ import CreateEvent from "./pages/CreateEvent";
 import Profile from "./pages/Profile";
 import Signup from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
+import OrgReqs from "./pages/OrgReqs";
 // later you'll add Events, Dashboard, etc.
 
 const router = createBrowserRouter([
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectRoute>
         <Profile />
+      </ProtectRoute>
+    )
+  },
+  {
+    path: "/org-reqs",
+    element: (
+      <ProtectRoute>
+        <OrgReqs />
       </ProtectRoute>
     )
   },

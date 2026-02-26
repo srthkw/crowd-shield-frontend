@@ -172,7 +172,7 @@ export default function AnnouncementTab({ eventId }) {
             return (
               <div
                 key={a._id}
-                className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 rounded-2xl hover:shadow-sm transition-all duration-300 overflow-hidden cursor-pointer group border-y-4 border-gray-300"
+                className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 rounded-2xl hover:shadow-sm transition-all duration-300 overflow-hidden cursor-pointer group border-2 border-gray-200"
                 onClick={() => setPop(pop === a._id ? null : a._id)}
               >
                 {/* Delete button */}
@@ -188,7 +188,7 @@ export default function AnnouncementTab({ eventId }) {
                 {/* Announcement Content */}
                 <div className="p-3 pb-4 flex flex-col">
                   <div className="mb-4 relative md:pr-10 h-full">
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-start md:gap-3">
                       <div className="md:p-2 p-1 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 flex-shrink-0">
                         <FiVolume2 className="md:w-5 md:h-5  text-blue-600" />
                       </div>

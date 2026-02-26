@@ -74,7 +74,7 @@ export default function Events() {
                   placeholder="Search events by name..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
                 />
                 {searchQuery && (
                   <button
@@ -133,7 +133,7 @@ export default function Events() {
               {filteredEvents.map((event) => (
                 <div
                   key={event._id}
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-gray-100 cursor-pointer relative"
+                  className="group bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-gray-100 cursor-pointer relative"
                   onClick={() => navigate(`/event/${event._id}`)}
                 >
                   {/* Info Button - Positioned properly on all cards */}

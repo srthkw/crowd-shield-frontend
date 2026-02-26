@@ -16,6 +16,7 @@ const Profile = () => {
     setLoading(true);
     try {
       const res = await API.post("/org-reqs", {
+        userId: user.id,
         name: user.name,
         email: user.email,
         phone: user.phone
@@ -32,12 +33,6 @@ const Profile = () => {
       <Navbar />
 
       <div className='max-w-4xl mx-auto p-4 md:p-6'>
-        {/* Header */}
-        <div className='text-center mb-8 md:mb-4'>
-          <h1 className='text-3xl md:text-4xl font-bold text-gray-600 mb-3'>
-            Profile
-          </h1>
-        </div>
 
         {/* Profile Card */}
         <div className='bg-white rounded-2xl shadow-xl shadow-blue-500/10 border border-blue-200/30 overflow-hidden'>
@@ -109,21 +104,21 @@ const Profile = () => {
               </div>
 
               {/* Apply for organizer */}
-              <div className='flex flex-col justify-center items-center bg-gradient-to-br from-green-200 to-green-300 rounded-xl p-5 border border-blue-200'>
+              <div className='flex flex-col justify-center items-center bg-gradient-to-br from-blue-200 to-blue-300 rounded-xl p-5 border border-blue-200'>
 
                 {orgReqStatus == null ? (
-                  <div>{isOrganizer ?
+                  <div>{isOrganizer || user.role === 'admin' ?
                     <div className='flex items-center gap-3'>
                       <div className='p-2 rounded-lg bg-blue-100'>
-                        <div className='text-green-600'><FiCheck className="size-4" /></div>
+                        <div className='text-blue-600'><FiCheck className="size-4" /></div>
                       </div>
-                      <h3 className='font-semibold text-gray-800'>You are an organizer</h3>
+                      <h3 className='font-semibold text-gray-800'>You are {user.role == 'admin' ? 'the admin' : 'an organizer'}</h3>
                     </div>
                     :
                     <div>
                       <div className='flex items-center gap-3 mb-3'>
                         <div className='p-2 rounded-lg bg-green-100'>
-                          <div className='text-green-600'><FiBox className="size-4" /></div>
+                          <div className='text-blue-600'><FiBox className="size-4" /></div>
                         </div>
                         <h3 className='font-semibold text-gray-800'>Wants to become an organizer ?</h3>
                       </div>

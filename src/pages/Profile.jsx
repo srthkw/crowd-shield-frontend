@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth";
 import Navbar from '../components/Navbar';
-import { FiCheck, FiBox } from "react-icons/fi";
+import { FiCheck, FiBox, FiAlertCircle } from "react-icons/fi";
 import { roleGradients } from '../constants/roleGradient';
 import API from '../api/axios';
 
@@ -104,7 +104,7 @@ const Profile = () => {
               </div>
 
               {/* Apply for organizer */}
-              <div className='flex flex-col justify-center items-center bg-gradient-to-br from-blue-200 to-blue-300 rounded-xl p-5 border border-blue-200'>
+              <div className='flex flex-col justify-center bg-gradient-to-br from-violet-100 to-violet-200 rounded-xl p-5 border border-blue-200'>
 
                 {orgReqStatus == null ? (
                   <div>{isOrganizer || user.role === 'admin' ?
@@ -116,19 +116,21 @@ const Profile = () => {
                     </div>
                     :
                     <div>
-                      <div className='flex items-center gap-3 mb-3'>
-                        <div className='p-2 rounded-lg bg-green-100'>
+                      <div className='flex items-center gap-3'>
+                        <div className='p-2 rounded-lg bg-blue-50'>
                           <div className='text-blue-600'><FiBox className="size-4" /></div>
                         </div>
+                        <div>
                         <h3 className='font-semibold text-gray-800'>Wants to become an organizer ?</h3>
-                      </div>
-                      <div className='flex items-center justify-center gap-2'>
+                      <div className='flex gap-2'>
                         <button disabled={loading} onClick={() => orgRequest(user)} className='text-blue-600 hover:text-blue-800 font-bold text-sm cursor-pointer rounded'>{loading ? "Applying..." : "Click here to apply"}</button>
+                      </div></div>
                       </div>
                     </div>
                   }</div>) : (
-                  <div className='text-center'>
-                    <h3 className='font-semibold text-gray-800 mb-2'>{orgReqStatus}</h3>
+                  <div className='flex items-center gap-3'>
+                    <div className='p-2 rounded-lg bg-blue-50'><div className='text-blue-600'><FiAlertCircle /></div></div>
+                    <h3 className='font-semibold text-gray-800'>{orgReqStatus}</h3>
                   </div>
                 )
                 }

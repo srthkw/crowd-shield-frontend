@@ -23,6 +23,29 @@ const OrgReqs = () => {
     fetchOrgReqs();
   }, []);
 
+  const handleAccept = async (orgReq) => {
+    try {
+      const res = await API.patch("/auth/makeorg", { orgReq });
+      if (res.data.message === "Role updated successfully") {
+        alert(`Approved ${orgReq.name} as organizer`);
+        await API.patch(`/org-reqs/${orgReq._id}` , { status: "approved" });
+       }
+      setOrgReqs(orgReqs.filter((req) => req._id !== orgReq._id));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to accept organizer request.");
+    }
+  }
+
+  const handleDecline = async (orgReq) => {
+    try {
+      await API.patch(`/org-reqs/${orgReq._id}` , { status: "rejected" });
+       alert(`Declined ${orgReq.name}'s request to be an organizer`);
+      setOrgReqs(orgReqs.filter((req) => req._id !== orgReq._id));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to decline organizer request.");
+    }
+  }
+
   return (
     <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''} text-gray-600`}>
       <Navbar />
@@ -35,15 +58,15 @@ const OrgReqs = () => {
             <h2 className="text-lg md:text-2xl font-bold md:mb-4">{orgReqs.length} users have requested to be an organizer</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 md:gap-3 gap-3 my-3">
               {orgReqs.map((orgReq) => (
-                <div key={orgReq._id} className="flex flex-col md:grid md:grid-cols-[1.5fr_0.5fr] gap-4 bg-gray-50 rounded-lg border-l-4 border-blue-400 shadow-l-4 p-3">
+                <div key={orgReq._id} className="flex flex-col md:grid md:grid-cols-[1.5fr_0.5fr] min-w-[400px] gap-4 bg-gray-50 rounded-lg border-l-4 border-blue-400 shadow-l-4 p-3">
                   <div className="flex flex-col gap-1 text-xs md:text-sm font-medium overflow-hidden">
                   <p className="text-md flex items-center gap-2"><span className="text-gray-900"><FiUser /></span>{orgReq.name}</p>
                   <p className="text-md flex items-center gap-2"><span className="text-gray-900"><FiMail /></span>{orgReq.email}</p>
                   <p className="text-md flex items-center gap-2"><span className="text-gray-900"><FiPhoneCall /></span>{orgReq.phone}</p>
                 </div>
                 <div className="flex md:flex-col justify-center items-center gap-3 text-sm text-white font-semibold"> 
-                  <button className={`bg-green-400 w-full px-3 py-1.5 rounded-lg cursor-pointer hover:bg-green-500 transition ease-in-out duration-300 `}>Approve</button>
-                  <button className={`bg-red-400 w-full px-3 py-1.5 rounded-lg cursor-pointer hover:bg-red-500 transition ease-in-out duration-300`}>Reject</button>
+                  <button onClick={() => handleAccept(orgReq)} className={`bg-green-400 w-full px-3 py-1.5 rounded-lg cursor-pointer hover:bg-green-500 transition ease-in-out duration-300 `}>Approve</button>
+                  <button onClick={() => handleDecline(orgReq)} className={`bg-red-400 w-full px-3 py-1.5 rounded-lg cursor-pointer hover:bg-red-500 transition ease-in-out duration-300`}>Reject</button>
                 </div>
                 </div>
               ))}

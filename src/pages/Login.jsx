@@ -46,7 +46,7 @@ const Login = () => {
 
 
             <div className="text-center">
-              <h1 className="text-violet-400 text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-3 sm:mb-5 px-5">
+              <h1 onClick={() => navigate("/")} className="text-violet-400 text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-3 sm:mb-5 px-5">
                 Crowd-Shield
               </h1></div>
 
@@ -62,14 +62,13 @@ const Login = () => {
 
               {error && (
                 <div className="w-full flex justify-center text-center">
-                <p className="sm:w-auto font-semibold text-xs sm:text-sm text-red-500 w-full">
-                  {error}
-                </p></div>
+                  <p className="sm:w-auto font-semibold text-xs sm:text-sm text-red-500 w-full">
+                    {error}
+                  </p></div>
               )}
 
               <button type="submit" className="w-full py-2.5 mt-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl active:scale-[0.98]">{loading ? "Logging you in..." : "Login"}</button>
 
-              {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 w-screen h-screen z-50 bg-white/50"><Loader /></div>}
 
               <div>
                 <p className="mt-5 text-xs md:text-sm opacity-90 leading-relaxed">
@@ -83,6 +82,7 @@ const Login = () => {
         </div>
 
       </div>
+      {loading && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen z-50 bg-white/50"><Loader /></div>}
 
     </>
 

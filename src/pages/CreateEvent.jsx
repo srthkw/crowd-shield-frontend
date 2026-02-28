@@ -69,7 +69,7 @@ const CreateEvent = () => {
                             className="w-full rounded-xl border-2 bg-white/80 border-gray-300 px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 
-                        <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Name *</label>
+                        <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Location *</label>
                         <input
                             type="text"
                             name="location"

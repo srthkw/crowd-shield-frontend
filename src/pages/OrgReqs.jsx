@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from "../hooks/useAuth";
 import Navbar from '../components/Navbar';
 import API from '../api/axios';
-import { roleGradients } from '../constants/roleGradient';
+import { roleGradientsBG, roleGradients } from '../constants/roleGradient';
 import { FiUser, FiMail, FiPhoneCall } from "react-icons/fi";
 import Loader from '../components/Loader';
 
@@ -62,14 +62,14 @@ const OrgReqs = () => {
 
   if (loading === "page") {
     return (
-      <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''} text-gray-600`}>
+      <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} text-gray-600`}>
         <Loader />
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''} text-gray-600`}>
+    <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} text-gray-600`}>
       <Navbar />
       {user.role !== "admin" ? <p className="text-center font-semibold text-2xl my-5"><div className="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto border-t-4 border-red-500">
         <div className="flex flex-col items-center text-center">
@@ -107,7 +107,7 @@ const OrgReqs = () => {
                 {/* Icon Container */}
                 <div className="relative">
                   <div className="absolute inset-0 bg-indigo-500/20 dark:bg-indigo-400/20 rounded-full blur-xl animate-pulse"></div>
-                  <div className="relative bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-400 dark:to-purple-500 p-4 rounded-full shadow-lg">
+                  <div className={`relative bg-gradient-to-br ${roleGradients[user.role]} p-4 rounded-full shadow-lg`}>
                     <svg
                       className="w-12 h-12 text-white"
                       fill="none"
@@ -126,7 +126,7 @@ const OrgReqs = () => {
 
                 {/* Text Content */}
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                  <h2 className={`text-3xl font-bold bg-gradient-to-r ${roleGradients[user.role]} dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent`}>
                     No Requests Yet
                   </h2>
                   <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">

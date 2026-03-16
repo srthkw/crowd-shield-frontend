@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Loader2 from "../Loader2";
 import { FiInfo, FiMapPin, FiRefreshCw, FiCamera, FiXCircle, FiPhoneCall } from "react-icons/fi";
 import ItemCard from "../ItemCard";
+import { roleGradients } from "../../constants/roleGradient";
 
 export default function LostFoundTab({ eventId }) {
     const { user } = useAuth();
@@ -396,7 +397,7 @@ export default function LostFoundTab({ eventId }) {
                             <button
                                 disabled={animate === "submit"}
                                 onClick={submitReport}
-                                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all duration-300 min-h-[44px]"
+                                className={`px-6 py-2.5 bg-gradient-to-r ${roleGradients[user.role]} text-white font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all duration-300 min-h-[44px]`}
                             >
                                 {animate === "submit" ? "Submitting..." : "Submit Report"}
                             </button>

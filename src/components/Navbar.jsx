@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { FiUser, FiPlusCircle, FiLogOut, FiHome, FiUserPlus } from "react-icons/fi";
 import BtnStyle from './buttons/BtnStyle';
+import { roleGradients } from '../constants/roleGradient';
 
 const Navbar = () => {
     const { user } = useAuth();
@@ -42,10 +43,10 @@ const Navbar = () => {
                         className="flex items-center gap-3 cursor-pointer"
                         onClick={() => navigate('/')}
                     >
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-md">
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${roleGradients[user.role]} flex items-center justify-center shadow-md`}>
                             <span className="text-white font-bold text-lg">CS</span>
                         </div>
-                        <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        <span className={`text-xl font-bold bg-gradient-to-r ${roleGradients[user.role]} bg-clip-text text-transparent`}>
                             Crowd-Shield
                         </span>
                     </div>

@@ -3,6 +3,7 @@ import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import { FiTrash2, FiVolume2, FiCalendar, FiUser, FiX } from "react-icons/fi";
 import Loader2 from "../Loader2";
+import { roleGradients } from "../../constants/roleGradient";
 
 export default function AnnouncementTab({ eventId }) {
   const [announcements, setAnnouncements] = useState([]);
@@ -98,7 +99,7 @@ export default function AnnouncementTab({ eventId }) {
         <div className="flex justify-center mb-6 md:mb-8">
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+            className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${roleGradients[user.role]} text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg`}
           >
             <span className="text-xl">+</span>
             Add Announcement
@@ -131,7 +132,7 @@ export default function AnnouncementTab({ eventId }) {
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="py-2.5 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                className={`py-2.5 w-full bg-gradient-to-r ${roleGradients[user.role]} text-white font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2`}
               >
                 {submitting ? (
                   <>

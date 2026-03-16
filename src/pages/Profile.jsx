@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth";
 import Navbar from '../components/Navbar';
 import { FiCheck, FiBox, FiAlertCircle } from "react-icons/fi";
-import { roleGradients } from '../constants/roleGradient';
+import { roleGradientsBG, roleGradients } from '../constants/roleGradient';
 import API from '../api/axios';
 
 const Profile = () => {
@@ -29,15 +29,15 @@ const Profile = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''} `}>
+    <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} `}>
       <Navbar />
 
       <div className='max-w-4xl mx-auto p-4 md:p-6'>
 
         {/* Profile Card */}
-        <div className='bg-white rounded-2xl shadow-xl shadow-blue-500/10 border border-blue-200/30 overflow-hidden'>
+        <div className='bg-white rounded-2xl shadow-xl shadow-black-500/20 border border-blue-200/30 overflow-hidden'>
           {/* Profile Header */}
-          <div className='bg-gradient-to-r from-blue-500 to-purple-500 p-6 md:p-8'>
+          <div className={`bg-gradient-to-r ${roleGradients[user.role] || ''} p-6 md:p-8`}>
             <div className='flex flex-row items-center gap-6'>
               {/* Avatar */}
               <div className='w-24 h-24 md:w-28 md:h-28 rounded-full bg-white/20 backdrop-blur-sm border-4 border-white/30 flex items-center justify-center shadow-lg'>

@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { useAuth } from "../hooks/useAuth";
 import { FiSearch, FiMapPin, FiCalendar, FiInfo, FiX } from 'react-icons/fi';
 import Loader from "../components/Loader";
-import { roleGradients } from "../constants/roleGradient";
+import { roleGradientsBG, roleGradients } from "../constants/roleGradient";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -51,7 +51,7 @@ export default function Events() {
 
   return (
     <>
-      <div className={`min-h-screen bg-gradient-to-br ${roleGradients[user.role] || ''}`}>
+      <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''}`}>
         {/* Background decorative element */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/20 pointer-events-none" />
 
@@ -61,12 +61,12 @@ export default function Events() {
         {/* Header Section */}
         <div className="relative z-10 mb-8 mt-3 md:mb-12">
           <div className="flex flex-col items-center text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-600 mb-3">
+            <h1 className="text-2xl md:text-4xl font-semibold text-gray-600 mb-3">
               Events
             </h1>
 
             {/* Search Bar */}
-            <div className="w-full max-w-2xl mx-auto">
+            <div className="w-full max-w-4xl mx-auto">
               <div className="relative">
                 <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
@@ -177,7 +177,7 @@ export default function Events() {
                   {/* Event Footer */}
                   <div className="p-4 pt-0">
                     <button
-                      className="w-full py-2 bg-gradient-to-r text-sm from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity group-hover:shadow-lg cursor-pointer"
+                      className={`w-full py-2 bg-gradient-to-r text-sm ${roleGradients[user.role]} text-white font-medium rounded-xl hover:opacity-90 transition-opacity group-hover:shadow-lg cursor-pointer`}
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/event/${event._id}`);

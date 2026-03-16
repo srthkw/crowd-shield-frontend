@@ -9,7 +9,7 @@ import ReportsTab from "../components/tabs/ReportsTab";
 import HelplinesTab from "../components/tabs/HelplinesTab";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
-import { roleGradients } from "../constants/roleGradient";
+import { roleGradientsBG, roleBorders } from "../constants/roleGradient";
 import { useAuth } from "../hooks/useAuth";
 
 export default function EventDashboard() {
@@ -40,11 +40,12 @@ export default function EventDashboard() {
 
     return (
         <>
-            <div className={`bg-gradient-to-br ${roleGradients[user.role] || ''} min-h-screen flex flex-col`}>
+            <div className={`bg-gradient-to-br ${roleGradientsBG[user.role] || ''} min-h-screen flex flex-col`}>
                 <Navbar />
 
                 <div className="w-full flex-1 flex flex-col min-h-0 px-1 md:px-3 py-2 md:py-8">
-  <div className="w-full bg-gray-50 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 border-violet-500/70">
+  <div className={`w-full bg-gray-50 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 
+    ${roleBorders[user.role]} `}>
 
                         {/* Header */}
                         <div className={`px-4 md:px-8 md:pt-8 pt-4 ${expanded ? "mb-4" : ""}`}>
@@ -118,7 +119,7 @@ export default function EventDashboard() {
                     </div>
 
                     {/* Tabs Section */}
-                    <div className="bg-gray-50 rounded-2xl shadow-lg overflow-auto flex-1 min-h-0  border-b-4 border-violet-500/70">
+                    <div className={`bg-gray-50 rounded-2xl shadow-lg overflow-auto flex-1 min-h-0  border-b-4 ${roleBorders[user.role]} `}>
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">

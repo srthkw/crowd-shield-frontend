@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { FiUser, FiPlusCircle, FiLogOut, FiHome, FiUserPlus } from "react-icons/fi";
+import { FiUser, FiPlusCircle, FiLogOut, FiHome, FiUserPlus, FiHelpCircle } from "react-icons/fi";
 import BtnStyle from './buttons/BtnStyle';
 import { roleGradients } from '../constants/roleGradient';
 
@@ -34,7 +34,7 @@ const Navbar = () => {
     }, [open])
 
     return (
-        <div className="sticky top-0 w-full z-50 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-gray-200 shadow-sm">
+        <div className="sticky top-0 w-full z-50 bg-white/70 backdrop-blur-md shadow-sm">
             <div className="mx-auto px-4 sm:px-6">
                 <div className="flex justify-between items-center h-16">
 
@@ -95,6 +95,11 @@ const Navbar = () => {
                                     (<button onClick={() => navigate(`/org-reqs`)}>
                                         <BtnStyle title={<span className="flex items-center"><div><FiUserPlus className="size-4 mr-2 mt-0.5" /></div>Organization Requests</span>} to={`/org-reqs`} />
                                     </button>)}
+
+                                {/* FAQs Button */}
+                                <button onClick={() => navigate(`/faqs`)}>
+                                    <BtnStyle title={<span className="flex items-center"><div><FiHelpCircle className="size-4 mr-2 mt-0.5" /></div>FAQs</span>} to={`/faqs`} />
+                                </button>
 
                                 {/* Logout Button */}
                                 <button onClick={handleLogout}>

@@ -8,11 +8,14 @@ import AuthRedirect from "../redirect/AuthRedirect";
 import EventDashboard from "./pages/EventDashboard";
 import Login from "./pages/Login";
 import Events from "./pages/Events";
+import FAQs from "./pages/FAQs";
 import CreateEvent from "./pages/CreateEvent";
 import Profile from "./pages/Profile";
 import Signup from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
 import OrgReqs from "./pages/OrgReqs";
+import EmergencyMap from "./components/EmergencyMap";
+import "./leafletConfig";
 // later you'll add Events, Dashboard, etc.
 
 const router = createBrowserRouter([
@@ -40,6 +43,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectRoute>
         <CreateEvent />
+      </ProtectRoute>
+    )
+  },
+  {
+    path: "/faqs",
+    element: (
+      <ProtectRoute>
+        <FAQs />
       </ProtectRoute>
     )
   },
@@ -72,8 +83,16 @@ const router = createBrowserRouter([
     element: (
         <Signup />
     )
-  }
-  
+  },
+  {
+    path: "/map/:id",
+    element: (
+      <ProtectRoute>
+        <EmergencyMap />
+      </ProtectRoute>
+    )
+  },
+   
 ]);
 
 createRoot(document.getElementById("root")).render(

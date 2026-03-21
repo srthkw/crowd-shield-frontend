@@ -1,16 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp, FiAlertTriangle } from "react-icons/fi";
 import API from "../api/axios";
+import { Link } from "react-router-dom";
 import AnnouncementTab from "../components/tabs/AnnouncementTab";
 import LostFoundTab from "../components/tabs/LostFoundTab";
-import { Link } from "react-router-dom";
 import ReportsTab from "../components/tabs/ReportsTab";
 import HelplinesTab from "../components/tabs/HelplinesTab";
+import EmergencyResponse from "../components/tabs/EmergencyResponse";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
 import { roleGradientsBG, roleBorders } from "../constants/roleGradient";
 import { useAuth } from "../hooks/useAuth";
+import EmergencyButton from "../components/buttons/EmergencyBTN";
 
 export default function EventDashboard() {
     const { eventId } = useParams();
@@ -19,6 +21,38 @@ export default function EventDashboard() {
     const [activeTab, setActiveTab] = useState("Helplines"); // default tab
     const [expanded, setExpanded] = useState(false);
     const { user } = useAuth();
+    const [showSOS, setShowSOS] = useState(false);
+
+    let watchId;
+    let lastSent = 0;
+
+    const startEmergency = () => {
+        watchId = navigator.geolocation.watchPosition(
+            async (pos) => {
+                const now = Date.now();
+
+                if (now - lastSent > 5000) {
+                    lastSent = now;
+
+                    const { latitude, longitude } = pos.coords;
+
+                    await API.post("/api/emergency/start", {
+                        eventId,
+                        latitude,
+                        longitude,
+                    });
+                }
+            }
+        );
+    };
+
+    // const stopEmergency = async () => {
+    //     if (watchId) {
+    //       navigator.geolocation.clearWatch(watchId);
+    //     }
+      
+    //     await API.post("/api/emergency/stop", { eventId });
+    //   };
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -44,7 +78,7 @@ export default function EventDashboard() {
                 <Navbar />
 
                 <div className="w-full flex-1 flex flex-col min-h-0 px-1 md:px-3 py-2 md:py-8">
-  <div className={`w-full bg-gray-50 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 
+                    <div className={`w-full bg-gray-50 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 
     ${roleBorders[user.role]} `}>
 
                         {/* Header */}
@@ -65,7 +99,7 @@ export default function EventDashboard() {
                                 </button>
                             </div>
                         </div>
-                        
+
                         {/* Expanded Details - FIXED WITH SCROLLABILITY */}
                         <div className={`px-6 md:px-8 pb-6 md:pb-8 transition-all duration-300 ease-in-out overflow-hidden ${expanded ? "max-h-full opacity-100" : "max-h-0 opacity-0"}`}>
                             <div className={`border-t border-gray-200 pt-3 space-y-6 ${expanded ? "overflow-y-auto max-h-[400px] md:max-h-none" : ""}`}>
@@ -73,12 +107,12 @@ export default function EventDashboard() {
                                 {/* Description */}
                                 <div className="space-y-3">
                                     <div className="bg-gray-50 rounded-xl p-4">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <div>
-                                            <FiInfo className="w-5 h-5 text-blue-600" />
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <div>
+                                                <FiInfo className="w-5 h-5 text-blue-600" />
+                                            </div>
+                                            <h3 className="font-semibold text-gray-800 text-md">Event Description</h3>
                                         </div>
-                                        <h3 className="font-semibold text-gray-800 text-md">Event Description</h3>
-                                    </div>
                                         <p className="text-gray-600 leading-relaxed whitespace-pre-wrap break-words">
                                             {event.description}
                                         </p>
@@ -123,7 +157,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {[ "Helplines", "announcements", "Lost-Found", "item reports" ].map((tab) => (
+                                {["Helplines", user.role === "organizer" && "emergencies reported", "announcements", "Lost Found", "item reports"].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -132,7 +166,7 @@ export default function EventDashboard() {
                                             : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                                             }`}
                                     >
-                                        {tab.replace("-", " ")}
+                                        {tab.replaceAll("-", " ")}
                                         {activeTab === tab && (
                                             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500" />
                                         )}
@@ -146,6 +180,9 @@ export default function EventDashboard() {
                             {activeTab === "Helplines" && (
                                 <HelplinesTab eventId={event._id} />
                             )}
+                            {activeTab === "emergencies reported" && (
+                                <EmergencyResponse eventId={event._id} />
+                            )}
                             {activeTab === "announcements" && (
                                 <AnnouncementTab eventId={event._id} />
                             )}
@@ -155,9 +192,30 @@ export default function EventDashboard() {
                             {activeTab === "item reports" && (
                                 <ReportsTab eventId={event._id} />
                             )}
+
                         </div>
                     </div>
                 </div>
+                {user.role !== null && (
+                    <span onClick={() => setShowSOS(true)} className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50">
+                        <EmergencyButton />
+                    </span>
+                )}
+                {showSOS && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="flex flex-col bg-white rounded-lg p-6 w-80 text-center">
+                            <span className="text-red-600 text-4xl mb-4 mx-auto"><FiAlertTriangle /></span>
+                            <h2 className="text-xl font-bold mb-2 text-gray-900">Emergency Alert</h2>
+                            <p className="text-gray-700 mb-4">Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you.</p>
+                            <button
+                                onClick={() => {
+                                    startEmergency();
+                                }}
+                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer"
+                            >Share live location</button>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     );

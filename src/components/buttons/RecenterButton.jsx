@@ -1,17 +1,16 @@
 import { useMap } from "react-leaflet";
 import { FiCrosshair } from "react-icons/fi";
 
-export default function RecenterButton({ userPosition, setAutoFollow }) {
+export default function RecenterButton({ position, setAutoFollow, text }) {
   const map = useMap();
 
   return (
     <button
   onClick={() => {
     setAutoFollow(true);
-    map.flyTo(userPosition, 16, { duration: 1.5 });
+    map.flyTo(position, 16, { duration: 1.5 });
   }}
   className="
-    absolute bottom-3 left-3 z-[1000]
     px-4 py-2
     bg-white/90 backdrop-blur
     border border-gray-300
@@ -24,7 +23,7 @@ export default function RecenterButton({ userPosition, setAutoFollow }) {
   "
 >
   <span className="text-xl"><FiCrosshair /></span>
-  Re-center
+  {text}
 </button>
   );
 }

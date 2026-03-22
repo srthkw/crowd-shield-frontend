@@ -18,23 +18,28 @@ export default function EmergencyMapPage() {
   const [emergency, setEmergency] = useState(null);
   const [myLocation, setMyLocation] = useState(null);
   const [heading, setHeading] = useState(0);
+  const [smoothHeading, setSmoothHeading] = useState(0);
+
+  useEffect(() => {
+    setSmoothHeading(prev => prev + (heading - prev) * 0.1);
+  }, [heading]);
 
   useEffect(() => {
     function handleOrientation(event) {
       let alpha = event.alpha;
-  
+
       // iOS fix
       if (event.webkitCompassHeading) {
         alpha = event.webkitCompassHeading;
       }
-  
+
       if (alpha !== null) {
         setHeading(alpha);
       }
     }
-  
+
     window.addEventListener("deviceorientation", handleOrientation, true);
-  
+
     return () => {
       window.removeEventListener("deviceorientation", handleOrientation);
     };
@@ -104,15 +109,26 @@ export default function EmergencyMapPage() {
 
       {/* 🧍 Organizer */}
       {myLocation && userPosition && (
-        <Marker position={myLocation} zIndexOffset={500} icon={createArrowIcon(getBearing(myLocation, userPosition, heading) - 90)}>
+        <Marker position={myLocation} zIndexOffset={500} icon={createArrowIcon(getBearing(myLocation, userPosition, smoothHeading) - 90)}>
           <Popup>You are here</Popup>
         </Marker>
       )}
-      
-      <RecenterButton
-    userPosition={userPosition}
-    setAutoFollow={setAutoFollow}
-  />
+
+      <span className="absolute top-3 right-3 z-[1000]">
+        <RecenterButton
+          text={"Center User"}
+          position={userPosition}
+          setAutoFollow={setAutoFollow}
+        />
+      </span>
+
+      <span className="absolute top-15 right-3 z-[1000]">
+        <RecenterButton
+        text={"Center Me"}
+          position={myLocation}
+          setAutoFollow={setAutoFollow}
+        />
+      </span>
 
     </MapContainer>
   );

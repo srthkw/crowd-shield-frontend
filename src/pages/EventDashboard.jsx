@@ -22,11 +22,13 @@ export default function EventDashboard() {
     const [expanded, setExpanded] = useState(false);
     const { user } = useAuth();
     const [showSOS, setShowSOS] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     let watchId;
     let lastSent = 0;
 
     const startEmergency = () => {
+        setLoading("location");
         watchId = navigator.geolocation.watchPosition(
             async (pos) => {
                 const now = Date.now();
@@ -36,11 +38,16 @@ export default function EventDashboard() {
 
                     const { latitude, longitude } = pos.coords;
 
-                    await API.post("/api/emergency/start", {
+                const res = await API.post("/api/emergency/start", {
                         eventId,
                         latitude,
                         longitude,
                     });
+
+                    if (res.data) {
+                        setShowSOS(false);
+                        setLoading(null);
+                    }
                 }
             }
         );
@@ -208,11 +215,13 @@ export default function EventDashboard() {
                             <h2 className="text-xl font-bold mb-2 text-gray-900">Emergency Alert</h2>
                             <p className="text-gray-700 mb-4">Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you.</p>
                             <button
+                                disabled={loading === "location"}
                                 onClick={() => {
                                     startEmergency();
+                                    setLoading("location");
                                 }}
                                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer"
-                            >Share live location</button>
+                            >{loading === "location" ? "Sharing..." : "Share Location"}</button>
                         </div>
                     </div>
                 )}

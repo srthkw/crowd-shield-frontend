@@ -1,0 +1,21 @@
+import L from "leaflet";
+
+export const redIcon = new L.Icon({
+  iconUrl: "https://pngimg.com/uploads/google_maps_pin/google_maps_pin_PNG76.png",
+  iconSize: [32, 32],
+});
+
+export const blueIcon = new L.Icon({
+  iconUrl: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  iconSize: [32, 32],
+});
+
+export const createArrowIcon = (angle) =>
+  L.divIcon({
+    className: "custom-arrow text-3xl text-blue-600",
+    html: `<div style="
+      transform: rotate(${angle}deg);
+    ">➤</div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+  });

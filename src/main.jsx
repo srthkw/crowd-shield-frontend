@@ -14,7 +14,7 @@ import Profile from "./pages/Profile";
 import Signup from "./pages/SignUp";
 import LandingPage from "./pages/LandingPage";
 import OrgReqs from "./pages/OrgReqs";
-import EmergencyMap from "./components/EmergencyMap";
+import EmergencyMap from "./pages/EmergencyMap";
 import "./leafletConfig";
 // later you'll add Events, Dashboard, etc.
 

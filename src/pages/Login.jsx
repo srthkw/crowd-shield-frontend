@@ -38,7 +38,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="fixed inset-0 z-10 grid place-items-center p-4 bg-gradient-to-br from-blue-300/50 via-purple-300/50 to-gray-200">
+      <div className="fixed inset-0 z-10 grid place-items-center p-4 bg-gradient-to-br from-blue-200 via-purple-200 to-gray-200">
 
         <div className="fixed inset-0 z-20 grid place-items-center p-4">
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api/axios";
 import SmoothFollow from "../components/smoothFollow";
@@ -10,25 +10,54 @@ import {
   Popup,
 } from "react-leaflet";
 import { getBearing } from "../mapAssets/direction";
-import { redIcon, createArrowIcon } from "../mapAssets/mapIcons"; // Fixes marker icons
+import { redIcon, createArrowIcon } from "../mapAssets/mapIcons";
 
 export default function EmergencyMapPage() {
   const { id } = useParams();
+
   const [autoFollow, setAutoFollow] = useState(true);
   const [emergency, setEmergency] = useState(null);
   const [myLocation, setMyLocation] = useState(null);
+
   const [heading, setHeading] = useState(0);
   const [smoothHeading, setSmoothHeading] = useState(0);
+  const [rotation, setRotation] = useState(0);
 
+  const arrowRef = useRef(null);
+
+  // ✅ Fetch emergency
   useEffect(() => {
-    setSmoothHeading(prev => prev + (heading - prev) * 0.1);
-  }, [heading]);
+    const fetchEmergency = async () => {
+      const res = await API.get(`/api/emergency/${id}`);
+      setEmergency(res.data);
+    };
 
+    fetchEmergency();
+  }, [id]);
+
+  // ✅ Watch user location
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const coords = [
+          pos.coords.latitude,
+          pos.coords.longitude,
+        ];
+        setMyLocation(coords);
+      },
+      (err) => {
+        console.error("Location error:", err);
+      }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
+
+  // ✅ Device orientation (compass)
   useEffect(() => {
     function handleOrientation(event) {
       let alpha = event.alpha;
 
-      // iOS fix
       if (event.webkitCompassHeading) {
         alpha = event.webkitCompassHeading;
       }
@@ -45,75 +74,92 @@ export default function EmergencyMapPage() {
     };
   }, []);
 
-  // Fetch emergency
+  // ✅ Smooth heading (with wrap fix)
   useEffect(() => {
-    const fetchEmergency = async () => {
-      const res = await API.get(`/api/emergency/${id}`);
-      setEmergency(res.data);
-    };
+    setSmoothHeading((prev) => {
+      let diff = heading - prev;
 
-    fetchEmergency();
-  }, [id]);
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
 
-  // Get viewer location
+      return prev + diff * 0.1;
+    });
+  }, [heading]);
+
+  // ✅ Safe user position
+  const userPosition = emergency
+    ? [emergency.latitude, emergency.longitude]
+    : null;
+
+  // ✅ Calculate relative direction
+  const relativeDirection =
+    myLocation && userPosition
+      ? getBearing(myLocation, userPosition, smoothHeading)
+      : 0;
+
+  // ✅ Smooth rotation (shortest path)
   useEffect(() => {
-    const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        const coords = [
-          pos.coords.latitude,
-          pos.coords.longitude,
-        ];
+    setRotation((prev) => {
+      let target = relativeDirection - 90; // arrow offset fix
+      let diff = target - prev;
 
-        console.log("📍 My location:", coords);
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
 
-        setMyLocation(coords);
-      },
-      (err) => {
-        console.error("Location error:", err);
-      }
-    );
+      return prev + diff;
+    });
+  }, [relativeDirection]);
 
-    return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  // ✅ Apply rotation to arrow DOM
+  useEffect(() => {
+    if (!arrowRef.current) return;
+
+    const el = arrowRef.current.getElement();
+    if (!el) return;
+
+    const arrow = el.querySelector(".arrow-inner");
+
+    if (arrow) {
+      arrow.style.transform = `rotate(${rotation}deg)`;
+      arrow.style.transition = "transform 0.2s linear";
+    }
+  }, [rotation]);
 
   if (!emergency) return <p>Loading...</p>;
 
-  const userPosition = [
-    emergency.latitude,
-    emergency.longitude,
-  ];
-
   return (
     <MapContainer
-      center={userPosition} // 🔥 center on user
+      center={userPosition}
       zoom={16}
       style={{ height: "100vh", width: "100%" }}
     >
-      {/* Smoothly follow user */}
+      {/* Follow target */}
       <SmoothFollow
         position={userPosition}
         autoFollow={autoFollow}
         setAutoFollow={setAutoFollow}
       />
 
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
       {/* 🚨 Emergency User */}
       <Marker position={userPosition} zIndexOffset={1000} icon={redIcon}>
-        <Popup>
-          🚨 {emergency.userName}
-        </Popup>
+        <Popup>{emergency.userName}</Popup>
       </Marker>
 
-      {/* 🧍 Organizer */}
-      {myLocation && userPosition && (
-        <Marker position={myLocation} zIndexOffset={500} icon={createArrowIcon(getBearing(myLocation, userPosition, smoothHeading) - 90)}>
+      {/* 🧍 You (with compass arrow) */}
+      {myLocation && (
+        <Marker
+          position={myLocation}
+          zIndexOffset={500}
+          icon={createArrowIcon()}
+          ref={arrowRef}
+        >
           <Popup>You are here</Popup>
         </Marker>
       )}
 
+      {/* UI Buttons */}
       <span className="absolute top-3 right-3 z-[1000]">
         <RecenterButton
           text={"Center User"}
@@ -124,12 +170,11 @@ export default function EmergencyMapPage() {
 
       <span className="absolute top-15 right-3 z-[1000]">
         <RecenterButton
-        text={"Center Me"}
+          text={"Center Me"}
           position={myLocation}
           setAutoFollow={setAutoFollow}
         />
       </span>
-
     </MapContainer>
   );
 }

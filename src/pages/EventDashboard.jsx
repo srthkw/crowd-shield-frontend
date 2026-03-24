@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp, FiAlertTriangle } from "react-icons/fi";
+import { useEffect, useState, useRef } from "react";
+import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp, FiAlertTriangle, FiXCircle } from "react-icons/fi";
 import API from "../api/axios";
 import { Link } from "react-router-dom";
 import AnnouncementTab from "../components/tabs/AnnouncementTab";
@@ -23,13 +23,14 @@ export default function EventDashboard() {
     const { user } = useAuth();
     const [showSOS, setShowSOS] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [emergencyMSG, setEmergencyMSG] = useState("");
 
-    let watchId;
+    const watchIdRef = useRef(null);
     let lastSent = 0;
 
     const startEmergency = () => {
         setLoading("location");
-        watchId = navigator.geolocation.watchPosition(
+        watchIdRef.current = navigator.geolocation.watchPosition(
             async (pos) => {
                 const now = Date.now();
 
@@ -38,13 +39,14 @@ export default function EventDashboard() {
 
                     const { latitude, longitude } = pos.coords;
 
-                const res = await API.post("/api/emergency/start", {
+                    const res = await API.post("/api/emergency/start", {
                         eventId,
                         latitude,
                         longitude,
                     });
 
                     if (res.data) {
+                        setEmergencyMSG(res.data.message);
                         setShowSOS(false);
                         setLoading(null);
                     }
@@ -55,9 +57,9 @@ export default function EventDashboard() {
 
     // const stopEmergency = async () => {
     //     if (watchId) {
-    //       navigator.geolocation.clearWatch(watchId);
+    //       navigator.geolocation.clearWatch(watchIdRef.current);
     //     }
-      
+
     //     await API.post("/api/emergency/stop", { eventId });
     //   };
 
@@ -76,7 +78,7 @@ export default function EventDashboard() {
         fetchEvent();
     }, [eventId]);
 
-    if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-screen h-screen z-10 bg-white/10"><Loader /></div>;
+    if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-screen h-screen z-10"><Loader /></div>;
     if (!event) return <p className="p-4 text-red-500">Event not found</p>;
 
     return (
@@ -203,25 +205,32 @@ export default function EventDashboard() {
                         </div>
                     </div>
                 </div>
-                {user.role !== null && (
+                {user.role === "attendee" && (
                     <span onClick={() => setShowSOS(true)} className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50">
                         <EmergencyButton />
                     </span>
                 )}
+
                 {showSOS && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="flex flex-col bg-white rounded-lg p-6 w-80 text-center">
-                            <span className="text-red-600 text-4xl mb-4 mx-auto"><FiAlertTriangle /></span>
-                            <h2 className="text-xl font-bold mb-2 text-gray-900">Emergency Alert</h2>
-                            <p className="text-gray-700 mb-4">Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you.</p>
-                            <button
+                        <div className="flex flex-col relative bg-white rounded-lg p-6 w-80 text-center">
+                        <span
+                        onClick={() => {
+                            if (loading !== "location") setShowSOS(false);
+                        }}
+                        className="absolute top-3 right-3 text-xl text-gray-400 cursor-pointer">
+                            <FiXCircle />
+                            </span>
+                            <span className={`text-4xl mb-4 mx-auto ${emergencyMSG.length > 0 ? "text-green-500" : "text-red-600"}`}><FiAlertTriangle /></span>
+                            <h2 className="text-xl font-bold mb-2 text-gray-900">Alert</h2>
+                            <p className={`text-gray-700 mb-4`}>{ emergencyMSG.length > 0 ? emergencyMSG : "Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you." }</p>
+                            {emergencyMSG.length === 0 && (
+                                <button
                                 disabled={loading === "location"}
-                                onClick={() => {
-                                    startEmergency();
-                                    setLoading("location");
-                                }}
-                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer"
-                            >{loading === "location" ? "Sharing..." : "Share Location"}</button>
+                                onClick={startEmergency}
+                                className={`px-4 py-2 text-white rounded-md cursor-pointer bg-red-600 hover:bg-red-700`}
+                                >{loading === "location" ? "Sharing..." : "Share Location"}</button>
+                            )}
                         </div>
                     </div>
                 )}

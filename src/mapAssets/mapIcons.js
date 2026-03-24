@@ -10,12 +10,10 @@ export const blueIcon = new L.Icon({
   iconSize: [32, 32],
 });
 
-export const createArrowIcon = (angle) =>
+export const createArrowIcon = () =>
   L.divIcon({
     className: "custom-arrow text-3xl text-blue-600",
-    html: `<div style="
-      transform: rotate(${angle}deg);
-    ">➤</div>`,
+    html: `<div class="arrow-inner">➤</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
   });

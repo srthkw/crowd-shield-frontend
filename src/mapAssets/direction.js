@@ -11,7 +11,7 @@ export const getBearing = (start, end, smootHeading) => {
       Math.cos(lat1) * Math.sin(lat2) -
       Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
   
-    const bearing = (Math.atan2(y, x) * 180) / Math.PI + 360 % 360;
+    const bearing = ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
     const relativeDirection = (bearing - smootHeading + 360) % 360;
 
     return relativeDirection;

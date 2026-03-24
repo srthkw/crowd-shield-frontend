@@ -76,13 +76,16 @@ export default function EmergencyMapPage() {
 
   // ✅ Smooth heading (with wrap fix)
   useEffect(() => {
-    setSmoothHeading((prev) => {
+    setSmoothHeading(prev => {
       let diff = heading - prev;
-
+    
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
-
-      return prev + diff * 0.1;
+    
+      // 🔥 dead zone (ignore small noise)
+      if (Math.abs(diff) < 1) return prev;
+    
+      return prev + diff * 0.2;
     });
   }, [heading]);
 
@@ -98,17 +101,17 @@ export default function EmergencyMapPage() {
       : 0;
 
   // ✅ Smooth rotation (shortest path)
-  useEffect(() => {
-    setRotation((prev) => {
-      let target = relativeDirection - 90; // arrow offset fix
-      let diff = target - prev;
+useEffect(() => {
+  setRotation(prev => {
+    let target = relativeDirection - 90;
+    let diff = target - prev;
 
-      if (diff > 180) diff -= 360;
-      if (diff < -180) diff += 360;
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
 
-      return prev + diff;
-    });
-  }, [relativeDirection]);
+    return prev + diff * 0.2;
+  });
+}, [relativeDirection]);
 
   // ✅ Apply rotation to arrow DOM
   useEffect(() => {
@@ -121,7 +124,7 @@ export default function EmergencyMapPage() {
 
     if (arrow) {
       arrow.style.transform = `rotate(${rotation}deg)`;
-      arrow.style.transition = "transform 0.2s linear";
+      arrow.style.transition = "none";
     }
   }, [rotation]);
 

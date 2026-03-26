@@ -13,6 +13,7 @@ export default function Events() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+
   // Add to your component's state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -21,6 +22,22 @@ export default function Events() {
   const filteredEvents = events.filter(event =>
     event.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const sortedEvents = filteredEvents.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+  
+    // 1. Sort by event date (ascending)
+    if (dateA - dateB !== 0) {
+      return dateA - dateB;
+    }
+  
+    // 2. If same date → sort by createdAt (descending)
+    const createdA = new Date(a.createdAt);
+    const createdB = new Date(b.createdAt);
+  
+    return createdB - createdA;
+  });
 
   const deleteEvent = async (eventId) => {
     try {
@@ -130,7 +147,7 @@ export default function Events() {
         {!loading && filteredEvents.length > 0 && (
           <div className="relative z-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
-              {filteredEvents.map((event) => (
+              {sortedEvents.map((event) => (
                 <div
                   key={event._id}
                   className="group bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-gray-100 cursor-pointer relative"
@@ -271,7 +288,7 @@ export default function Events() {
                     navigate(`/event/${selectedEvent._id}`);
                   }}
                 >
-                  View Details
+                  Open Dashboard
                 </button>
                 
                 { (user.id === selectedEvent.createdBy || user.role === 'admin') && (

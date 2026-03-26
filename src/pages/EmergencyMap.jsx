@@ -11,30 +11,20 @@ import {
 } from "react-leaflet";
 import { getBearing } from "../mapAssets/direction";
 import { redIcon, createArrowIcon } from "../mapAssets/mapIcons";
+import useEmergencySocket from "../hooks/useEmergencySocket";
 
 export default function EmergencyMapPage() {
   const { id } = useParams();
 
   const [autoFollow, setAutoFollow] = useState(true);
-  const [emergency, setEmergency] = useState(null);
   const [myLocation, setMyLocation] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
   const [heading, setHeading] = useState(0);
   const [smoothHeading, setSmoothHeading] = useState(0);
   const [rotation, setRotation] = useState(0);
-
   const arrowRef = useRef(null);
   const prevLocationRef = useRef(null);
-
-  // ✅ Fetch emergency
-  useEffect(() => {
-    const fetchEmergency = async () => {
-      const res = await API.get(`/api/emergency/${id}`);
-      setEmergency(res.data);
-    };
-
-    fetchEmergency();
-  }, [id]);
+  const emergency = useEmergencySocket(id);
 
   // ✅ Watch user location
   useEffect(() => {

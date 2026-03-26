@@ -128,7 +128,7 @@ export default function EmergencyMapPage() {
 
       if (Math.abs(diff) < 2) return prev;
 
-      return prev + diff * 0.05;
+      return prev + diff * 0.15;
     });
   }, [heading]);
 
@@ -153,7 +153,7 @@ export default function EmergencyMapPage() {
       if (diff < -180) diff += 360;
 
       if (Math.abs(diff) < 2) return prev;
-      return prev + diff * 0.08;
+      return prev + diff * 0.12;
     });
   }, [relativeDirection]);
 

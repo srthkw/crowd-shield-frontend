@@ -16,7 +16,7 @@ import useEmergencySocket from "../hooks/useEmergencySocket";
 export default function EmergencyMapPage() {
   const { id } = useParams();
 
-  const [autoFollow, setAutoFollow] = useState(true);
+  const [followTarget, setFollowTarget] = useState("user");
   const [myLocation, setMyLocation] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
   const [heading, setHeading] = useState(0);
@@ -65,12 +65,12 @@ export default function EmergencyMapPage() {
           setIsMoving(false); // ✅ fallback mode
         }
 
-        
+
         if (!prevLocationRef.current) {
           setMyLocation(coords);
         } else {
           const dist = getDistance(prevLocationRef.current, coords);
-          
+
           if (dist > 5) { // 👈 5 meters threshold
             setMyLocation(coords);
             // store for next calculation
@@ -185,9 +185,15 @@ export default function EmergencyMapPage() {
     >
       {/* Follow target */}
       <SmoothFollow
-        position={userPosition}
-        autoFollow={autoFollow}
-        setAutoFollow={setAutoFollow}
+        position={
+          followTarget === "user"
+            ? userPosition
+            : followTarget === "me"
+              ? myLocation
+              : null
+        }
+        autoFollow={!!followTarget}
+        setAutoFollow={() => setFollowTarget(null)}
       />
 
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -210,19 +216,17 @@ export default function EmergencyMapPage() {
       )}
 
       {/* UI Buttons */}
-      <span className="absolute top-3 right-3 z-[1000]">
+      <span onClick={() => setFollowTarget("user")} className="absolute top-3 right-3 z-[1000]">
         <RecenterButton
           text={"Center User"}
           position={userPosition}
-          setAutoFollow={setAutoFollow}
         />
       </span>
 
-      <span className="absolute top-15 right-3 z-[1000]">
+      <span onClick={() => setFollowTarget("me")} className="absolute top-15 right-3 z-[1000]">
         <RecenterButton
           text={"Center Me"}
           position={myLocation}
-          setAutoFollow={setAutoFollow}
         />
       </span>
     </MapContainer>

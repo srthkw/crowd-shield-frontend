@@ -6,11 +6,11 @@ export default function SmoothFollow({ position, autoFollow, setAutoFollow }) {
     const isFirst = useRef(true);
   
     useEffect(() => {
-      map.on("dragstart", () => {
-        setAutoFollow(false);
-      });
-  
-      return () => map.off("dragstart");
+      const handler = () => setAutoFollow(null);
+    
+      map.on("dragstart", handler);
+    
+      return () => map.off("dragstart", handler);
     }, [map, setAutoFollow]);
   
     useEffect(() => {

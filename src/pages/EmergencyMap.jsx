@@ -128,7 +128,7 @@ export default function EmergencyMapPage() {
 
       if (Math.abs(diff) < 2) return prev;
 
-      return prev + diff * 0.30;
+      return prev + diff * 0.25;
     });
   }, [heading]);
 
@@ -146,14 +146,14 @@ export default function EmergencyMapPage() {
   // ✅ Smooth rotation (shortest path)
   useEffect(() => {
     setRotation(prev => {
-      let target = relativeDirection - 90;
+      let target = relativeDirection - 135;
       let diff = target - prev;
 
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
 
       if (Math.abs(diff) < 2) return prev;
-      return prev + diff * 0.30;
+      return prev + diff * 0.25;
     });
   }, [relativeDirection]);
 

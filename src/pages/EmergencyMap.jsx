@@ -146,7 +146,7 @@ export default function EmergencyMapPage() {
   // ✅ Smooth rotation (shortest path)
   useEffect(() => {
     setRotation(prev => {
-      let target = relativeDirection - 135;
+      let target = relativeDirection;
       let diff = target - prev;
 
       if (diff > 180) diff -= 360;

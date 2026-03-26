@@ -26,6 +26,20 @@ export default function EmergencyMapPage() {
   const prevLocationRef = useRef(null);
   const emergency = useEmergencySocket(id);
 
+  const getDistance = (a, b) => {
+    const R = 6371e3;
+    const φ1 = a[0] * Math.PI / 180;
+    const φ2 = b[0] * Math.PI / 180;
+    const Δφ = (b[0] - a[0]) * Math.PI / 180;
+    const Δλ = (b[1] - a[1]) * Math.PI / 180;
+
+    const x = Math.sin(Δφ / 2) ** 2 +
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ / 2) ** 2;
+
+    return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+  };
+
   // ✅ Watch user location
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -38,7 +52,7 @@ export default function EmergencyMapPage() {
         // ✅ If moving → use movement direction
         const speed = pos.coords.speed;
 
-        if (speed && speed > 0.5 && prevLocationRef.current) {
+        if (speed && speed > 1 && prevLocationRef.current) {
           const movementHeading = getBearing(
             prevLocationRef.current,
             coords,
@@ -51,10 +65,18 @@ export default function EmergencyMapPage() {
           setIsMoving(false); // ✅ fallback mode
         }
 
-        // store for next calculation
-        prevLocationRef.current = coords;
-
-        setMyLocation(coords);
+        
+        if (!prevLocationRef.current) {
+          setMyLocation(coords);
+        } else {
+          const dist = getDistance(prevLocationRef.current, coords);
+          
+          if (dist > 5) { // 👈 5 meters threshold
+            setMyLocation(coords);
+            // store for next calculation
+            prevLocationRef.current = coords;
+          }
+        }
       },
       (err) => {
         console.error("Location error:", err);
@@ -71,21 +93,21 @@ export default function EmergencyMapPage() {
 
     function handleOrientation(event) {
       if (isMoving) return; // 🚨 THIS IS THE KEY FIX
-    
+
       const now = Date.now();
       if (now - lastUpdate < 100) return;
       lastUpdate = now;
-    
+
       let alpha = event.alpha;
-    
+
       if (event.webkitCompassHeading) {
         alpha = event.webkitCompassHeading;
       }
-    
+
       if (alpha === null) return;
-    
+
       alpha = (alpha + 360) % 360;
-    
+
       setHeading(alpha);
     }
 
@@ -94,7 +116,7 @@ export default function EmergencyMapPage() {
     return () => {
       window.removeEventListener("deviceorientation", handleOrientation);
     };
-  }, []);
+  }, [isMoving]);
 
   // ✅ Smooth heading (with wrap fix)
   useEffect(() => {
@@ -130,7 +152,8 @@ export default function EmergencyMapPage() {
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
 
-      return prev + diff * 0.1;
+      if (Math.abs(diff) < 2) return prev;
+      return prev + diff * 0.08;
     });
   }, [relativeDirection]);
 
@@ -149,7 +172,10 @@ export default function EmergencyMapPage() {
     }
   }, [rotation]);
 
+  const arrowIcon = useRef(createArrowIcon()).current;
+
   if (!emergency) return <p>Loading...</p>;
+
 
   return (
     <MapContainer
@@ -176,7 +202,7 @@ export default function EmergencyMapPage() {
         <Marker
           position={myLocation}
           zIndexOffset={500}
-          icon={createArrowIcon()}
+          icon={arrowIcon}
           ref={arrowRef}
         >
           <Popup>You are here</Popup>

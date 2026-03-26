@@ -131,20 +131,6 @@ export default function EmergencyMapPage() {
       return prev + diff * 0.30;
     });
   }, [heading]);
-  
-    // ✅ Smooth rotation (shortest path)
-    useEffect(() => {
-      setRotation(prev => {
-        let target = relativeDirection - 90;
-        let diff = target - prev;
-  
-        if (diff > 180) diff -= 360;
-        if (diff < -180) diff += 360;
-  
-        if (Math.abs(diff) < 2) return prev;
-        return prev + diff * 0.30;
-      });
-    }, [relativeDirection]);
 
   // ✅ Safe user position
   const userPosition = emergency
@@ -156,6 +142,20 @@ export default function EmergencyMapPage() {
     myLocation && userPosition
       ? getBearing(myLocation, userPosition, smoothHeading)
       : 0;
+
+  // ✅ Smooth rotation (shortest path)
+  useEffect(() => {
+    setRotation(prev => {
+      let target = relativeDirection - 90;
+      let diff = target - prev;
+
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
+
+      if (Math.abs(diff) < 2) return prev;
+      return prev + diff * 0.30;
+    });
+  }, [relativeDirection]);
 
   // ✅ Apply rotation to arrow DOM
   useEffect(() => {

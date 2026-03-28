@@ -25,6 +25,7 @@ export default function EmergencyMapPage() {
   const arrowRef = useRef(null);
   const prevLocationRef = useRef(null);
   const emergency = useEmergencySocket(id);
+  const [forceCenter, setForceCenter] = useState(false);
 
   const getDistance = (a, b) => {
     const R = 6371e3;
@@ -146,7 +147,7 @@ export default function EmergencyMapPage() {
   // ✅ Smooth rotation (shortest path)
   useEffect(() => {
     setRotation(prev => {
-      let target = relativeDirection;
+      let target = relativeDirection - 45; // because arrow points up
       let diff = target - prev;
 
       if (diff > 180) diff -= 360;
@@ -174,7 +175,7 @@ export default function EmergencyMapPage() {
 
   const arrowIcon = useRef(createArrowIcon()).current;
 
-  if (!emergency) return <p>Loading...</p>;
+  if (!emergency) return <p>Loading...</p>;followTarget
 
 
   return (
@@ -194,6 +195,8 @@ export default function EmergencyMapPage() {
         }
         autoFollow={!!followTarget}
         setAutoFollow={() => setFollowTarget(null)}
+        forceCenter={forceCenter}
+        setForceCenter={() => setForceCenter(false)}
       />
 
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

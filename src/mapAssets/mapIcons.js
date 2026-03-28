@@ -8,8 +8,8 @@ export const redIcon = new L.Icon({
 
 export const createArrowIcon = () =>
   L.divIcon({
-    className: "custom-arrow text-3xl text-blue-600",
-    html: `<div class="arrow-inner">➤</div>`,
+    className: "custom-arrow text-3xl text-blue-700",
+    html: `<div class="arrow-inner">⏏</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
   });

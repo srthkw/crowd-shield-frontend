@@ -147,7 +147,7 @@ export default function EmergencyMapPage() {
   // ✅ Smooth rotation (shortest path)
   useEffect(() => {
     setRotation(prev => {
-      let target = relativeDirection - 45; // because arrow points up
+      let target = relativeDirection - 80; // Arrow points down by default
       let diff = target - prev;
 
       if (diff > 180) diff -= 360;
@@ -175,7 +175,7 @@ export default function EmergencyMapPage() {
 
   const arrowIcon = useRef(createArrowIcon()).current;
 
-  if (!emergency) return <p>Loading...</p>;followTarget
+  if (!emergency) return <p>Loading...</p>;
 
 
   return (
@@ -219,14 +219,20 @@ export default function EmergencyMapPage() {
       )}
 
       {/* UI Buttons */}
-      <span onClick={() => setFollowTarget("user")} className="absolute top-3 right-3 z-[1000]">
+      <span onClick={() => {
+        setForceCenter(true);
+        setFollowTarget("user");
+      }} className="absolute top-3 right-3 z-[1000]">
         <RecenterButton
           text={"Center User"}
           position={userPosition}
         />
       </span>
 
-      <span onClick={() => setFollowTarget("me")} className="absolute top-15 right-3 z-[1000]">
+      <span onClick={() => {
+        setForceCenter(true);
+        setFollowTarget("me");
+      }} className="absolute top-15 right-3 z-[1000]">
         <RecenterButton
           text={"Center Me"}
           position={myLocation}

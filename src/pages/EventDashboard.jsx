@@ -195,7 +195,7 @@ export default function EventDashboard() {
                             {activeTab === "announcements" && (
                                 <AnnouncementTab eventId={event._id} />
                             )}
-                            {activeTab === "Lost-Found" && (
+                            {activeTab === "Lost Found" && (
                                 <LostFoundTab eventId={event._id} />
                             )}
                             {activeTab === "item reports" && (

@@ -23,7 +23,7 @@ export default function AnnouncementTab({ eventId }) {
         setLoading(true);
   
         const [annRes, eventRes] = await Promise.all([
-          axios.get(`/announcements/event/${eventId}`),
+          axios.get(`/announcements/event/approved/${eventId}`),
           axios.get(`/events/${eventId}`)
         ]);
   
@@ -55,13 +55,27 @@ export default function AnnouncementTab({ eventId }) {
     setSubmitting(true);
 
     try {
-      const res = await axios.post("/announcements", {
+      await axios.post("/announcements", {
         eventId,
         message,
       });
 
-      // Optimistic update (no refetch)
-      setAnnouncements(prev => [res.data, ...prev]);
+      // Add to list immediately with optimistic UI (assumes success)
+      if (user.role === "admin" || user.role === "organizer") {
+      setAnnouncements(prev => [
+        {
+          _id: Date.now(), // Temporary ID for optimistic UI
+          message,
+          role: user.role,
+          createdBy: user.id,
+          status: "approved",
+          createdAt: Date.now(),
+        },
+        ...prev,
+      ]);
+      } else {
+        alert("Announcement request sent! It will be visible once approved by the organizer.");
+      }
       setMessage("");
       setShowModal(false);
 
@@ -94,18 +108,16 @@ export default function AnnouncementTab({ eventId }) {
 
   return (
     <div className="py-2 md:py-3">
-      {/* CREATE BUTTON — only for organizer/admin */}
-      {(user.id === eventCreator || user.role === "admin") && (
+      {/* CREATE BUTTON */}
         <div className="flex justify-center mb-6 md:mb-8">
           <button
             onClick={() => setShowModal(true)}
-            className={`flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${roleGradients[user.role]} text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg`}
+            className={`cursor-pointer flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${roleGradients[user.role]} text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg`}
           >
             <span className="text-xl">+</span>
-            Add Announcement
+            { eventCreator === user.id || user.role === "admin" ? "Post Announcement" : "Request Announcement" }
           </button>
         </div>
-      )}
 
       {/* MODAL */}
       {showModal && (
@@ -168,7 +180,7 @@ export default function AnnouncementTab({ eventId }) {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {announcements.map((a) => {
-            const canDelete = user.role === "admin" || user.id === a.createdBy;
+            const canDelete = user.role === "admin" || user.id === eventCreator;
 
             return (
               <div

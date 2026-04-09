@@ -79,7 +79,7 @@ export default function Events() {
         <div className="relative z-10 mb-8 mt-3 md:mb-12">
           <div className="flex flex-col items-center text-center">
             <h1 className="text-2xl md:text-4xl font-semibold text-gray-600 mb-3">
-              Events
+              Kumbh Events
             </h1>
 
             {/* Search Bar */}
@@ -150,7 +150,7 @@ export default function Events() {
               {sortedEvents.map((event) => (
                 <div
                   key={event._id}
-                  className="group bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border border-gray-100 cursor-pointer relative"
+                  className="group bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 cursor-pointer relative"
                   onClick={() => navigate(`/event/${event._id}`)}
                 >
                   {/* Info Button - Positioned properly on all cards */}

@@ -17,6 +17,10 @@ const Navbar = () => {
         navigate("/login");
     };
 
+    function capitalize(val) {
+        return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    }
+
     useEffect(() => {
         function handleClickOutside(e) {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -46,8 +50,9 @@ const Navbar = () => {
                         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${roleGradients[user.role]} flex items-center justify-center shadow-md`}>
                             <span className="text-white font-bold text-lg">CS</span>
                         </div>
-                        <span className={`text-xl font-bold bg-gradient-to-r ${roleGradients[user.role]} bg-clip-text text-transparent`}>
-                            Crowd-Shield
+                        <span className={`bg-gradient-to-r ${roleGradients[user.role]} bg-clip-text text-transparent flex flex-col`}>
+                            <span className="text-md font-bold">Crowd-Shield</span>
+                            <span className="text-xs font-semibold">{capitalize(user.role)} Panel</span>
                         </span>
                     </div>
 

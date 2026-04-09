@@ -31,19 +31,18 @@ const navigate = useNavigate();
 
     try {
       setLoading(true);
-      await API.post("/auth/signup",
+      await API.post("/auth/signup-init",
         formData
       );
-
-      setSuccess("Account created. You will be redirected to login page.");
+      setSuccess("Redirecting to OTP verification. Please check your email for the OTP.");
       setFormData({ name: "", email: "", phone: "", password: "" });
       setTimeout(() => {
-        navigate("/login");
+        navigate("/enter-otp", { state: { email: formData.email } });
       }, 3000);
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Signup failed. Either server cried or you broke something."
+          "Signup failed. Please try again later."
       );
     } finally {
       setLoading(false);

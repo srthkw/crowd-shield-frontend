@@ -87,7 +87,7 @@ const HelplinesTab = () => {
               {/* Call Button */}
               <button
                 onClick={() => handleEmergencyCall(emergency.number)}
-                className={`w-full py-3 bg-gradient-to-r ${emergency.color} text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md group-hover:scale-[1.02]`}
+                className={`w-full py-3 bg-gradient-to-r ${emergency.color} text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md`}
               >
                 <svg 
                   className="w-5 h-5" 

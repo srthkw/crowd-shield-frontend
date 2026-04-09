@@ -8,6 +8,7 @@ import LostFoundTab from "../components/tabs/LostFoundTab";
 import ReportsTab from "../components/tabs/ReportsTab";
 import HelplinesTab from "../components/tabs/HelplinesTab";
 import EmergencyResponse from "../components/tabs/EmergencyResponse";
+import AnnounceReqs from "../components/tabs/AnnounceReqs";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
 import { roleGradientsBG, roleBorders } from "../constants/roleGradient";
@@ -39,7 +40,7 @@ export default function EventDashboard() {
 
                     const { latitude, longitude } = pos.coords;
 
-                    const res = await API.post("/api/emergency/start", {
+                    const res = await API.post("/emergency/start", {
                         eventId,
                         latitude,
                         longitude,
@@ -166,7 +167,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["Helplines", user.role === "organizer" && "emergencies reported", "announcements", "Lost Found", "item reports"].filter(Boolean).map((tab) => (
+                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "from users", "Lost Found", "item reports"].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -189,7 +190,7 @@ export default function EventDashboard() {
                             {activeTab === "Helplines" && (
                                 <HelplinesTab eventId={event._id} />
                             )}
-                            {activeTab === "emergencies reported" && (
+                            {activeTab === "emergency" && (
                                 <EmergencyResponse eventId={event._id} />
                             )}
                             {activeTab === "announcements" && (
@@ -200,6 +201,9 @@ export default function EventDashboard() {
                             )}
                             {activeTab === "item reports" && (
                                 <ReportsTab eventId={event._id} />
+                            )}
+                            {activeTab === "from users" && (
+                                <AnnounceReqs eventId={event._id} />
                             )}
 
                         </div>

@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [activeFeature, setActiveFeature] = useState(null);
 
   const features = [
+    {
+      title: "Emergency location sharing",
+      description: "Share your location with emergency responders for faster assistance"
+    },
     {
       title: "Lost & Found Reporting",
       description: "Quickly report and find lost items during large events"
     },
     {
-      title: "Live Announcements",
+      title: "Announcements",
       description: "Real-time broadcast alerts for emergency scenarios"
     },
     {
       title: "Emergency Helplines",
-      description: "Accurate weather information for event planning"
+      description: "Access important contacts for emergency services and support"
     },
-    {
-      title: "Nearby Facilities",
-      description: "Discover essential facilities around event locations"
-    }
   ];
 
   return (
@@ -102,40 +101,25 @@ const LandingPage = () => {
         {/* Right Content - Features Carousel - Lighter */}
         <div className="flex-1 max-w-lg">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 md:p-8 border border-gray-200 shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800 p-3">Core Features</h3>
+            <h3 className="text-xl font-semibold text-gray-800 p-3">Core Features :</h3>
             
             <div className="md:space-y-4">
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className={`p-2 rounded-xl transition-all duration-500 cursor-pointer ${
-                    activeFeature === index
-                      ? 'bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200'
-                      : 'hover:bg-gray-50/80'
-                  }`}
-                  onClick={() => setActiveFeature(index)}
+                  className={`p-2 rounded-xl transition-all duration-500 bg-gradient-to-r from-blue-50 to-purple-50`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 md:h-10 h-7 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                      activeFeature === index
-                        ? 'bg-gradient-to-br from-blue-500 to-purple-500'
-                        : 'bg-gray-100'
-                    }`}>
-                      <span className={`font-bold text-xs md:text-base ${
-                        activeFeature === index ? 'text-white' : 'text-gray-500'
-                      }`}>
+                    <div className={`w-10 md:h-10 h-7 rounded-lg flex items-center justify-center transition-all duration-300 bg-gradient-to-br from-blue-500 to-purple-500`}>
+                      <span className={`font-bold text-xs md:text-base text-white`}>
                         {index + 1}
                       </span>
                     </div>
                     <div>
-                      <h4 className={`font-medium text-sm md:text-base transition-all duration-300 ${
-                        activeFeature === index ? 'text-gray-900' : 'text-gray-700'
-                      }`}>
+                      <h4 className={`font-medium text-sm md:text-base transition-all duration-300 text-gray-700`}>
                         {feature.title}
                       </h4>
-                      <p className={`text-sm transition-all duration-300 ${
-                        activeFeature === index ? 'text-gray-600' : 'text-gray-500'
-                      }`}>
+                      <p className={`text-sm transition-all duration-300 text-gray-600`}>
                         {feature.description}
                       </p>
                     </div>

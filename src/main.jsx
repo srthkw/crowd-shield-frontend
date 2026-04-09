@@ -15,6 +15,7 @@ import LandingPage from "./pages/LandingPage";
 import OrgReqs from "./pages/OrgReqs";
 import EmergencyMap from "./pages/EmergencyMap";
 import FAQs from "./pages/FAQs";
+import Otp from "./pages/Otp";
 import "./leafletConfig";
 // later you'll add Events, Dashboard, etc.
 
@@ -24,6 +25,24 @@ const router = createBrowserRouter([
   <LandingPage />
   </AuthRedirect>
 ) },
+
+{
+  path: "/signup",
+  element: (
+    <AuthRedirect>
+      <Signup />
+    </AuthRedirect>
+  )
+},
+
+{
+  path: "/enter-otp",
+  element: (
+    <AuthRedirect>
+      <Otp />
+    </AuthRedirect>
+  )
+},
 
   { path: "/login", element: (
   <AuthRedirect>
@@ -80,13 +99,6 @@ const router = createBrowserRouter([
       <ProtectRoute>
         <EventDashboard />
       </ProtectRoute>
-    )
-  },
-
-  {
-    path: "/signup",
-    element: (
-        <Signup />
     )
   },
 

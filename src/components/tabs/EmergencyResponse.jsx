@@ -14,7 +14,7 @@ export default function EmergencyResponse({ eventId }) {
     const fetchEmergencies = async () => {
       try {
         const res = await API.get(
-          `/api/emergency/active/${eventId}`
+          `/emergency/active/${eventId}`
         );
 
         setEmergencies(res.data);

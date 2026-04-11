@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from "../api/axios";
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -9,8 +9,19 @@ const Otp = () => {
     const email = location.state?.email;
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [verifyOtp, setVerifyOtp] = useState(false);
+
+    useEffect(() => {
+        if (!email) {
+          navigate("/");
+        }   
+    }, []);
 
     const handleSubmit = async (e) => {
+
+      setVerifyOtp(true);
+      setLoading(true);
         e.preventDefault();
         try {
         
@@ -23,8 +34,12 @@ const Otp = () => {
         } catch (err) {
           setError(err.response?.data?.message || "OTP verification failed. Please try again.");
           console.error(err);
+          setLoading(false);
+        } finally {
+          setVerifyOtp(false);
         }
       };
+
     
   return (
 <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
@@ -69,8 +84,8 @@ const Otp = () => {
           </div>
         )}
 
-        <button disabled={otp.length !== 6} type="submit" className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-md hover:shadow-lg">
-          Verify OTP
+        <button disabled={otp.length !== 6 || loading} type="submit" className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-md hover:shadow-lg">
+          {verifyOtp ? "Verifying..." : "Verify OTP"}
         </button>
 
       </form>

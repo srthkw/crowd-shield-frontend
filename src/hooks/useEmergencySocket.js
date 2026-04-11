@@ -9,7 +9,7 @@ export default function useEmergencySocket(id) {
   useEffect(() => {
     const fetchEmergency = async () => {
       try {
-        const res = await API.get(`/api/emergency/${id}`);
+        const res = await API.get(`/emergency/${id}`);
         setEmergency(res.data);
       } catch (err) {
         console.error(err);

@@ -34,7 +34,7 @@ const navigate = useNavigate();
       await API.post("/auth/signup-init",
         formData
       );
-      setSuccess("Redirecting to OTP verification. Please check your email for the OTP.");
+      setSuccess("Redirecting to OTP verification.");
       setFormData({ name: "", email: "", phone: "", password: "" });
       setTimeout(() => {
         navigate("/enter-otp", { state: { email: formData.email } });
@@ -61,7 +61,7 @@ const navigate = useNavigate();
     {/* Card */}
     <div className="bg-white/90 py-1 backdrop-blur-sm rounded-xl shadow-xl shadow-blue-500/10 border border-blue-200/30">
       {/* Header */}
-      <div className="p-5 text-center"><h1 className="text-violet-400 md:mb-1 text-[clamp(1.5rem,4vw,2.2rem)] font-bold">
+      <div className="p-5 text-center"><h1 onClick={() => navigate("/")} className="text-violet-400 md:mb-1 text-[clamp(1.5rem,4vw,2.2rem)] font-bold cursor-pointer">
             Crowd-Shield
           </h1>
         <h1 className="text-md md:text-lg font-bold text-gray-600">
@@ -80,7 +80,7 @@ const navigate = useNavigate();
             <input
               type="text"
               name="name"
-              placeholder="Enter your full name"
+              placeholder="Tanka Jahari"
               value={formData.name}
               onChange={handleChange}
               className="p-3 bg-gray-200 w-full font-medium text-xs mb-2 md:mb-3 sm:text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
@@ -95,7 +95,7 @@ const navigate = useNavigate();
             <input
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="abcde@gmail.com"
               value={formData.email}
               onChange={handleChange}
               className="p-3 bg-gray-200 w-full font-medium text-xs mb-2 md:mb-3 sm:text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
@@ -110,7 +110,7 @@ const navigate = useNavigate();
             <input
               type="tel"
               name="phone"
-              placeholder="Enter your phone number"
+              placeholder="+91 98765 43210"
               value={formData.phone}
               onChange={handleChange}
               className="p-3 bg-gray-200 w-full font-medium text-xs mb-2 md:mb-3 sm:text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
@@ -125,7 +125,7 @@ const navigate = useNavigate();
             <input
               type="password"
               name="password"
-              placeholder="Create a secure password"
+              placeholder="At least 8 characters"
               value={formData.password}
               onChange={handleChange}
               className="p-3 bg-gray-200 w-full font-medium text-xs mb-1 md:mb-3 sm:text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"
@@ -160,7 +160,7 @@ const navigate = useNavigate();
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 mt-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl active:scale-[0.98]"
+            className="w-full py-2.5 mt-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer shadow-lg hover:shadow-xl active:scale-[0.98]"
           >
             {loading ? (
               <div className="flex items-center justify-center gap-2">

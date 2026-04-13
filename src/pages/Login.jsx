@@ -27,7 +27,7 @@ const Login = () => {
         password: data.password,
       });
 
-      login(res.data.token, res.data.role, res.data.name, res.data.id, res.data.email, res.data.phone);
+      login(res.data.token, res.data.role, res.data.name, res.data.id, res.data.email, res.data.phone, res.data.eventRegistered);
       navigate("/events");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
@@ -46,7 +46,7 @@ const Login = () => {
 
 
             <div className="text-center">
-              <h1 onClick={() => navigate("/")} className="text-violet-400 text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-3 sm:mb-5 px-5">
+              <h1 onClick={() => navigate("/")} className="text-violet-400 text-[clamp(1.5rem,4vw,2.2rem)] cursor-pointer font-bold mb-3 sm:mb-5 px-5">
                 Crowd-Shield
               </h1></div>
 

@@ -99,7 +99,7 @@ const Profile = () => {
                 </div>
                 <div className='flex items-center ml-4 gap-2'>
                   <div className='w-2 h-2 bg-green-500 rounded-full'></div>
-                  <span className='text-gray-700 font-medium'>Active</span>
+                  <span className='text-gray-700 font-medium'>{user.eventRegistered == null ? 'Registered' : 'Not Registered'}</span>
                 </div>
               </div>
 

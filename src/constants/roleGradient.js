@@ -11,7 +11,7 @@ export const roleBorders = {
 };
 
 export const roleGradients = {
-  attendee: 'from-violet-500 to-purple-500',
+  attendee: 'from-violet-500 to-fuchsia-500',
   organizer: 'from-emerald-500 to-green-500',
   admin: 'from-cyan-500 to-sky-500'
 };

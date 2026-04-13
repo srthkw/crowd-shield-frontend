@@ -1,139 +1,226 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FcSearch, FcPhone, FcSpeaker, FcGlobe } from "react-icons/fc";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+  const [hoveredFeature, setHoveredFeature] = useState(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const features = [
     {
       title: "Emergency location sharing",
-      description: "Share your location with emergency responders for faster assistance"
+      description: "Share your location with emergency responders",
+      icon: <FcGlobe />
     },
     {
       title: "Lost & Found Reporting",
-      description: "Quickly report and find lost items during large events"
+      description: "Quickly report and find lost items during large events",
+      icon: <FcSearch />
     },
     {
       title: "Announcements",
-      description: "Real-time broadcast alerts for emergency scenarios"
+      description: "Real-time broadcast alerts for emergency scenarios",
+      icon: <FcSpeaker />
     },
     {
       title: "Emergency Helplines",
-      description: "Access important contacts for emergency services and support"
+      description: "Access important contacts during emergency",
+      icon: <FcPhone />
     },
   ];
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-gray-50 overflow-hidden">
-  {/* Animated background elements - Lighter version */}
-  <div className="absolute inset-0 overflow-hidden">
-    <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-300/20 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-300/20 rounded-full blur-3xl animate-pulse delay-1000" />
-    <div className="absolute top-1/2 left-1/4 w-60 h-60 bg-teal-300/10 rounded-full blur-3xl animate-pulse delay-500" />
-    
-    {/* Grid pattern - Lighter */}
-    <div className="absolute inset-0 opacity-[0.03]">
-      <div className="absolute inset-0" style={{
-        backgroundImage: `linear-gradient(to right, #4f46e5 1px, transparent 1px),
-                        linear-gradient(to bottom, #4f46e5 1px, transparent 1px)`,
-        backgroundSize: '50px 50px'
-      }} />
-    </div>
-  </div>
-
-  {/* Navigation - Lighter */}
-  <nav className="relative z-10 px-6 py-4 md:py-6 md:px-12">
-    <div className="max-w-7xl mx-auto flex justify-between items-center">
-      <div className="flex items-center justify-center md:justify-start gap-3 w-full">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
-          <span className="text-white font-bold text-xl">CS</span>
-        </div>
-        <span className="md:text-4xl text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Crowd-Shield
-        </span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-blue-900 overflow-hidden relative">
+      {/* Animated Background Particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse top-20 -left-48" />
+        <div className="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000 bottom-20 -right-48" />
+        <div className="absolute w-80 h-80 bg-blue-400/10 rounded-full blur-3xl animate-pulse delay-500 top-1/2 left-1/3" />
+        
+        {/* Floating particles */}
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute bg-white/10 rounded-full animate-float"
+            style={{
+              width: `${Math.random() * 4 + 2}px`,
+              height: `${Math.random() * 4 + 2}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 10 + 10}s`
+            }}
+          />
+        ))}
       </div>
-    </div>
-  </nav>
 
-  {/* Hero Section - Lighter */}
-  <main className="relative z-10 px-4 md:px-12 py-3 md:py-10">
-    <div className="max-w-7xl mx-auto">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-        {/* Left Content */}
-        <div className="flex-1 max-w-2xl ">
-          <div className="flex flex-col items-center md:items-start mb-6 mt-6 md:mt-0">
-            <div className="hidden md:flex justify-center items-center md:justify-start">
-            <span className="inline-block px-3 md:px-4 py-2.5 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-sm font-medium mb-6 border border-blue-200/50">
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-center">
+            <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
+                <span className="text-white font-bold text-2xl">CS</span>
+              </div>
+              <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Crowd-Shield
+              </span>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <main className="relative z-10 pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Badge */}
+          <div className="flex justify-center mb-8 animate-fade-in-up">
+            <span className="inline-block px-6 py-2 bg-blue-500/10 backdrop-blur-sm border border-blue-400/30 rounded-full text-blue-300 text-sm font-medium">
               Full-Stack Event Management Platform
             </span>
-            </div>
-            <h1 className="text-center md:text-start text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
-              Secure, Scalable &<br />
-              <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-400 bg-clip-text text-transparent">
+          </div>
+
+          {/* Main Title */}
+          <div className="text-center mb-12 animate-fade-in-up animation-delay-200">
+            <h1 className="text-5xl lg:text-7xl font-bold mb-6">
+              <span className="text-white">Secure, Scalable &</span>
+              <br />
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Intelligent Event Management
               </span>
             </h1>
-            <p className="text-center md:text-start text-lg text-gray-700 mb-8 leading-relaxed">
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
               A comprehensive platform designed for large public events and emergency scenarios. 
               Built with modern technologies for reliability and scalability.
             </p>
           </div>
 
-          {/* CTA Buttons - Lighter */}
-          <div className="flex flex-wrap justify-center md:justify-start gap-4 md:mb-12">
+          {/* CTA Buttons */}
+          <div className="flex justify-center gap-6 mb-20 animate-fade-in-up animation-delay-400">
             <button
-              onClick={() => {
-                console.log("Bro!")
-                navigate('/login')}}
-              className="md:px-8 px-15 py-2.5 cursor-pointer bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+              onClick={() => navigate('/login')}
+              className="group relative px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 overflow-hidden"
             >
-              Login
+              <span className="relative z-10">Login</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </button>
             <button
               onClick={() => navigate('/signup')}
-              className="md:px-8 px-15 py-2.5 cursor-pointer bg-white text-gray-800 font-medium rounded-xl hover:bg-gray-50 transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-sm"
+              className="px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95 hover:border-white/40"
             >
               Sign-up
             </button>
           </div>
-        </div>
 
-        {/* Right Content - Features Carousel - Lighter */}
-        <div className="flex-1 max-w-lg">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 md:p-8 border border-gray-200 shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-800 p-3">Core Features :</h3>
-            
-            <div className="space-y-4 px-3 py-3">
+          {/* Features Grid */}
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6">
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className={`p-2 rounded-xl transition-all duration-500 bg-gradient-to-r from-blue-50 to-purple-50 h-22 flex items-center gap-3 border border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md`}
+                  className="group relative animate-slide-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                  onMouseEnter={() => setHoveredFeature(index)}
+                  onMouseLeave={() => setHoveredFeature(null)}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-gradient-to-br from-blue-500 to-purple-500`}>
-                      <span className={`font-bold text-xs md:text-base text-white`}>
-                        {index + 1}
-                      </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-white/20 hover:transform hover:-translate-y-1">
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full w-12 h-12 flex items-center justify-center">
+                        {feature.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-white mb-2">
+                          {feature.title}
+                        </h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          {feature.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className={`font-medium text-md md:text-base transition-all duration-300 text-gray-700`}>
-                        {feature.title}
-                      </h4>
-                      <p className={`text-xs transition-all duration-300 text-gray-600`}>
-                        {feature.description}
-                      </p>
-                    </div>
+                    
+                    {/* Animated underline */}
+                    <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transform transition-transform duration-300 ${hoveredFeature === index ? 'scale-x-100' : 'scale-x-0'}`} />
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </main>
 
-</div>
+          {/* Decorative bottom element */}
+          <div className="mt-20 text-center">
+            <div className="inline-flex items-center gap-2 text-gray-400 text-sm">
+              <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+              <span>Ready to protect your crowd</span>
+              <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <style jsx>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        .animate-slide-up {
+          opacity: 0;
+          animation: slide-up 0.6s ease-out forwards;
+        }
+
+        .animate-float {
+          animation: float linear infinite;
+        }
+
+        .animation-delay-200 {
+          animation-delay: 0.2s;
+        }
+
+        .animation-delay-400 {
+          animation-delay: 0.4s;
+        }
+      `}</style>
+    </div>
   );
 };
 

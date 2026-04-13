@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import Navbar from '../components/Navbar';
 import API from '../api/axios';
@@ -10,8 +11,16 @@ import Loader from '../components/Loader';
 const OrgReqs = () => {
   const [orgReqs, setOrgReqs] = useState([]);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      setTimeout(() => {
+        navigate("/events");
+      }, 2000);
+    }
+  }, [user]);
 
   useEffect(() => {
     setLoading("page");
@@ -19,8 +28,7 @@ const OrgReqs = () => {
       try {
         const res = await API.get("/org-reqs");
         setOrgReqs(res.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch organizer requests.");
+      } catch {
         setOrgReqs([]);
 
       } finally {
@@ -71,35 +79,7 @@ const OrgReqs = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} text-gray-600`}>
       <Navbar />
-      {user.role !== "admin" ? <p className="text-center font-semibold text-2xl my-5"><div className="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto border-t-4 border-red-500">
-        <div className="flex flex-col items-center text-center">
-          {/* Big Icon */}
-          <div className="bg-red-100 p-4 rounded-full mb-4">
-            <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-
-          {/* Error Message */}
-          <div className="bg-red-50 rounded-lg p-4 w-full mb-4">
-            <p className="text-red-600 font-medium">
-              {(() => {
-                if (!error) return "Unknown error";
-                if (typeof error === "string") return error;
-                if (error.message) return error.message;
-                return "Something went wrong";
-              })()}
-            </p>
-          </div>
-
-          {/* Error Code (if available) */}
-          {error?.code && (
-            <p className="text-xs text-gray-400 mb-4">
-              Error Code: <span className="font-mono">{error.code}</span>
-            </p>
-          )}
-        </div>
-      </div></p> : (
+      {user.role !== "admin" ? <div className="text-center font-semibold text-2xl my-5">You are not authorized to view this page</div> : (
         <div className='mx-auto p-4 md:p-6'>
           {orgReqs.length === 0 ? (
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900 rounded-2xl shadow-xl p-12 max-w-md mx-auto border border-gray-200 dark:border-gray-700">

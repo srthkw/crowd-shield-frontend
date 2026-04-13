@@ -31,6 +31,11 @@ export default function EmergencyResponse({ eventId }) {
   useEffect(() => {
     const handler = (data) => {
 
+      if (!data.active){
+        setEmergencies((prev) => prev.filter((e) => e._id !== data._id));
+        return
+      }
+
       setEmergencies((prev) => {
         const exists = prev.find(
           (e) => e.user?.toString() === data.user?.toString()
@@ -51,7 +56,16 @@ export default function EmergencyResponse({ eventId }) {
     return () => {
       socket.off("emergency-alert", handler);
     };
-  }, []);
+  }, [socket]);
+
+  const deleteEmergency = async (id) => {
+    try {
+      await API.delete(`/emergency/${id}`);
+      setEmergencies((prev) => prev.filter((e) => e._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   if (loading === "emergencies") {
     return (
@@ -122,9 +136,11 @@ export default function EmergencyResponse({ eventId }) {
             </div>
             
             <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <button onClick={(a) =>{ 
+                a.stopPropagation();
+                deleteEmergency(e._id)}} className="px-4 py-2 bg-red-500 cursor-pointer text-white rounded-md hover:bg-red-600 transition-colors duration-200">
+                Delete
+                </button>  
             </div>
           </div>
         </div>

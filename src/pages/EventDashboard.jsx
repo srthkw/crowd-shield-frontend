@@ -24,7 +24,7 @@ export default function EventDashboard() {
     const { user } = useAuth();
     const [showSOS, setShowSOS] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [emergencyMSG, setEmergencyMSG] = useState("");
+    const [startSos, setStartSos] = useState(false);
 
     const watchIdRef = useRef(null);
     let lastSent = 0;
@@ -35,34 +35,49 @@ export default function EventDashboard() {
             async (pos) => {
                 const now = Date.now();
 
-                if (now - lastSent > 5000) {
+                try {
+                    if (now - lastSent > 5000) {
                     lastSent = now;
 
                     const { latitude, longitude } = pos.coords;
 
-                    const res = await API.post("/emergency/start", {
+                    const res = await API.post("/emergency/toggle", {
                         eventId,
                         latitude,
                         longitude,
+                        active: true
                     });
+                    console.log(res.data.message);
+                    setStartSos(true);
 
-                    if (res.data) {
-                        setEmergencyMSG(res.data.message);
-                        setShowSOS(false);
-                        setLoading(null);
-                    }
+                }} catch (err) {
+                    console.error("Failed to start emergency", err);
+                } finally {
+                    setLoading(null);
                 }
             }
         );
     };
 
-    // const stopEmergency = async () => {
-    //     if (watchId) {
-    //       navigator.geolocation.clearWatch(watchIdRef.current);
-    //     }
+    const stopEmergency = () => {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        try{
+            API.post("/emergency/toggle", {
+                eventId,
+                active: false
+            });
+        } catch (err) {
+            console.error("Failed to stop emergency", err);
+        }
+        setStartSos(false);
+        setLoading(null);
+    };
 
-    //     await API.post("/api/emergency/stop", { eventId });
-    //   };
+    useEffect(() => {
+        if(user.eventRegistered !== eventId) {
+            window.location.href = "/";
+        }
+    }, []);
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -95,7 +110,7 @@ export default function EventDashboard() {
                         <div className={`px-4 md:px-8 md:pt-8 pt-4 ${expanded ? "mb-4" : ""}`}>
                             <div className="flex justify-between items-start gap-4">
                                 <div className="flex-1 min-w-0">
-                                    <h1 className={`text-lg md:text-2xl font-bold text-gray-800 transition-all duration-300 ${expanded ? "" : "line-clamp-2"}`}>
+                                    <h1 className={`text-lg md:text-2xl font-bold text-gray-800 text-center transition-all duration-300 ${expanded ? "" : "line-clamp-2"}`}>
                                         {event.name}
                                     </h1>
                                 </div>
@@ -167,7 +182,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "from users", "Lost Found", "item reports"].filter(Boolean).map((tab) => (
+                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "alerts from users", "Lost Found", "item reports"].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -202,7 +217,7 @@ export default function EventDashboard() {
                             {activeTab === "item reports" && (
                                 <ReportsTab eventId={event._id} />
                             )}
-                            {activeTab === "from users" && (
+                            {activeTab === "alerts from users" && (
                                 <AnnounceReqs eventId={event._id} />
                             )}
 
@@ -225,15 +240,22 @@ export default function EventDashboard() {
                         className="absolute top-3 right-3 text-xl text-gray-400 cursor-pointer">
                             <FiXCircle />
                             </span>
-                            <span className={`text-4xl mb-4 mx-auto ${emergencyMSG.length > 0 ? "text-green-500" : "text-red-600"}`}><FiAlertTriangle /></span>
+                            <span className={`text-4xl mb-4 mx-auto ${startSos ? "text-green-500" : "text-red-600"}`}><FiAlertTriangle /></span>
                             <h2 className="text-xl font-bold mb-2 text-gray-900">Alert</h2>
-                            <p className={`text-gray-700 mb-4`}>{ emergencyMSG.length > 0 ? emergencyMSG : "Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you." }</p>
-                            {emergencyMSG.length === 0 && (
+                            <p className={`text-gray-700 mb-4`}>{ startSos ? "Your location is being shared with the organizers. Please wait for our team to reach you. Do not refresh the page." : "Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you." }</p>
+                            {!startSos && (
                                 <button
                                 disabled={loading === "location"}
                                 onClick={startEmergency}
                                 className={`px-4 py-2 text-white rounded-md cursor-pointer bg-red-600 hover:bg-red-700`}
                                 >{loading === "location" ? "Sharing..." : "Share Location"}</button>
+                            )}
+                            {startSos && (
+                                <button
+                                disabled={loading === "location"}
+                                onClick={stopEmergency}
+                                className={`px-4 py-2 text-white rounded-md cursor-pointer bg-green-600 hover:bg-green-700`}
+                                >{loading === "location" ? "Stopping..." : "Stop Sharing"}</button>
                             )}
                         </div>
                     </div>

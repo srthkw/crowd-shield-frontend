@@ -12,25 +12,27 @@ export const AuthProvider = ({ children }) => {
     id: localStorage.getItem("id") || null,
     email: localStorage.getItem("email") || null,
     phone: localStorage.getItem("phone") || null,
+    eventRegistered: localStorage.getItem("eventRegistered") !== "undefined" ? localStorage.getItem("eventRegistered") : null
   });
 
-  const login = (token, role, name, id, email, phone) => {
+  const login = (token, role, name, id, email, phone, eventRegistered) => {
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
     localStorage.setItem("name", name);
     localStorage.setItem("id", id);
     localStorage.setItem("email", email);
     localStorage.setItem("phone", phone);
-    setUser({ token, role, name, id , email, phone});
+    localStorage.setItem("eventRegistered", eventRegistered ? eventRegistered : "");
+    setUser({ token, role, name, id, email, phone, eventRegistered });
   };
 
   const logout = () => {
     localStorage.clear();
-    setUser({ token: null, role: null, name: null, id: null, email: null, phone: null });
+    setUser({ token: null, role: null, name: null, id: null, email: null, phone: null, eventRegistered: null });
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

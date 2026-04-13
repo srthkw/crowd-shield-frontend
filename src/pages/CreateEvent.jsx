@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "./../api/axios";
 import Navbar from "../components/Navbar";
 import { roleGradientsBG, roleGradients } from "../constants/roleGradient";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const CreateEvent = () => {
     const { user } = useAuth();
-
+    const navigate = useNavigate();
     const today = new Date().toISOString().split("T")[0];
 
     const [formData, setFormData] = useState({
@@ -24,13 +25,21 @@ const CreateEvent = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    useEffect(() => {
+            if (!user || user.role !== "admin") {
+                setTimeout(() => {
+                    navigate("/events");
+                }, 2000);
+            }
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setSuccess("");
 
         if (!formData.name || !formData.location || !formData.date || !formData.description) {
-            setError("Name, location, and date are non-negotiable.");
+            setError("All fields are required.");
             return;
         }
 
@@ -41,28 +50,43 @@ const CreateEvent = () => {
                 formData
             );
 
-            setSuccess("Event created. Crowd control unlocked.");
+            setSuccess("Event created successfully!");
             setFormData({ name: "", location: "", date: "", description: "" });
         } catch (err) {
             setError(
                 err.response?.data?.message ||
-                "Event creation failed. Backend said nope."
+                "Failed to create event. Please try again."
             );
         } finally {
             setLoading(false);
         }
     };
 
+    if (!user || user.role !== "admin") {
+        return (
+            <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} flex flex-col items-center text-gray-600`}>
+                <Navbar />
+                <div className="md:mt-5">
+                    <div className="p-6">
+                        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-500 mb-5 md:mb-8">
+                            You are not authorized to create an event.
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} flex flex-col items-center text-gray-600`}>
             <Navbar />
             <div className="md:mt-5">
                 <div className="p-6">
-                    <h1 className="text-2xl md:text-3xl font-semibold text-center text-gray-600 mb-5 md:mb-8">
+                    <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-500 mb-5 md:mb-8">
                         Create an Event
                     </h1>
 
-                    <form onSubmit={handleSubmit} className="space-y-4 md:max-w-xl">
+                    <form onSubmit={handleSubmit} className="space-y-4 md:max-w-xl bg-white/40 p-6 rounded-2xl shadow-lg">
                         <label htmlFor="username" className="font-semibold sm:text-base text-xs text-left mr-auto relative left-0">Event name *</label>
                         <input
                             type="text"

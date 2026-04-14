@@ -69,10 +69,10 @@ export default function ReportsTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center justify-center text-center">
         <h2 className="text-2xl font-bold text-gray-800">My Reports</h2>
         {items.length > 0 && (
-          <span className="text-sm text-gray-500">
+          <span className="text-sm font-semibold text-gray-500">
             {items.length} {items.length === 1 ? 'report' : 'reports'}
           </span>
         )}

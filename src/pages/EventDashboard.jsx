@@ -8,6 +8,7 @@ import LostFoundTab from "../components/tabs/LostFoundTab";
 import ReportsTab from "../components/tabs/ReportsTab";
 import HelplinesTab from "../components/tabs/HelplinesTab";
 import EmergencyResponse from "../components/tabs/EmergencyResponse";
+import UserReportsTab from "../components/tabs/UserReportsTab";
 import AnnounceReqs from "../components/tabs/AnnounceReqs";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
@@ -182,7 +183,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "alerts from users", "Lost Found", "item reports"].filter(Boolean).map((tab) => (
+                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "alerts from users", "Lost Found", "item reports", event.createdBy === user.id && "user reports"].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -219,6 +220,9 @@ export default function EventDashboard() {
                             )}
                             {activeTab === "alerts from users" && (
                                 <AnnounceReqs eventId={event._id} />
+                            )}
+                            {activeTab === "user reports" && (
+                                <UserReportsTab eventId={event._id} eventCreator={event.createdBy} />
                             )}
 
                         </div>

@@ -57,11 +57,12 @@ export default function AnnouncementTab({ eventId }) {
     try {
       await axios.post("/announcements", {
         eventId,
+        eventCreator,
         message,
       });
 
       // Add to list immediately with optimistic UI (assumes success)
-      if (user.role === "admin" || user.role === "organizer") {
+      if (user.role === "admin" || user.id === eventCreator) {
       setAnnouncements(prev => [
         {
           _id: Date.now(), // Temporary ID for optimistic UI

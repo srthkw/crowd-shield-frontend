@@ -64,7 +64,7 @@ const LandingPage = () => {
       </div>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/10 backdrop-blur-xl shadow-lg' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-center">
             <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>

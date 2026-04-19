@@ -183,7 +183,7 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "alerts from users", "Lost Found", "item reports", event.createdBy === user.id && "user reports"].filter(Boolean).map((tab) => (
+                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "alerts from users", "Lost Found", "item reports", event.createdBy === user.id || user.role === "admin" && "user reports"].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}

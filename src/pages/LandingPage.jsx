@@ -84,21 +84,21 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto">
           {/* Badge */}
           <div className="flex justify-center mb-8 animate-fade-in-up">
-            <span className="inline-block px-6 py-2 bg-blue-500/10 backdrop-blur-sm border border-blue-400/30 rounded-full text-blue-300 text-sm font-medium">
+            <span className="inline-block px-6 py-2 bg-blue-500/10 backdrop-blur-sm border border-blue-400/30 rounded-full text-blue-300 text-xs md:text-sm font-medium">
               Full-Stack Event Management Platform
             </span>
           </div>
 
           {/* Main Title */}
           <div className="text-center mb-12 animate-fade-in-up animation-delay-200">
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6">
+            <h1 className="text-4xl lg:text-7xl font-bold mb-6 leading-[1.15] tracking-[-0.01em]">
               <span className="text-white">Secure, Scalable &</span>
               <br />
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Intelligent Event Management
               </span>
             </h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-md text-gray-300 max-w-2xl mx-auto leading-relaxed">
               A comprehensive platform designed for large public events and emergency scenarios. 
               Built with modern technologies for reliability and scalability.
             </p>

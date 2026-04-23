@@ -315,8 +315,11 @@ export default function Events() {
                   <button
                     className="sm:px-6 px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity"
                     onClick={() => {
-                      setSelectedEvent(null);
-                      navigate(`/event/${selectedEvent._id}`);
+                      if (user.eventRegistered == selectedEvent._id) {
+                        navigate(`/event/${selectedEvent._id}`);
+                      } else {
+                        setRegEvent(selectedEvent._id);
+                      }
                     }}
                   >
                     Open Dashboard

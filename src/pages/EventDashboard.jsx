@@ -38,20 +38,21 @@ export default function EventDashboard() {
 
                 try {
                     if (now - lastSent > 5000) {
-                    lastSent = now;
+                        lastSent = now;
 
-                    const { latitude, longitude } = pos.coords;
+                        const { latitude, longitude } = pos.coords;
 
-                    const res = await API.post("/emergency/toggle", {
-                        eventId,
-                        latitude,
-                        longitude,
-                        active: true
-                    });
-                    console.log(res.data.message);
-                    setStartSos(true);
+                        const res = await API.post("/emergency/toggle", {
+                            eventId,
+                            latitude,
+                            longitude,
+                            active: true
+                        });
+                        console.log(res.data.message);
+                        setStartSos(true);
 
-                }} catch (err) {
+                    }
+                } catch (err) {
                     console.error("Failed to start emergency", err);
                 } finally {
                     setLoading(null);
@@ -62,7 +63,7 @@ export default function EventDashboard() {
 
     const stopEmergency = () => {
         navigator.geolocation.clearWatch(watchIdRef.current);
-        try{
+        try {
             API.post("/emergency/toggle", {
                 eventId,
                 active: false
@@ -75,7 +76,7 @@ export default function EventDashboard() {
     };
 
     useEffect(() => {
-        if(user.eventRegistered !== eventId) {
+        if (user.eventRegistered !== eventId) {
             window.location.href = "/";
         }
     }, []);
@@ -96,7 +97,19 @@ export default function EventDashboard() {
     }, [eventId]);
 
     if (pageload) return <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 md:w-full w-screen h-screen z-10"><Loader /></div>;
-    if (!event) return <p className="p-4 text-red-500">Event not found</p>;
+    if (!event) return <div className="bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-xl p-4 shadow-md">
+        <div className="flex items-start">
+            <div className="flex-shrink-0">
+                <div className="bg-red-500 rounded-full w-8 h-8 flex items-center justify-center text-white text-sm">
+                    !
+                </div>
+            </div>
+            <div className="ml-3 flex-1">
+                <h3 className="text-red-800 font-semibold">Event Not Found</h3>
+                <p className="text-red-600 text-sm mt-1">The requested event could not be located. Please check the event ID or try again.</p>
+            </div>
+        </div>
+    </div>;
 
     return (
         <>
@@ -104,8 +117,7 @@ export default function EventDashboard() {
                 <Navbar />
 
                 <div className="w-full flex-1 flex flex-col min-h-0 px-1 md:px-3 py-2 md:py-8">
-                    <div className={`w-full bg-gray-50 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300 border-t-4 
-    ${roleBorders[user.role]} `}>
+                    <div className={`w-full bg-gray-50 rounded-2xl shadow-lg mb-1 md:mb-3 overflow-hidden transition-all duration-300`}>
 
                         {/* Header */}
                         <div className={`px-4 md:px-8 md:pt-8 pt-4 ${expanded ? "mb-4" : ""}`}>
@@ -183,7 +195,15 @@ export default function EventDashboard() {
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
-                                {["Helplines", event.createdBy === user.id || user.role === "admin" ? "emergency" : "", "announcements", event.createdBy === user.id  && "alerts from users", "Lost Found", "item reports", event.createdBy === user.id || user.role === "admin" && "user reports"].filter(Boolean).map((tab) => (
+                                {[
+                                    "Helplines",
+                                    (event.createdBy === user.id || user.role === "admin") && "emergency",
+                                    "announcements",
+                                    event.createdBy === user.id && "alerts from users",
+                                    "Lost Found",
+                                    "item reports",
+                                    (event.createdBy === user.id || user.role === "admin") && "user reports"
+                                ].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
@@ -192,7 +212,7 @@ export default function EventDashboard() {
                                             : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
                                             }`}
                                     >
-                                        {tab.replaceAll("-", " ")}
+                                        {String(tab).replaceAll("-", " ")}
                                         {activeTab === tab && (
                                             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500" />
                                         )}
@@ -237,28 +257,28 @@ export default function EventDashboard() {
                 {showSOS && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
                         <div className="flex flex-col relative bg-white rounded-lg p-6 w-80 text-center">
-                        <span
-                        onClick={() => {
-                            if (loading !== "location") setShowSOS(false);
-                        }}
-                        className="absolute top-3 right-3 text-xl text-gray-400 cursor-pointer">
-                            <FiXCircle />
+                            <span
+                                onClick={() => {
+                                    if (loading !== "location") setShowSOS(false);
+                                }}
+                                className="absolute top-3 right-3 text-xl text-gray-400 cursor-pointer">
+                                <FiXCircle />
                             </span>
                             <span className={`text-4xl mb-4 mx-auto ${startSos ? "text-green-500" : "text-red-600"}`}><FiAlertTriangle /></span>
                             <h2 className="text-xl font-bold mb-2 text-gray-900">Alert</h2>
-                            <p className={`text-gray-700 mb-4`}>{ startSos ? "Your location is being shared with the organizers. Please wait for our team to reach you. Do not refresh the page." : "Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you." }</p>
+                            <p className={`text-gray-700 mb-4`}>{startSos ? "Your location is being shared with the organizers. Please wait for our team to reach you. Do not refresh the page." : "Clicking below button shares your location with the organizers. Please do not click if you are not in immediate danger. After sharing, please wait for our team to reach you."}</p>
                             {!startSos && (
                                 <button
-                                disabled={loading === "location"}
-                                onClick={startEmergency}
-                                className={`px-4 py-2 text-white rounded-md cursor-pointer bg-red-600 hover:bg-red-700`}
+                                    disabled={loading === "location"}
+                                    onClick={startEmergency}
+                                    className={`px-4 py-2 text-white rounded-md cursor-pointer bg-red-600 hover:bg-red-700`}
                                 >{loading === "location" ? "Sharing..." : "Share Location"}</button>
                             )}
                             {startSos && (
                                 <button
-                                disabled={loading === "location"}
-                                onClick={stopEmergency}
-                                className={`px-4 py-2 text-white rounded-md cursor-pointer bg-green-600 hover:bg-green-700`}
+                                    disabled={loading === "location"}
+                                    onClick={stopEmergency}
+                                    className={`px-4 py-2 text-white rounded-md cursor-pointer bg-green-600 hover:bg-green-700`}
                                 >{loading === "location" ? "Stopping..." : "Stop Sharing"}</button>
                             )}
                         </div>

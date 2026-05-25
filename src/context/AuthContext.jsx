@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { connectSocket, disconnectSocket } from "../socket";
 
 export const AuthContext = createContext();
 export const isLoggedIn = () =>
@@ -24,10 +25,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("phone", phone);
     localStorage.setItem("eventRegistered", eventRegistered ? eventRegistered : "");
     setUser({ token, role, name, id, email, phone, eventRegistered });
+    connectSocket();
   };
 
   const logout = () => {
     localStorage.clear();
+    disconnectSocket();
     setUser({ token: null, role: null, name: null, id: null, email: null, phone: null, eventRegistered: null });
   };
 

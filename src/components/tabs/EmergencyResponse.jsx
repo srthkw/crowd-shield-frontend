@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket from "../../socket";
+import socket, { connectSocket } from "../../socket";
 import API from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import Loader2 from "../Loader2";
@@ -29,7 +29,10 @@ export default function EmergencyResponse({ eventId }) {
   }, [eventId]);
 
   useEffect(() => {
+    connectSocket();
+
     const handler = (data) => {
+      if (data.event?.toString() !== eventId?.toString()) return;
 
       if (!data.active){
         setEmergencies((prev) => prev.filter((e) => e._id !== data._id));
@@ -56,7 +59,7 @@ export default function EmergencyResponse({ eventId }) {
     return () => {
       socket.off("emergency-alert", handler);
     };
-  }, [socket]);
+  }, [eventId]);
 
   const deleteEmergency = async (id) => {
     try {

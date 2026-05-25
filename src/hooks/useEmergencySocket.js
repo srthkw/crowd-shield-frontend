@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket from "../socket"; // adjust path
+import socket, { connectSocket } from "../socket";
 import API from "../api/axios";
 
 export default function useEmergencySocket(id) {
@@ -21,6 +21,8 @@ export default function useEmergencySocket(id) {
 
   // 2. Socket listener
   useEffect(() => {
+    connectSocket();
+
     const handler = (data) => {
       // Ensure the update is for the current emergency
       if (data._id === id) {

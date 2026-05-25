@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { FiTrash2, FiVolume2, FiCalendar, FiUser, FiX } from "react-icons/fi";
 import Loader2 from "../Loader2";
 import { roleGradients } from "../../constants/roleGradient";
+import socket, { connectSocket } from "../../socket";
 
 export default function AnnouncementTab({ eventId }) {
   const [announcements, setAnnouncements] = useState([]);
@@ -14,6 +15,17 @@ export default function AnnouncementTab({ eventId }) {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [eventCreator, setEventCreator] = useState(null);
+
+  const upsertAnnouncement = (announcement) => {
+    setAnnouncements((prev) => {
+      const exists = prev.some((item) => item._id === announcement._id);
+      const next = exists
+        ? prev.map((item) => (item._id === announcement._id ? announcement : item))
+        : [announcement, ...prev];
+
+      return next.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    });
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -49,31 +61,49 @@ export default function AnnouncementTab({ eventId }) {
       isMounted = false;
     };
   }, [eventId, user.id]);
+
+  useEffect(() => {
+    if (!eventId) return;
+
+    connectSocket();
+
+    const joinRoom = () => socket.emit("join-announcement-event", eventId);
+    const handleApproved = (announcement) => {
+      if (String(announcement.eventId) !== String(eventId)) return;
+      upsertAnnouncement(announcement);
+    };
+    const handleDeleted = ({ _id, eventId: deletedEventId }) => {
+      if (String(deletedEventId) !== String(eventId)) return;
+      setAnnouncements((prev) => prev.filter((item) => item._id !== _id));
+      setPop((current) => (current === _id ? null : current));
+    };
+
+    joinRoom();
+    socket.on("connect", joinRoom);
+    socket.on("announcement:approved", handleApproved);
+    socket.on("announcement:deleted", handleDeleted);
+
+    return () => {
+      socket.emit("leave-announcement-event", eventId);
+      socket.off("connect", joinRoom);
+      socket.off("announcement:approved", handleApproved);
+      socket.off("announcement:deleted", handleDeleted);
+    };
+  }, [eventId]);
  
   const handleSubmit = async () => {
     if (!message.trim()) return;
     setSubmitting(true);
 
     try {
-      await axios.post("/announcements", {
+      const { data: announcement } = await axios.post("/announcements", {
         eventId,
         eventCreator,
         message,
       });
 
-      // Add to list immediately with optimistic UI (assumes success)
       if (user.role === "admin" || user.id === eventCreator) {
-      setAnnouncements(prev => [
-        {
-          _id: Date.now(), // Temporary ID for optimistic UI
-          message,
-          role: user.role,
-          createdBy: user.id,
-          status: "approved",
-          createdAt: Date.now(),
-        },
-        ...prev,
-      ]);
+        upsertAnnouncement(announcement);
       } else {
         alert("Announcement request sent! It will be visible once approved by the organizer.");
       }
@@ -94,7 +124,6 @@ export default function AnnouncementTab({ eventId }) {
     try {
       await axios.delete(`/announcements/${announcementId}`);
 
-      // Remove instantly without refetch
       setAnnouncements(prev =>
         prev.filter(a => a._id !== announcementId)
       );

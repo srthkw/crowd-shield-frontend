@@ -4,6 +4,7 @@ import axios from "../../api/axios";
 import { useAuth } from "../../hooks/useAuth";
 import Loader2 from "../Loader2";
 import { roleGradients } from "../../constants/roleGradient";
+import socket, { connectSocket } from "../../socket";
 
 const AnnounceReqs = ({ eventId }) => {
 
@@ -11,6 +12,17 @@ const AnnounceReqs = ({ eventId }) => {
     const [loading, setLoading] = useState(true);
     const [announcements, setAnnouncements] = useState([]);
     const [maximize, setMaximize] = useState(null);
+
+    const upsertPendingAnnouncement = (announcement) => {
+        setAnnouncements((prev) => {
+            const exists = prev.some((item) => item._id === announcement._id);
+            const next = exists
+                ? prev.map((item) => (item._id === announcement._id ? announcement : item))
+                : [announcement, ...prev];
+
+            return next.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        });
+    };
 
     useEffect(() => {
         const fetchPending = async () => {
@@ -25,13 +37,47 @@ const AnnounceReqs = ({ eventId }) => {
             }
         };
         fetchPending();
-    }, []);
+    }, [eventId]);
+
+    useEffect(() => {
+        if (!eventId) return;
+
+        connectSocket();
+
+        const joinRoom = () => socket.emit("join-announcement-event", eventId);
+        const removeAnnouncement = ({ _id, eventId: changedEventId }) => {
+            if (String(changedEventId) !== String(eventId)) return;
+            setAnnouncements((prev) => prev.filter((item) => item._id !== _id));
+            setMaximize((current) => (current?._id === _id ? null : current));
+        };
+        const handlePendingCreated = (announcement) => {
+            if (String(announcement.eventId) !== String(eventId)) return;
+            upsertPendingAnnouncement(announcement);
+        };
+        const handleApproved = (announcement) => {
+            removeAnnouncement({ _id: announcement._id, eventId: announcement.eventId });
+        };
+
+        joinRoom();
+        socket.on("connect", joinRoom);
+        socket.on("announcement:pending-created", handlePendingCreated);
+        socket.on("announcement:approved", handleApproved);
+        socket.on("announcement:deleted", removeAnnouncement);
+
+        return () => {
+            socket.emit("leave-announcement-event", eventId);
+            socket.off("connect", joinRoom);
+            socket.off("announcement:pending-created", handlePendingCreated);
+            socket.off("announcement:approved", handleApproved);
+            socket.off("announcement:deleted", removeAnnouncement);
+        };
+    }, [eventId]);
 
     const approveAnnouncement = async (id, user) => {
         try {
             await axios.put(`/announcements/approve/${id}`, { user });
-            const annRes = await axios.get(`/announcements/event/pending/${eventId}`);
-            setAnnouncements(annRes.data);
+            setAnnouncements((prev) => prev.filter((item) => item._id !== id));
+            setMaximize((current) => (current?._id === id ? null : current));
         } catch (err) {
             console.error("Failed to load event data", err);
         } finally {
@@ -42,8 +88,8 @@ const AnnounceReqs = ({ eventId }) => {
     const deleteAnnouncement = async (id) => {
         try {
             await axios.delete(`/announcements/${id}`);
-            const annRes = await axios.get(`/announcements/event/pending/${eventId}`);
-            setAnnouncements(annRes.data);
+            setAnnouncements((prev) => prev.filter((item) => item._id !== id));
+            setMaximize((current) => (current?._id === id ? null : current));
             alert("Announcement request declined and removed.");
         } catch (err) {
             console.error("Failed to load event data", err);

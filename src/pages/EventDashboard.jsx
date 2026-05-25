@@ -28,7 +28,7 @@ export default function EventDashboard() {
     const [startSos, setStartSos] = useState(false);
 
     const watchIdRef = useRef(null);
-    let lastSent = 0;
+    const lastSentRef = useRef(0);
 
     const startEmergency = () => {
         setLoading("location");
@@ -37,8 +37,8 @@ export default function EventDashboard() {
                 const now = Date.now();
 
                 try {
-                    if (now - lastSent > 5000) {
-                        lastSent = now;
+                    if (now - lastSentRef.current > 5000) {
+                        lastSentRef.current = now;
 
                         const { latitude, longitude } = pos.coords;
 
@@ -61,10 +61,10 @@ export default function EventDashboard() {
         );
     };
 
-    const stopEmergency = () => {
+    const stopEmergency = async () => {
         navigator.geolocation.clearWatch(watchIdRef.current);
         try {
-            API.post("/emergency/toggle", {
+            await API.post("/emergency/toggle", {
                 eventId,
                 active: false
             });

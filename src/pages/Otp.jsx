@@ -6,7 +6,7 @@ const Otp = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [otp, setOtp] = useState("");
-    const email = location.state?.email;
+    const email = location.state?.email || sessionStorage.getItem("signupEmail");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -14,9 +14,9 @@ const Otp = () => {
 
     useEffect(() => {
         if (!email) {
-          navigate("/");
+          navigate("/signup");
         }   
-    }, []);
+    }, [email, navigate]);
 
     const handleSubmit = async (e) => {
 
@@ -26,6 +26,7 @@ const Otp = () => {
         try {
         
           await axios.post("/auth/verify-otp", { email, otp });
+          sessionStorage.removeItem("signupEmail");
           setError("");
           setSuccess(true);
           setTimeout(() => {

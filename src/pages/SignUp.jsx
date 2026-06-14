@@ -31,14 +31,17 @@ const navigate = useNavigate();
 
     try {
       setLoading(true);
-      await API.post("/auth/signup-init",
-        formData
-      );
-      setSuccess("Redirecting to OTP verification.");
-      setFormData({ name: "", email: "", phone: "", password: "" });
-      setTimeout(() => {
-        navigate("/enter-otp", { state: { email: formData.email } });
-      }, 3000);
+      const signupData = {
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        phone: formData.phone.trim(),
+      };
+
+      await API.post("/auth/signup-init", signupData);
+      sessionStorage.setItem("signupEmail", signupData.email);
+      setSuccess("OTP sent. Redirecting to verification.");
+      navigate("/enter-otp", { state: { email: signupData.email } });
     } catch (err) {
       setError(
         err.response?.data?.message ||

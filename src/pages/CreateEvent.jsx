@@ -62,7 +62,7 @@ const CreateEvent = () => {
         }
     };
 
-    if (!user || user.role !== "admin") {
+    if (user.role !== "organizer" || user.role !== "admin") {
         return (
             <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} flex flex-col items-center text-gray-600`}>
                 <Navbar />

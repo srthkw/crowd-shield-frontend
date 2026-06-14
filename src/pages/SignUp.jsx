@@ -80,7 +80,7 @@ const navigate = useNavigate();
             <input
               type="text"
               name="name"
-              placeholder="Tanka Jahari"
+              placeholder="John Wick"
               value={formData.name}
               onChange={handleChange}
               className="p-3 bg-gray-200 w-full font-medium text-xs mb-2 md:mb-3 sm:text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-300"

@@ -7,12 +7,30 @@ import API from '../api/axios';
 import { roleGradientsBG, roleGradients } from '../constants/roleGradient';
 import { FiUser, FiMail, FiPhoneCall } from "react-icons/fi";
 import Loader from '../components/Loader';
+import socket, { connectSocket } from "../socket";
 
 const OrgReqs = () => {
   const [orgReqs, setOrgReqs] = useState([]);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(null);
+
+  const upsertOrgReq = (orgReq) => {
+    if (orgReq.status !== "pending") return;
+
+    setOrgReqs((prev) => {
+      const exists = prev.some((req) => req._id === orgReq._id);
+      const next = exists
+        ? prev.map((req) => (req._id === orgReq._id ? orgReq : req))
+        : [orgReq, ...prev];
+
+      return next.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    });
+  };
+
+  const removeOrgReq = (orgReqId) => {
+    setOrgReqs((prev) => prev.filter((req) => req._id !== orgReqId));
+  };
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -39,6 +57,28 @@ const OrgReqs = () => {
     fetchOrgReqs();
   }, []);
 
+  useEffect(() => {
+    if (!user || user.role !== "admin") return;
+
+    connectSocket();
+
+    const handleCreated = (orgReq) => {
+      upsertOrgReq(orgReq);
+    };
+
+    const handleResolved = (orgReq) => {
+      removeOrgReq(orgReq._id);
+    };
+
+    socket.on("org-request:created", handleCreated);
+    socket.on("org-request:resolved", handleResolved);
+
+    return () => {
+      socket.off("org-request:created", handleCreated);
+      socket.off("org-request:resolved", handleResolved);
+    };
+  }, [user]);
+
   const handleAccept = async (orgReq) => {
     setLoading(`accept ${orgReq._id}`);
     try {
@@ -47,7 +87,7 @@ const OrgReqs = () => {
         alert(`Approved ${orgReq.name} as organizer`);
         await API.patch(`/org-reqs/${orgReq._id}`, { status: "approved" });
       }
-      setOrgReqs(orgReqs.filter((req) => req._id !== orgReq._id));
+      removeOrgReq(orgReq._id);
     } catch (err) {
       alert(err.response?.data?.message || "Failed to accept organizer request.");
     } finally {
@@ -60,7 +100,7 @@ const OrgReqs = () => {
     try {
       await API.patch(`/org-reqs/${orgReq._id}`, { status: "rejected" });
       alert(`Declined ${orgReq.name}'s request to be an organizer`);
-      setOrgReqs(orgReqs.filter((req) => req._id !== orgReq._id));
+      removeOrgReq(orgReq._id);
     } catch (err) {
       alert(err.response?.data?.message || "Failed to decline organizer request.");
     } finally {

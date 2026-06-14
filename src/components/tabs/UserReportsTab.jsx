@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../api/axios';
+import socket, { connectSocket } from '../../socket';
 
 
 const UserReportsTab = ({ eventId, eventCreator }) => {
@@ -15,11 +16,30 @@ const UserReportsTab = ({ eventId, eventCreator }) => {
         setUserData(data.users);
         console.log(res.data);
       } catch (err) {
+        if (err.response?.status === 404) {
+          setUserData([]);
+          return;
+        }
         console.error("Failed:", err);
       }
     };
+
+    connectSocket();
     fetchData();
-  }, []);
+
+    const handleUsersUpdated = (data) => {
+      if (data.eventId?.toString() !== eventId?.toString()) return;
+      fetchData();
+    };
+
+    socket.emit("join-user-reports-event", eventId);
+    socket.on("event-users-updated", handleUsersUpdated);
+
+    return () => {
+      socket.emit("leave-user-reports-event", eventId);
+      socket.off("event-users-updated", handleUsersUpdated);
+    };
+  }, [eventId]);
 
   return (
     <div className="text-black">

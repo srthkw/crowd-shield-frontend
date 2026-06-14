@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { FiInfo, FiMapPin, FiCalendar, FiArrowLeft, FiChevronDown, FiChevronUp, FiAlertTriangle, FiXCircle } from "react-icons/fi";
 import API from "../api/axios";
+import socket, { connectSocket } from "../socket";
 import { Link } from "react-router-dom";
 import AnnouncementTab from "../components/tabs/AnnouncementTab";
 import LostFoundTab from "../components/tabs/LostFoundTab";
@@ -22,13 +23,16 @@ export default function EventDashboard() {
     const [pageload, setPageload] = useState(true);
     const [activeTab, setActiveTab] = useState("Helplines"); // default tab
     const [expanded, setExpanded] = useState(false);
-    const { user } = useAuth();
+    const { user, setUser } = useAuth();
     const [showSOS, setShowSOS] = useState(false);
     const [loading, setLoading] = useState(false);
     const [startSos, setStartSos] = useState(false);
 
     const watchIdRef = useRef(null);
     const lastSentRef = useRef(0);
+    const activeSosRef = useRef(false);
+    const cleanupSentRef = useRef(false);
+    const APIURL = import.meta.env.VITE_API_BASE_URL;
 
     const startEmergency = () => {
         setLoading("location");
@@ -50,6 +54,7 @@ export default function EventDashboard() {
                         });
                         console.log(res.data.message);
                         setStartSos(true);
+                        activeSosRef.current = true;
 
                     }
                 } catch (err) {
@@ -62,7 +67,10 @@ export default function EventDashboard() {
     };
 
     const stopEmergency = async () => {
-        navigator.geolocation.clearWatch(watchIdRef.current);
+        if (watchIdRef.current) {
+            navigator.geolocation.clearWatch(watchIdRef.current);
+            watchIdRef.current = null;
+        }
         try {
             await API.post("/emergency/toggle", {
                 eventId,
@@ -72,14 +80,67 @@ export default function EventDashboard() {
             console.error("Failed to stop emergency", err);
         }
         setStartSos(false);
+        activeSosRef.current = false;
         setLoading(null);
     };
+
+    const markEventUnregisteredLocally = useCallback(() => {
+        localStorage.setItem("eventRegistered", "");
+        setUser(prev => prev ? { ...prev, eventRegistered: null } : prev);
+    }, [setUser]);
+
+    const cleanupEventSession = useCallback((useKeepalive = false) => {
+        if (cleanupSentRef.current || user.role !== "attendee") return;
+        cleanupSentRef.current = true;
+
+        if (watchIdRef.current) {
+            navigator.geolocation.clearWatch(watchIdRef.current);
+            watchIdRef.current = null;
+        }
+
+        activeSosRef.current = false;
+        socket.emit("attendee-leave-event", eventId);
+        markEventUnregisteredLocally();
+
+        if (useKeepalive) {
+            const token = localStorage.getItem("token");
+            fetch(`${APIURL}/auth/cleanup-event-session`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ eventId }),
+                keepalive: true,
+            }).catch(() => {});
+            return;
+        }
+
+        API.post("/auth/cleanup-event-session", { eventId }).catch((err) => {
+            console.error("Failed to cleanup event session", err);
+        });
+    }, [APIURL, eventId, markEventUnregisteredLocally, user.role]);
 
     useEffect(() => {
         if (user.eventRegistered !== eventId) {
             window.location.href = "/";
         }
-    }, []);
+    }, [eventId, user.eventRegistered]);
+
+    useEffect(() => {
+        if (user.role !== "attendee") return;
+
+        connectSocket();
+        socket.emit("attendee-active-event", eventId);
+
+        const handlePageHide = () => cleanupEventSession(true);
+        window.addEventListener("pagehide", handlePageHide);
+
+        return () => {
+            window.removeEventListener("pagehide", handlePageHide);
+            cleanupEventSession(true);
+        };
+    }, [cleanupEventSession, eventId, user.role]);
 
     useEffect(() => {
         const fetchEvent = async () => {

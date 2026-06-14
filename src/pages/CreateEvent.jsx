@@ -26,11 +26,11 @@ const CreateEvent = () => {
     };
 
     useEffect(() => {
-            if (user.role !== "organizer" && user.role !== "admin") {
-                setTimeout(() => {
-                    navigate("/events");
-                }, 2000);
-            }
+        if (user.role !== "organizer" && user.role !== "admin") {
+            setTimeout(() => {
+                navigate("/events");
+            }, 2000);
+        }
     }, []);
 
     const handleSubmit = async (e) => {
@@ -66,6 +66,9 @@ const CreateEvent = () => {
         return (
             <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} flex flex-col items-center text-gray-600`}>
                 <Navbar />
+                <h1>
+                    Role: {user?.role}
+                </h1>
                 <div className="md:mt-5">
                     <div className="p-6">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-500 mb-5 md:mb-8">
@@ -95,7 +98,7 @@ const CreateEvent = () => {
                             onChange={(e) => {
                                 handleChange(e);
                                 setError("");
-                              }}
+                            }}
                             className="w-full rounded-xl bg-white/70 border-none px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 
@@ -107,7 +110,7 @@ const CreateEvent = () => {
                             onChange={(e) => {
                                 handleChange(e);
                                 setError("");
-                              }}
+                            }}
                             className="w-full rounded-xl bg-white/70 border-none px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 
@@ -124,7 +127,7 @@ const CreateEvent = () => {
                             onChange={(e) => {
                                 handleChange(e);
                                 setError("");
-                              }}
+                            }}
                             className="w-full rounded-xl bg-white/70 border-none px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
 
@@ -136,7 +139,7 @@ const CreateEvent = () => {
                             onChange={(e) => {
                                 handleChange(e);
                                 setError("");
-                              }}
+                            }}
                             className="w-full rounded-xl bg-white/70 border-none px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
                         />
 

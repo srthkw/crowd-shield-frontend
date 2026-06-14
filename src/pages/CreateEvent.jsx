@@ -66,9 +66,6 @@ const CreateEvent = () => {
         return (
             <div className={`min-h-screen bg-gradient-to-br ${roleGradientsBG[user.role] || ''} flex flex-col items-center text-gray-600`}>
                 <Navbar />
-                <h1>
-                    Role: {user?.role}
-                </h1>
                 <div className="md:mt-5">
                     <div className="p-6">
                         <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-500 mb-5 md:mb-8">

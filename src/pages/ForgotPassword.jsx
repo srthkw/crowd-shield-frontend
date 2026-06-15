@@ -185,6 +185,9 @@ const ForgotPassword = () => {
           Enter your new password. Make sure to use a strong and secure password.
         </p>
 
+        {error && <p className="text-sm text-red-500 text-center mb-2">{error}</p>}
+        {success && <p className="text-sm text-green-500 text-center mb-2">{success}</p>}
+
         <form
           onSubmit={resetPassword}
           className="flex flex-col gap-4"

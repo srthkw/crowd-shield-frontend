@@ -107,7 +107,7 @@ export default function Events() {
           <div className="relative z-10 mb-8 mt-3 md:mb-12">
             <div className="flex flex-col items-center text-center">
               <h1 className={`text-2xl md:text-5xl font-bold bg-gradient-to-r ${roleGradients[user.role] || ''} text-transparent bg-clip-text mb-3`}>
-                Kumbh Events
+                Events
               </h1>
 
               {/* Search Bar */}
@@ -178,7 +178,7 @@ export default function Events() {
                 {sortedEvents.map((event) => (
                   <div
                     key={event._id}
-                    className="group bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 cursor-pointer relative"
+                    className={`group bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-3 ${user.id === event.createdBy ? 'border-green-400/70' : 'border-gray-300/70'} cursor-pointer relative`}
                     onClick={() => {
                       if (user.eventRegistered == event._id) {
                         navigate(`/event/${event._id}`);

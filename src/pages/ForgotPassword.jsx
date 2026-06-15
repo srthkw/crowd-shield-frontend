@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
-import { roleGradientsBG } from "../constants/roleGradient";
-import { useAuth } from "../hooks/useAuth";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -12,8 +10,8 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-  const { user } = useAuth();
   const [step, setStep] = useState(1);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const sendOtp = async (e) => {
     e.preventDefault();
@@ -69,6 +67,11 @@ const ForgotPassword = () => {
 
   const resetPassword = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -155,7 +158,9 @@ const ForgotPassword = () => {
           className="flex flex-col gap-4"
         >
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            maxLength={6}
             placeholder="Enter the OTP"
             value={otp}
             required
@@ -168,7 +173,6 @@ const ForgotPassword = () => {
           <button
             type="submit"
             disabled={loading}
-            onClick
             className="bg-blue-600 text-white py-3 rounded-lg disabled:opacity-50"
           >
             {loading ? "Verifying OTP..." : "Verify OTP"}
@@ -197,8 +201,23 @@ const ForgotPassword = () => {
             placeholder="Enter your new password"
             value={password}
             required
-            onChange={(e) =>
-              setPassword(e.target.value)
+            onChange={(e) =>{
+              setPassword(e.target.value);
+              setError("");
+            }
+            }
+            className="rounded-lg px-4 py-3 outline-none bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
+          />
+
+            <input
+            type="password"
+            placeholder="Confirm your new password"
+            value={confirmPassword}
+            required
+            onChange={(e) =>{
+              setConfirmPassword(e.target.value);
+              setError("");
+            }
             }
             className="rounded-lg px-4 py-3 outline-none bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent text-gray-800 transition-all duration-300"
           />

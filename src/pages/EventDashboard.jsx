@@ -10,6 +10,7 @@ import ReportsTab from "../components/tabs/ReportsTab";
 import HelplinesTab from "../components/tabs/HelplinesTab";
 import EmergencyResponse from "../components/tabs/EmergencyResponse";
 import UserReportsTab from "../components/tabs/UserReportsTab";
+import StayServicesTab from "../components/tabs/StayServicesTab";
 import AnnounceReqs from "../components/tabs/AnnounceReqs";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
@@ -260,12 +261,13 @@ export default function EventDashboard() {
                             <div className="flex overflow-x-auto no-scrollbar-zero px-4 md:px-6">
                                 {[
                                     "Helplines",
-                                    (event.createdBy === user.id || user.role === "admin") && "emergency",
+                                    (event.createdBy === user.id ) && "emergency",
                                     "announcements",
                                     event.createdBy === user.id && "alerts from users",
                                     "Lost Found",
                                     "item reports",
-                                    (event.createdBy === user.id || user.role === "admin") && "user reports"
+                                    (event.createdBy === user.id || user.role === "admin") && "user reports",
+                                    "Stay Services"
                                 ].filter(Boolean).map((tab) => (
                                     <button
                                         key={tab}
@@ -306,6 +308,9 @@ export default function EventDashboard() {
                             )}
                             {activeTab === "user reports" && (
                                 <UserReportsTab eventId={event._id} eventCreator={event.createdBy} />
+                            )}
+                            {activeTab === "Stay Services" && (
+                                <StayServicesTab eventId={event._id} user={user} event={event} />
                             )}
 
                         </div>

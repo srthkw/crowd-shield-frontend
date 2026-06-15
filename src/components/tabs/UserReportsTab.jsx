@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../api/axios';
 import socket, { connectSocket } from '../../socket';
+import Loader2 from '../Loader2';
 
 
 const UserReportsTab = ({ eventId, eventCreator }) => {
@@ -48,9 +49,9 @@ const UserReportsTab = ({ eventId, eventCreator }) => {
     <div className="text-black">
       <h1 className={`text-3xl font-bold mb-2 text-gray-800 text-center`}>User Reports</h1>
 
-      {loading && <div className="text-md mb-4 text-gray-600 text-center">Loading...</div>}
+      {loading && <div className="text-md mb-4 text-gray-600 text-center"><Loader2 /></div>}
 
-      {userData.length === 0 ? (
+      {userData.length === 0 && !loading ? (
         <div className={`text-md mb-4 text-gray-600 text-center`}>No users found</div>
       ) : (
         <div>

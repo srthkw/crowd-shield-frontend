@@ -4,11 +4,12 @@ import socket, { connectSocket } from '../../socket';
 
 
 const UserReportsTab = ({ eventId, eventCreator }) => {
-  ;
   const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const res = await API.get(`/events/event-users/${eventId}`);
         const data = res.data;
@@ -21,6 +22,8 @@ const UserReportsTab = ({ eventId, eventCreator }) => {
           return;
         }
         console.error("Failed:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,8 +48,10 @@ const UserReportsTab = ({ eventId, eventCreator }) => {
     <div className="text-black">
       <h1 className={`text-3xl font-bold mb-2 text-gray-800 text-center`}>User Reports</h1>
 
+      {loading && <div className="text-md mb-4 text-gray-600 text-center">Loading...</div>}
+
       {userData.length === 0 ? (
-        <p>No users found</p>
+        <div className={`text-md mb-4 text-gray-600 text-center`}>No users found</div>
       ) : (
         <div>
           <h1 className={`text-md mb-4 text-gray-600 text-center`}>{userData.length === 1 ? userData.length + " user" : userData.length + " users"} registered for this event</h1>

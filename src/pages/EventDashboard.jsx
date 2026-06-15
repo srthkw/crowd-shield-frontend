@@ -89,8 +89,10 @@ export default function EventDashboard() {
         setUser(prev => prev ? { ...prev, eventRegistered: null } : prev);
     }, [setUser]);
 
+    const shouldCleanupEventSession = ["attendee", "organizer", "admin"].includes(user.role);
+
     const cleanupEventSession = useCallback((useKeepalive = false) => {
-        if (cleanupSentRef.current || user.role !== "attendee") return;
+        if (cleanupSentRef.current || !shouldCleanupEventSession) return;
         cleanupSentRef.current = true;
 
         if (watchIdRef.current) {
@@ -104,7 +106,7 @@ export default function EventDashboard() {
 
         if (useKeepalive) {
             const token = localStorage.getItem("token");
-            fetch(`${APIURL}/auth/cleanup-event-session`, {
+            fetch(`${APIURL}auth/cleanup-event-session`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -119,7 +121,7 @@ export default function EventDashboard() {
         API.post("/auth/cleanup-event-session", { eventId }).catch((err) => {
             console.error("Failed to cleanup event session", err);
         });
-    }, [APIURL, eventId, markEventUnregisteredLocally, user.role]);
+    }, [APIURL, eventId, markEventUnregisteredLocally, shouldCleanupEventSession]);
 
     useEffect(() => {
         if (user.eventRegistered !== eventId) {
@@ -128,7 +130,7 @@ export default function EventDashboard() {
     }, [eventId, user.eventRegistered]);
 
     useEffect(() => {
-        if (user.role !== "attendee") return;
+        if (!shouldCleanupEventSession) return;
 
         connectSocket();
         socket.emit("attendee-active-event", eventId);
@@ -140,7 +142,7 @@ export default function EventDashboard() {
             window.removeEventListener("pagehide", handlePageHide);
             cleanupEventSession(true);
         };
-    }, [cleanupEventSession, eventId, user.role]);
+    }, [cleanupEventSession, eventId, shouldCleanupEventSession]);
 
     useEffect(() => {
         const fetchEvent = async () => {

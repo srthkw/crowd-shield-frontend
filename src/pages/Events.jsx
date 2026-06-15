@@ -28,6 +28,11 @@ export default function Events() {
         eventRegistered: eventId
       } : prev);
 
+      console.log({
+        eventId,
+        eventIdType: typeof eventId,
+      });
+
       navigate(`/event/${eventId}`);
 
     } catch (err) {
@@ -228,7 +233,11 @@ export default function Events() {
                         className={`w-full py-2 bg-gradient-to-r text-sm ${roleGradients[user.role]} text-white font-medium rounded-xl hover:opacity-90 transition-opacity group-hover:shadow-lg cursor-pointer`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/event/${event._id}`);
+                          if (user.eventRegistered == event._id) {
+                            navigate(`/event/${event._id}`);
+                          } else {
+                            setRegEvent(event._id);
+                          }
                         }}
                       >
                         Open Event Dashboard

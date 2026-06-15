@@ -70,9 +70,10 @@ const Login = () => {
               <button type="submit" className="w-full py-2.5 mt-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl hover:opacity-90 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl active:scale-[0.98]">{loading ? "Logging you in..." : "Login"}</button>
 
 
-              <div>
+              <div className="flex flex-col items-center font-semibold">
                 <p className="mt-5 text-xs md:text-sm opacity-90 leading-relaxed">
-                  Don't have an account? <span className="text-blue-500 hover:text-blue-600 transition-colors cursor-pointer underline" onClick={() => navigate("/signup")}>Click here!</span></p>
+                  New to Crowd-Shield? <span className="text-blue-500 hover:text-blue-600 transition-colors cursor-pointer underline" onClick={() => navigate("/signup")}>Create an account</span></p>
+                  <p className="mt-2 text-xs md:text-sm opacity-90 leading-relaxed">Can't access your account? <span className="text-blue-500 hover:text-blue-600 transition-colors cursor-pointer underline" onClick={() => navigate("/forgot-password")}>Reset your password</span></p>
               </div>
 
             </form>

@@ -16,6 +16,7 @@ import OrgReqs from "./pages/OrgReqs";
 import EmergencyMap from "./pages/EmergencyMap";
 import FAQs from "./pages/FAQs";
 import Otp from "./pages/Otp";
+import ForgotPassword from "./pages/ForgotPassword";
 import "./leafletConfig";
 // later you'll add Events, Dashboard, etc.
 
@@ -49,6 +50,15 @@ const router = createBrowserRouter([
   <Login />
   </AuthRedirect>
 ) },
+
+  {
+    path: "/forgot-password",
+    element: (
+      <AuthRedirect>
+        <ForgotPassword />
+      </AuthRedirect>
+    )
+  },
 
   {
     path: "/events",

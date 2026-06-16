@@ -1,4 +1,6 @@
-import { FiCamera, FiMapPin } from "react-icons/fi";
+import { FiCamera, FiMapPin,  } from "react-icons/fi";
+import { LuCircleX } from "react-icons/lu";
+import React, { useState } from "react";
 
 const ItemCard = ({
     item,
@@ -10,6 +12,7 @@ const ItemCard = ({
     claimLoad,
     timeAgo
 }) => {
+    const [image, setImage] = useState(null);
     const isOwner =
         item.reportedBy.toString() === user.id ||
         user.role === "admin" ||
@@ -20,7 +23,7 @@ const ItemCard = ({
     return (
         <div
             key={item._id}
-            onClick={() => item.reportedBy.toString() === user.id && checkMatches(item)}
+            onClick={() => item.reportedBy.toString() === user.id && checkMatches(item) } 
             className={`bg-white flex flex-col h-full relative rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-0.5 ${item.reportedBy.toString() === user.id
                 ? "border-t-4 border-blue-500/70 cursor-pointer"
                 : "border-t-4 border-green-500/70"
@@ -46,7 +49,7 @@ const ItemCard = ({
             </div>
 
             {/* Item Images */}
-            <div className="flex flex-row pb-3">
+            <div className="flex flex-row pb-3" onClick={() => setImage(item.imageUrls?.[0] || null)    }>
                 <div className="px-1.5">
                     <div className="flex">
                         {item.imageUrls?.length > 0 ? (
@@ -116,6 +119,13 @@ const ItemCard = ({
                     </div>
                 )}
             </div>
+
+            {image && (
+                <div className="fixed inset-0 bg-black/20 backdrop-blur-2xl flex items-center justify-center z-100" onClick={() => setImage(null)}>
+                    <img src={image} alt="Item" className="max-w-[28em] max-h-[28em] rounded-lg shadow-lg" />
+                    <button className="absolute top-5 right-5 text-white text-3xl" onClick={() => setImage(null)}><LuCircleX /></button>
+                </div>
+            )}
         </div>
     );
 };

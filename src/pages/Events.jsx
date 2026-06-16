@@ -16,6 +16,8 @@ export default function Events() {
   const navigate = useNavigate();
 
   const registerEvent = async (eventId) => {
+    if (loader === "reg") return;
+
     setLoader("reg");
     if (!eventId) return;
     try {
@@ -94,6 +96,10 @@ export default function Events() {
 
     fetchEvents();
   }, []);
+
+  if (loader === "reg") {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -183,8 +189,7 @@ export default function Events() {
                       if (user.eventRegistered == event._id) {
                         navigate(`/event/${event._id}`);
                       } else {
-                        console.log(event._id);
-                        setRegEvent(event._id);
+                        registerEvent(event._id);
                       }
                     }
                     }
@@ -236,7 +241,7 @@ export default function Events() {
                           if (user.eventRegistered == event._id) {
                             navigate(`/event/${event._id}`);
                           } else {
-                            setRegEvent(event._id);
+                            registerEvent(event._id);
                           }
                         }}
                       >
@@ -327,7 +332,7 @@ export default function Events() {
                       if (user.eventRegistered == selectedEvent._id) {
                         navigate(`/event/${selectedEvent._id}`);
                       } else {
-                        setRegEvent(selectedEvent._id);
+                        registerEvent(selectedEvent._id);
                       }
                     }}
                   >
@@ -350,7 +355,7 @@ export default function Events() {
           )}
 
         </div>
-        {regEvent && (
+        {/* {regEvent && (
           <div className="fixed inset-0 flex items-center justify-center z-500 bg-black/30 backdrop-blur-sm">
             <div className="bg-white w-[400px] max-w-[90%] rounded-2xl shadow-2xl border border-gray-200 transform transition-all duration-200 animate-in fade-in zoom-in-95">
               <h1 className="text-xl font-bold text-gray-900 mb-3 bg-gray-200 px-6 py-4 rounded-t-2xl">
@@ -384,7 +389,7 @@ export default function Events() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

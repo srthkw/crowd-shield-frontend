@@ -45,17 +45,23 @@ const UserReportsTab = ({ eventId, eventCreator }) => {
     };
   }, [eventId]);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center">
+        <Loader2 />
+      </div>
+    );
+  }
+
   return (
     <div className="text-black">
       <h1 className={`text-3xl font-bold mb-2 text-gray-800 text-center`}>User Reports</h1>
-
-      {loading && <div className="text-md mb-4 text-gray-600 text-center"><Loader2 /></div>}
 
       {userData.length === 0 && !loading ? (
         <div className={`text-md mb-4 text-gray-600 text-center`}>No users found</div>
       ) : (
         <div>
-          <h1 className={`text-md mb-4 text-gray-600 text-center`}>{userData.length === 1 ? userData.length + " user" : userData.length + " users"} registered for this event</h1>
+          <h1 className={`text-md mb-4 text-gray-600 text-center`}>{userData.length === 1 ? userData.length + " user" : userData.length + " users"} active in this event</h1>
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-4">
             {userData.map((user) => (
               <div key={user._id} className={`group flex items-center gap-3 p-2 rounded-lg bg-white border-l-5 shadow-md hover:shadow-lg transition-all duration-300 ${user._id === eventCreator ? " border-green-500" : "border-sky-500"}`}>

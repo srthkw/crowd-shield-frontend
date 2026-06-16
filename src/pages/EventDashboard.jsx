@@ -264,7 +264,7 @@ export default function EventDashboard() {
                                     (event.createdBy === user.id ) && "emergency",
                                     "announcements",
                                     event.createdBy === user.id && "alerts from users",
-                                    "Lost Found",
+                                    "Lost and Found",
                                     "item reports",
                                     (event.createdBy === user.id || user.role === "admin") && "user reports",
                                     "Stay Services"
@@ -297,7 +297,7 @@ export default function EventDashboard() {
                             {activeTab === "announcements" && (
                                 <AnnouncementTab eventId={event._id} />
                             )}
-                            {activeTab === "Lost Found" && (
+                            {activeTab === "Lost and Found" && (
                                 <LostFoundTab eventId={event._id} />
                             )}
                             {activeTab === "item reports" && (

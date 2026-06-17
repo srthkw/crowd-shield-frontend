@@ -24,7 +24,7 @@ export default function StayServicesTab({ eventId, user, event }) {
 
     const handleSubmit = async () => {
 
-        if (!formData.name || !formData.contactNumber || !formData.address || !formData.price || !formData.description || !image) {
+        if (!formData.name || !formData.contactNumber || !formData.address || !formData.price || !image) {
             setError("All fields are required.");
             return;
         }
@@ -147,10 +147,10 @@ export default function StayServicesTab({ eventId, user, event }) {
 
             {/* Add Service Modal */}
             {showModal && (
-                <div onClick={() => setShowModal(false)} className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div onClick={() => setShowModal(false)} className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 no-scrollbar">
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto no-scrollbar"
+                        className="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto no-scrollbar-zero"
                     >
                         {/* Header */}
                         <div className="mb-6 border-b border-green-100 pb-4">
@@ -258,11 +258,11 @@ export default function StayServicesTab({ eventId, user, event }) {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-600 mb-1.5">
-                                    Description
+                                    Webite or Booking Link (Optional)
                                 </label>
                                 <textarea
                                     rows={4}
-                                    placeholder="Describe your stay service..."
+                                    placeholder="Keep empty if not applicable"
                                     value={formData.description}
                                     onChange={(e) => {
                                         setError("");
@@ -272,7 +272,7 @@ export default function StayServicesTab({ eventId, user, event }) {
                                         })
                                     }
                                     }
-                                    className="w-full px-4 py-2.5 rounded-lg border border-green-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-colors text-gray-700 placeholder-gray-400 resize-none"
+                                    className="w-full h-20 px-4 py-2.5 rounded-lg border border-green-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-colors text-gray-700 placeholder-gray-400 resize-none"
                                 />
                             </div>
                         </div>
@@ -285,8 +285,7 @@ export default function StayServicesTab({ eventId, user, event }) {
                         <div className="flex gap-3 mt-6 pt-4 border-t border-green-100">
                             <button
                                 onClick={() => setShowModal(false)}
-                                className="flex-1 px-4 py-2.5 rounded-lg border border-green-200 text-green-700 font-medium hover:bg-green-50 transition-colors"
-                            >
+                                className="flex-1 px-4 py-2.5 rounded-lg border border-green-200 text-green-700 font-medium hover:bg-green-50 transition-colors">
                                 Cancel
                             </button>
                             <button
@@ -346,6 +345,10 @@ export default function StayServicesTab({ eventId, user, event }) {
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
                     {services.map((service) => (
                         <div
+                        onClick={() => {
+                            if (!service.description) return;
+                            window.open(service.description, "_blank");
+                        }}
                             key={service._id}
                             className="group bg-white rounded-2xl shadow-md hover:shadow-xl border border-green-100 hover:border-green-300 transition-all duration-300 overflow-hidden"
                         >
